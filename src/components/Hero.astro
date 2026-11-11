@@ -1,4 +1,5 @@
 ---
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 import { Image, getImage } from "astro:assets";
 import Navbar from "./Navbar.astro";
 import HandleForm from "./ui/HandleForm.astro";
@@ -35,14 +36,14 @@ const products = {
 // lashes #8558301 · pov #7986315 · serum #8131887 · bottle #7815839 (Mikhail Nilov) · city #9921064
 // headphones #8005691 · park #7815884 (Mikhail Nilov) · roller #3756003 (cottonbro studio)
 const reel = [
-  { img: lashes, video: "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash" },
-  { img: pov, video: "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", product: "scrunchie" },
-  { img: serum, video: "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum" },
-  { img: bottle, video: "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler" },
-  { img: city, video: "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", product: "tumbler" },
-  { img: headphones, video: "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "scrunchie" },
-  { img: park, video: "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "lash" },
-  { img: roller, video: "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "serum" },
+  { img: lashes, video: BASE + "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash" },
+  { img: pov, video: BASE + "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", product: "scrunchie" },
+  { img: serum, video: BASE + "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum" },
+  { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler" },
+  { img: city, video: BASE + "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", product: "tumbler" },
+  { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "scrunchie" },
+  { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "lash" },
+  { img: roller, video: BASE + "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "serum" },
 ] as const;
 const startIndex = 2;
 const reelData = await Promise.all(

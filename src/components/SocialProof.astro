@@ -1,4 +1,5 @@
 ---
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 import { Image } from "astro:assets";
 import Arrow from "./ui/Arrow.astro";
 import wallLeft from "../assets/img/wall-left.png";
@@ -18,7 +19,7 @@ const people = {
   freedom: { h: "freedom.lover26", f: "2,567", av: roller },
 };
 // Creator clips from fypro.ai's "They use Fypro" section
-const V = "/videos/creators/";
+const V = BASE + "/videos/creators/";
 const slots = [[0, 0], [238, 0], [476, 0], [0, 378], [238, 378], [476, 378]];
 const walls = [
   {

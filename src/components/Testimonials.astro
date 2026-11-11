@@ -1,4 +1,5 @@
 ---
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 import { Image } from "astro:assets";
 import Arrow from "./ui/Arrow.astro";
 import avDes from "../assets/figma/testi/av-des.jpg";
@@ -11,7 +12,7 @@ import ambient from "../assets/figma/testi/ambient.svg";
 import floor from "../assets/figma/testi/floor.svg";
 import contact from "../assets/figma/testi/contact.svg";
 
-const V = "/videos/creators/";
+const V = BASE + "/videos/creators/";
 const items = [
   {
     short: "Des", name: "Des McKillop", result: "Beats her average views", avatar: avDes, handle: "@des.lashverse",
@@ -26,10 +27,10 @@ const items = [
 ];
 // Product Hunt reviews (fypro.ai "On Product Hunt" section) — text reviews, so their cards show a review panel instead of a video
 const reviews = [
-  { name: "Alparslan", avatar: avAlparslan, src: "/videos/reviews/r-8136210.mp4", pos: "50% 30%", handle: "Product Hunt review", quote: "The way it pulls the vibe from your actual content instead of slapping a generic template on you is really smart, feels like the site actually sounds like the creator." },
-  { name: "James", avatar: avJames, src: "/videos/reviews/r-8135595.mp4", pos: "50% 28%", handle: "Sea Imagine AI · Product Hunt", quote: "I have tried Fypro. It’s useful for my TikTok user growth." },
-  { name: "Sean", avatar: avSean, src: "/videos/reviews/r-7414130.mp4", pos: "50% 15%", handle: "Product Hunt review", quote: "The biggest challenge for creators isn’t content anymore. It’s commercialization. Love seeing a product tackle that directly." },
-  { name: "Hassan Ismail Rebe", avatar: avHassan, src: "/videos/reviews/r-7261920.mp4", pos: "50% 42%", handle: "Product Hunt review", quote: "Turning content into an actual business is a much bigger challenge than growing followers. I like that you’re tackling that part." },
+  { name: "Alparslan", avatar: avAlparslan, src: BASE + "/videos/reviews/r-8136210.mp4", pos: "50% 30%", handle: "Product Hunt review", quote: "The way it pulls the vibe from your actual content instead of slapping a generic template on you is really smart, feels like the site actually sounds like the creator." },
+  { name: "James", avatar: avJames, src: BASE + "/videos/reviews/r-8135595.mp4", pos: "50% 28%", handle: "Sea Imagine AI · Product Hunt", quote: "I have tried Fypro. It’s useful for my TikTok user growth." },
+  { name: "Sean", avatar: avSean, src: BASE + "/videos/reviews/r-7414130.mp4", pos: "50% 15%", handle: "Product Hunt review", quote: "The biggest challenge for creators isn’t content anymore. It’s commercialization. Love seeing a product tackle that directly." },
+  { name: "Hassan Ismail Rebe", avatar: avHassan, src: BASE + "/videos/reviews/r-7261920.mp4", pos: "50% 42%", handle: "Product Hunt review", quote: "Turning content into an actual business is a much bigger challenge than growing followers. I like that you’re tackling that part." },
 ];
 // Drum order alternates video testimonials with reviews
 const all = [
