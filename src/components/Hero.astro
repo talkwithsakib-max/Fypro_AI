@@ -26,17 +26,17 @@ const tools = [
   { id: "avatar", label: "AI avatar", icon: "user", tone: "light" },
 ];
 const chips = {
-  ideas: ["Scans your niche", "3 hooks ready"],
+  ideas: ["Scans your niche", "Proven hooks"],
   remake: ["Paste any link", "Your version"],
   shop: ["You post", "They buy"],
-  avatar: ["No camera needed", "Sounds like you"],
+  avatar: ["No repeat filming", "Sounds like you"],
 } as const;
 const ideas = [
   { hook: "POV: you found it first", views: "2.4M" },
   { hook: "3 things I’d rebuy tomorrow", views: "1.1M" },
   { hook: "Get ready with me, 60s", views: "890K" },
 ];
-const avatarLine = ["This", "serum", "fixed", "my", "skin", "in", "one", "week."];
+const avatarLine = ["Okay,", "this", "is", "the", "serum", "I", "keep", "rebuying."];
 
 // Coverflow reel: the active creator plays inside the phone, neighbours fan out to each side.
 const products = {
@@ -118,7 +118,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
           <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="size-1.5 rounded-full bg-cyan"></span>Trending in Skincare</span>
           <div class="screen-card absolute inset-x-2.5 top-[318px] p-2.5">
             <div class="mb-1.5 flex items-center justify-between px-0.5">
-              <p class="text-[11.5px] font-semibold text-ink">Viral ideas for you</p>
+              <p class="text-[11.5px] font-semibold text-ink">Proven hooks in your niche</p>
               <span class="rounded-full bg-pink/10 px-1.5 py-px text-[10px] font-bold text-pink">3 new</span>
             </div>
             {ideas.map((it, i) => (
@@ -137,10 +137,10 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
         <div class="panel absolute inset-0" data-panel="remake">
           <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2">
             <svg class="size-3" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2v3h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Remixing a viral video
+            Remaking a viral video
           </span>
           <div class="screen-card absolute inset-x-2.5 top-[340px] p-3">
-            {["Hook rewritten", "Script in your voice"].map((s, i) => (
+            {["Hook decoded", "Pacing mapped"].map((s, i) => (
               <div class="idea-row flex items-center gap-2 py-[5px]" style={`--d:${i * 120 + 120}ms`}>
                 <span class="grid size-[18px] place-items-center rounded-full bg-ink text-white">
                   <svg class="size-2.5" viewBox="0 0 12 12" fill="none"><path d="m2.5 6.2 2.3 2.3 4.7-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -150,7 +150,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
             ))}
             <div class="idea-row mt-1.5" style="--d:360ms">
               <div class="flex items-center justify-between text-[11px]">
-                <p class="font-semibold text-ink">Rendering your version</p>
+                <p class="font-semibold text-ink">Rebuilding with your product</p>
                 <p class="font-bold text-pink" data-progress-label>0%</p>
               </div>
               <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-ink/10">
@@ -177,7 +177,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
 
         <!-- AI avatar: a talking avatar with live captions, no camera -->
         <div class="panel absolute inset-0" data-panel="avatar">
-          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="rec-dot size-1.5 rounded-full bg-pink"></span>AI avatar · live</span>
+          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="rec-dot size-1.5 rounded-full bg-pink"></span>AI avatar · your voice</span>
           <p class="screen-text absolute inset-x-4 top-[226px] text-center text-[19px] leading-[1.25] font-extrabold" data-captions>
             {avatarLine.map((w, i) => <span class="cap-word" style={`--w:${i}`}>{w} </span>)}
           </p>
@@ -185,7 +185,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
             <img src={avatarThumb.src} alt="" width="34" height="34" class="size-[34px] rounded-full object-cover object-top" />
             <div class="min-w-0 flex-1 text-left leading-[1.25]">
               <p class="text-[11.5px] font-semibold text-ink">Your avatar</p>
-              <p class="text-[10.5px] font-medium text-muted">Speaking in your voice</p>
+              <p class="text-[10.5px] font-medium text-muted">From 1 photo + a voice clip</p>
             </div>
             <span class="wave flex h-5 items-center gap-[3px]">
               {[0, 1, 2, 3, 4].map((b) => <span class="wave-bar w-[3px] rounded-full bg-pink" style={`--b:${b}`}></span>)}

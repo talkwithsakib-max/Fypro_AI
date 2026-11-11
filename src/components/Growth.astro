@@ -213,7 +213,7 @@ const startAvatars = [a1, a2, a3, a4];
             <div class="absolute flex flex-col rounded-2xl bg-ink" style="left:569.2px;top:170px;width:154.933px;height:117.6px;padding:13.067px 14.933px;gap:9.333px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
               <p class="flex items-center gap-[7.467px]"><img src={users.src} alt="" class="size-[14.933px]" /><span class="text-[11px] leading-normal font-medium whitespace-nowrap text-white/70">Customers you own</span></p>
               <p class="text-[26px] leading-normal font-bold tracking-[-0.52px] text-white">1,284</p>
-              <span class="w-fit rounded-full bg-white/10 text-[10px] leading-normal font-semibold whitespace-nowrap text-white" style="padding:4.667px 9.333px">Export CSV ↗</span>
+              <span class="mini-btn flex w-fit items-center gap-1.5 rounded-full bg-white py-[3px] pr-[3px] pl-2.5 text-[10.5px] leading-normal font-semibold whitespace-nowrap text-ink">Export CSV<span class="grid size-[17px] place-items-center rounded-full bg-ink text-white"><svg class="size-[9px]" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
             </div>
             {/* Notification stack: same card size for all, depth via slot (0 front, 1 middle, 2 back) — matches the Figma stack */}
             {orders.map((o, i) => (
@@ -352,6 +352,7 @@ const startAvatars = [a1, a2, a3, a4];
       padding: 0 32px;
     }
   }
+  .mini-btn { box-shadow: inset 0 1px 0 #fff, 0 4px 10px -2px #00000066, -4px 6px 14px -6px #25f4ee59, 4px 6px 14px -6px #fe2c5559; }
 </style>
 
 <script>
