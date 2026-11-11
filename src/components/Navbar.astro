@@ -13,7 +13,7 @@ const links = [
 <header class="relative z-40">
   <div class="flex h-9 items-center justify-center px-4 text-[13px] text-muted">
     <a href="#cta" class="group inline-flex items-center gap-2.5 rounded-full">
-      <span class="rounded-full bg-[#d6fbf9] px-2 py-0.5 text-[11.5px] font-semibold text-[#0e8f8a]">New</span>
+      <span class="new-tag relative inline-flex items-center gap-1.5 rounded-full bg-ink py-0.5 pr-2.5 pl-2 text-[11.5px] font-semibold text-white"><span class="new-dot size-1.5 rounded-full bg-cyan"></span>New</span>
       <span class="hidden sm:inline">Fypro just launched at VidCon 2026.</span>
       <span class="sm:hidden">Launched at VidCon 2026.</span>
       <span class="font-medium text-pink underline underline-offset-2 decoration-pink/40 group-hover:decoration-pink">Try it free →</span>
@@ -96,6 +96,13 @@ const links = [
   }
   #nav-toggle[aria-expanded="true"] .nav-l1 { transform: translateY(3px) rotate(45deg); }
   #nav-toggle[aria-expanded="true"] .nav-l2 { transform: translateY(-3px) rotate(-45deg); }
+  .new-tag { box-shadow: 0 2px 6px #12142426, -4px 4px 12px -4px #25f4ee66, 4px 4px 12px -4px #fe2c5559; }
+  .new-dot { box-shadow: 0 0 0 0 #25f4ee99; animation: new-ping 2.4s ease-out infinite; }
+  @keyframes new-ping {
+    0% { box-shadow: 0 0 0 0 #25f4ee99; }
+    70%, 100% { box-shadow: 0 0 0 5px #25f4ee00; }
+  }
+  @media (prefers-reduced-motion: reduce) { .new-dot { animation: none; } }
 </style>
 
 <script>

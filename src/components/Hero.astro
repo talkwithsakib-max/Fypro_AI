@@ -18,12 +18,25 @@ import pLash from "../assets/img/product-lashkit.png";
 import pScrunchie from "../assets/img/product-scrunchie.png";
 import hand from "../assets/img/hand-phone.png";
 
+// Each tool swaps the phone screen to a preview of what that tool produces, plus the two floating chips.
 const tools = [
-  { label: "Viral ideas", icon: "spark", tone: "cyan" },
-  { label: "Remake a video", icon: "remix", tone: "dark", active: true },
-  { label: "Shoppable video", icon: "cart", tone: "pink" },
-  { label: "AI avatar", icon: "user", tone: "light" },
+  { id: "ideas", label: "Viral ideas", icon: "spark", tone: "cyan" },
+  { id: "remake", label: "Remake a video", icon: "remix", tone: "dark" },
+  { id: "shop", label: "Shoppable video", icon: "cart", tone: "pink", active: true },
+  { id: "avatar", label: "AI avatar", icon: "user", tone: "light" },
 ];
+const chips = {
+  ideas: ["Scans your niche", "3 hooks ready"],
+  remake: ["Paste any link", "Your version"],
+  shop: ["You post", "They buy"],
+  avatar: ["No camera needed", "Sounds like you"],
+} as const;
+const ideas = [
+  { hook: "POV: you found it first", views: "2.4M" },
+  { hook: "3 things I’d rebuy tomorrow", views: "1.1M" },
+  { hook: "Get ready with me, 60s", views: "890K" },
+];
+const avatarLine = ["This", "serum", "fixed", "my", "skin", "in", "one", "week."];
 
 // Coverflow reel: the active creator plays inside the phone, neighbours fan out to each side.
 const products = {
@@ -54,6 +67,7 @@ const reelData = await Promise.all(
   }),
 );
 const first = reelData[startIndex];
+const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cover" });
 ---
 
 <section class="hero relative isolate overflow-hidden" aria-labelledby="hero-title">
@@ -82,10 +96,10 @@ const first = reelData[startIndex];
   </div>
 
   <!-- Creator coverflow — slot geometry from the Figma "Hero visual" frame (origin 212,496) -->
-  <div class="stage-wrap relative mx-auto mt-10 flex justify-center lg:-mt-3" aria-hidden="true">
-    <div class="stage relative h-[717px] w-[1016px] shrink-0" data-reel data-start={startIndex} data-reel-info={JSON.stringify(reelData)}>
+  <div class="stage-wrap relative mx-auto mt-10 flex justify-center lg:-mt-3">
+    <div class="stage relative h-[717px] w-[1016px] shrink-0" data-reel data-start={startIndex} data-reel-info={JSON.stringify(reelData)} data-chips={JSON.stringify(chips)} data-tool="shop">
       {reel.map((r, i) => (
-        <figure class="reel-slide absolute overflow-hidden" data-slide={i}>
+        <figure class="reel-slide absolute overflow-hidden" data-slide={i} aria-hidden="true">
           <Image src={r.img} alt="" widths={[300, 560]} sizes="260px" class="size-full object-cover" loading={Math.abs(i - startIndex) <= 2 ? "eager" : "lazy"} />
           {"video" in r && r.video && (
             <video class="slide-video absolute inset-0 size-full object-cover" src={r.video} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
@@ -95,10 +109,59 @@ const first = reelData[startIndex];
       ))}
 
       <!-- Screen UI pinned to the phone; its text swaps with each creator -->
-      <div class="screen-ui pointer-events-none absolute left-[378px] top-[105px] z-[40] h-[564px] w-[260px] overflow-hidden rounded-[32px]" data-screen>
+      <div class="screen-ui pointer-events-none absolute left-[378px] top-[105px] z-[40] h-[564px] w-[260px] overflow-hidden rounded-[32px]" data-screen aria-hidden="true">
         <span class="absolute inset-x-0 top-[324px] h-[240px] bg-gradient-to-b from-transparent to-black/60"></span>
         <span class="absolute left-[88px] top-3 h-6 w-[84px] rounded-xl bg-black"></span>
-        <div class="screen-swap" data-swap>
+
+        <!-- Viral ideas: hooks trending in the creator's niche -->
+        <div class="panel absolute inset-0" data-panel="ideas">
+          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="size-1.5 rounded-full bg-cyan"></span>Trending in Skincare</span>
+          <div class="screen-card absolute inset-x-2.5 top-[318px] p-2.5">
+            <div class="mb-1.5 flex items-center justify-between px-0.5">
+              <p class="text-[11.5px] font-semibold text-ink">Viral ideas for you</p>
+              <span class="rounded-full bg-pink/10 px-1.5 py-px text-[10px] font-bold text-pink">3 new</span>
+            </div>
+            {ideas.map((it, i) => (
+              <div class="idea-row flex items-center gap-2 rounded-[10px] px-1.5 py-[7px]" style={`--d:${i * 90 + 120}ms`}>
+                <span class="grid size-[22px] shrink-0 place-items-center rounded-full bg-cyan text-[11px] font-bold text-ink">{i + 1}</span>
+                <p class="min-w-0 flex-1 truncate text-left text-[11.5px] font-semibold text-ink">{it.hook}</p>
+                <span class="flex shrink-0 items-center gap-0.5 text-[10.5px] font-medium text-muted">
+                  <svg class="size-2.5" viewBox="0 0 12 12"><path d="M3.5 2v8l6.5-4z" fill="currentColor"/></svg>{it.views}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Remake a video: a viral clip rebuilt in the creator's voice -->
+        <div class="panel absolute inset-0" data-panel="remake">
+          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2">
+            <svg class="size-3" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2v3h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Remixing a viral video
+          </span>
+          <div class="screen-card absolute inset-x-2.5 top-[340px] p-3">
+            {["Hook rewritten", "Script in your voice"].map((s, i) => (
+              <div class="idea-row flex items-center gap-2 py-[5px]" style={`--d:${i * 120 + 120}ms`}>
+                <span class="grid size-[18px] place-items-center rounded-full bg-ink text-white">
+                  <svg class="size-2.5" viewBox="0 0 12 12" fill="none"><path d="m2.5 6.2 2.3 2.3 4.7-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <p class="text-[11.5px] font-semibold text-ink">{s}</p>
+              </div>
+            ))}
+            <div class="idea-row mt-1.5" style="--d:360ms">
+              <div class="flex items-center justify-between text-[11px]">
+                <p class="font-semibold text-ink">Rendering your version</p>
+                <p class="font-bold text-pink" data-progress-label>0%</p>
+              </div>
+              <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-ink/10">
+                <span class="progress-bar block h-full rounded-full"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shoppable video: product tag on the post; text swaps with each creator -->
+        <div class="panel screen-swap absolute inset-0" data-panel="shop" data-swap>
           <p class="screen-text absolute inset-x-2 top-[228px] text-center text-[28px] leading-[1.2] font-extrabold" data-f="caption">{first.caption}</p>
           <p class="screen-text absolute inset-x-0 top-[266px] text-center text-[19px] font-bold !text-pink" data-f="sub">{first.sub}</p>
           <p class="absolute left-3 top-[308px] text-[13px] font-bold text-white" data-f="handle">{first.handle}</p>
@@ -111,26 +174,44 @@ const first = reelData[startIndex];
             <span class="rounded-md bg-pink px-[9px] py-[5px] text-[11px] font-bold text-white">Buy</span>
           </div>
         </div>
+
+        <!-- AI avatar: a talking avatar with live captions, no camera -->
+        <div class="panel absolute inset-0" data-panel="avatar">
+          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="rec-dot size-1.5 rounded-full bg-pink"></span>AI avatar · live</span>
+          <p class="screen-text absolute inset-x-4 top-[226px] text-center text-[19px] leading-[1.25] font-extrabold" data-captions>
+            {avatarLine.map((w, i) => <span class="cap-word" style={`--w:${i}`}>{w} </span>)}
+          </p>
+          <div class="screen-card absolute inset-x-2.5 top-[440px] flex items-center gap-2.5 p-2.5">
+            <img src={avatarThumb.src} alt="" width="34" height="34" class="size-[34px] rounded-full object-cover object-top" />
+            <div class="min-w-0 flex-1 text-left leading-[1.25]">
+              <p class="text-[11.5px] font-semibold text-ink">Your avatar</p>
+              <p class="text-[10.5px] font-medium text-muted">Speaking in your voice</p>
+            </div>
+            <span class="wave flex h-5 items-center gap-[3px]">
+              {[0, 1, 2, 3, 4].map((b) => <span class="wave-bar w-[3px] rounded-full bg-pink" style={`--b:${b}`}></span>)}
+            </span>
+          </div>
+        </div>
       </div>
-      <div class="hand-wrap pointer-events-none absolute left-[165px] top-0 z-[45]" data-intro="hand">
+      <div class="hand-wrap pointer-events-none absolute left-[165px] top-0 z-[45]" data-intro="hand" aria-hidden="true">
         <Image src={hand} alt="" width={1024} class="h-[1035px] w-[690px] max-w-none" loading="eager" />
       </div>
 
       <!-- Floating chips -->
-      <span class="chip-intro absolute left-[286px] top-[225px] z-50" data-intro="pop" style="--i:10">
+      <span class="chip-intro absolute right-[622px] top-[225px] z-50" data-intro="pop" style="--i:10" aria-hidden="true">
         <span class="float-chip [--r:-6deg]">
           <span class="grid size-6 place-items-center rounded-full bg-cyan text-ink">
             <svg class="size-3" viewBox="0 0 12 12"><path d="M4 2.5v7l5.5-3.5z" fill="currentColor"/></svg>
           </span>
-          You post
+          <span class="chip-label" data-chip="0">{chips.shop[0]}</span>
         </span>
       </span>
-      <span class="chip-intro absolute left-[616px] top-[429px] z-50" data-intro="pop" style="--i:11">
+      <span class="chip-intro chip-b absolute left-[616px] top-[429px] z-50" data-intro="pop" style="--i:11" aria-hidden="true">
         <span class="float-chip [--r:6deg] [animation-delay:-3s]">
           <span class="grid size-6 place-items-center rounded-full bg-pink text-white">
-            <svg class="size-3.5" viewBox="0 0 16 16" fill="none"><path d="M2 2.5h2l1.6 7.5h6.6L14 5H5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="13" r="1" fill="currentColor"/><circle cx="11.5" cy="13" r="1" fill="currentColor"/></svg>
+            <svg class="size-3.5" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.4 6.6 11.5 12.5 4.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          They buy
+          <span class="chip-label" data-chip="1">{chips.shop[1]}</span>
         </span>
       </span>
 
@@ -142,8 +223,9 @@ const first = reelData[startIndex];
             <p class="text-[11px] font-medium text-muted">No account needed</p>
           </div>
           <span class="h-7 w-px bg-ink/10"></span>
+          <div class="flex items-center gap-1" role="group" aria-label="Preview a tool">
           {tools.map((t) => (
-            <span class:list={["tool relative flex items-center gap-2 rounded-full py-1.5 pr-3.5 pl-1.5 text-[14px] font-semibold text-ink", t.active && "tool-active"]}>
+            <button type="button" data-tool-btn={t.id} aria-pressed={t.active ? "true" : "false"} class="tool relative flex cursor-pointer items-center gap-2 rounded-full py-1.5 pr-3.5 pl-1.5 text-[14px] font-semibold text-ink">
               <span class:list={[
                 "grid size-[30px] place-items-center rounded-[15px]",
                 t.tone === "cyan" && "bg-cyan text-ink",
@@ -157,9 +239,10 @@ const first = reelData[startIndex];
                 {t.icon === "user" && <svg class="size-[15px]" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.6" fill="currentColor"/><path d="M3 13.5c.6-2.6 2.6-4 5-4s4.4 1.4 5 4z" fill="currentColor"/></svg>}
               </span>
               {t.label}
-              {t.active && <svg class="size-[13px]" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>}
-            </span>
+              <svg class="tool-arrow size-[13px]" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           ))}
+          </div>
         </div>
       </div>
     </div>
@@ -225,11 +308,105 @@ const first = reelData[startIndex];
     backdrop-filter: blur(12px);
     box-shadow: inset 0 1px 0 #fff, var(--shadow-glow);
   }
-  .tool-active,
+  .tool {
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, padding 0.3s ease;
+  }
+  .tool:hover { background: rgb(255 255 255 / 0.55); }
+  .tool:focus-visible { outline: 2px solid var(--color-pink); outline-offset: 2px; }
+  .tool[aria-pressed="true"],
   .tool-icon-light {
     background: #fff;
     box-shadow: inset 0 1px 0 #fff;
     filter: drop-shadow(0 4px 5px #12142412) drop-shadow(0 1px 1px #1214240f);
+  }
+  .tool-arrow {
+    max-width: 0;
+    margin-left: -8px;
+    opacity: 0;
+    transition: max-width 0.3s ease, margin 0.3s ease, opacity 0.2s ease;
+  }
+  .tool[aria-pressed="true"] .tool-arrow { max-width: 13px; margin-left: 0; opacity: 1; }
+
+  /* Tool previews inside the phone */
+  .panel {
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 10px;
+    filter: blur(6px);
+    transition: opacity 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), translate 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      filter 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.45s;
+  }
+  .panel.is-on {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    filter: none;
+    transition-delay: 0.08s, 0.08s, 0.08s, 0s;
+  }
+  .screen-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    background: rgb(22 24 35 / 0.45);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 #ffffff26, 0 6px 16px -6px #00000059;
+  }
+  .screen-card {
+    border-radius: 16px;
+    background: rgb(255 255 255 / 0.94);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 #fff, 0 10px 24px -8px #00000066, -8px 10px 24px -14px #25f4ee66, 8px 10px 24px -14px #fe2c5559;
+  }
+  .idea-row {
+    opacity: 0;
+    translate: 0 6px;
+    transition: opacity 0.4s ease, translate 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .panel.is-on .idea-row { opacity: 1; translate: 0 0; transition-delay: var(--d); }
+  [data-panel="ideas"] .idea-row:nth-child(2) { background: #25f4ee1f; }
+  .panel.screen-swap.is-swapping { opacity: 0; transition-delay: 0s; }
+  .progress-bar {
+    width: 0;
+    background: linear-gradient(90deg, #25f4ee, #fe2c55);
+  }
+  .panel.is-on .progress-bar { animation: render 3.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s infinite; }
+  @keyframes render {
+    0% { width: 0; }
+    80%, 100% { width: 100%; }
+  }
+  .cap-word { opacity: 0.35; transition: opacity 0.2s, color 0.2s; }
+  .panel.is-on .cap-word { animation: speak 4s steps(1) infinite; animation-delay: calc(var(--w) * 0.32s); }
+  @keyframes speak {
+    0% { opacity: 1; color: var(--color-cyan); }
+    8% { opacity: 1; color: #fff; }
+    85% { opacity: 1; color: #fff; }
+    100% { opacity: 0.35; }
+  }
+  .wave-bar { height: 6px; }
+  .panel.is-on .wave-bar { animation: wave 0.9s ease-in-out infinite; animation-delay: calc(var(--b) * -0.18s); }
+  @keyframes wave {
+    0%, 100% { height: 5px; }
+    50% { height: 18px; }
+  }
+  .rec-dot { animation: blink 1.4s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: 0.25; } }
+  .chip-b { transition: top 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .stage:not([data-tool="shop"]) .chip-b { top: 300px; }
+  .chip-label { transition: opacity 0.2s ease, filter 0.2s ease; }
+  .chip-label.is-swapping { opacity: 0; filter: blur(4px); }
+  @media (prefers-reduced-motion: reduce) {
+    .panel, .idea-row { transition: none; filter: none; translate: none; }
+    .progress-bar, .cap-word, .wave-bar, .rec-dot, .panel.is-on .progress-bar, .panel.is-on .cap-word, .panel.is-on .wave-bar { animation: none; }
+    .panel.is-on .progress-bar { width: 72%; }
+    .cap-word { opacity: 1; }
   }
   .screen-ui {
     box-shadow: var(--shadow-glow);
@@ -400,6 +577,43 @@ const first = reelData[startIndex];
       setTimeout(ready, 60); // fallback: rAF is paused in background tabs
       setTimeout(() => layout({ stagger: true }), 900);
     }
+
+    // Tool dock: each button switches the phone screen to that tool's preview and retitles the chips.
+    const chipText: Record<string, readonly [string, string]> = JSON.parse(stage.dataset.chips || "{}");
+    const buttons = [...stage.querySelectorAll<HTMLButtonElement>("[data-tool-btn]")];
+    const panels = [...stage.querySelectorAll<HTMLElement>("[data-panel]")];
+    const chipLabels = [...stage.querySelectorAll<HTMLElement>("[data-chip]")];
+    const progressLabel = stage.querySelector<HTMLElement>("[data-progress-label]");
+    const progressBar = stage.querySelector<HTMLElement>(".progress-bar");
+    let progressTimer: number | undefined;
+    const setTool = (id: string, animate = true) => {
+      stage.dataset.tool = id;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.toolBtn === id)));
+      panels.forEach((p) => {
+        const on = p.dataset.panel === id;
+        if (on && animate) { p.classList.remove("is-on"); void p.offsetWidth; } // restart entrance + loops
+        p.classList.toggle("is-on", on);
+      });
+      const labels = chipText[id];
+      if (labels) {
+        chipLabels.forEach((el, i) => {
+          if (!animate || reduce) { el.textContent = labels[i]; return; }
+          el.classList.add("is-swapping");
+          setTimeout(() => { el.textContent = labels[i]; el.classList.remove("is-swapping"); }, 200);
+        });
+      }
+      clearInterval(progressTimer);
+      if (id === "remake" && progressLabel && progressBar) {
+        const track = progressBar.parentElement!;
+        progressTimer = window.setInterval(() => {
+          progressLabel.textContent = `${Math.round((progressBar.offsetWidth / track.offsetWidth) * 100)}%`;
+        }, 80);
+      }
+    };
+    buttons.forEach((b) => b.addEventListener("click", () => {
+      if (b.dataset.toolBtn && b.dataset.toolBtn !== stage.dataset.tool) setTool(b.dataset.toolBtn);
+    }));
+    setTool(stage.dataset.tool || "shop", false);
 
     // Autoplay every 2s (700ms move), only while the hero is on screen and the tab is visible.
     let timer: number | undefined;
