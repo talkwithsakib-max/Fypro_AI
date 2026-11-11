@@ -1,0 +1,167 @@
+---
+import { Image } from "astro:assets";
+import Arrow from "./ui/Arrow.astro";
+import wallLeft from "../assets/img/wall-left.png";
+import wallRight from "../assets/img/wall-right.png";
+// Flat Figma wall sources (546:17666 / 546:17721, 696×738) — warped below with the same perspective as the wall renders
+import serum from "../assets/img/creator-serum.png";
+import lashes from "../assets/img/creator-lashes.png";
+import pov from "../assets/img/creator-pov.png";
+import city from "../assets/img/creator-city.png";
+import roller from "../assets/img/creator-roller.png";
+
+const people = {
+  justinaa: { h: "mama.justinaa", f: "8,209", av: serum },
+  des: { h: "des.lashverse", f: "5,057", av: lashes },
+  raquel: { h: "raquelgardner", f: "12.7K", av: pov },
+  buritica: { h: "buriticahustle", f: "6,885", av: city },
+  freedom: { h: "freedom.lover26", f: "2,567", av: roller },
+};
+// Creator clips from fypro.ai's "They use Fypro" section
+const V = "/videos/creators/";
+const slots = [[0, 0], [238, 0], [476, 0], [0, 378], [238, 378], [476, 378]];
+const walls = [
+  {
+    side: "l",
+    // Homography: 696×738 flat frame → wall quad (0,18.5)(559.5,177.5)(559.5,682)(0,841)
+    m: "matrix3d(1.3105862,0.3891998,0,0.0009056,0,1.1144986,0,0,0,0,1,0,0,18.5,0,1)",
+    cards: [
+      { v: "mama.justinaa_7663166263023127838", p: people.justinaa },
+      { v: "des.lashverse_7667742225882778911", p: people.des },
+      { v: "raquelgardnerofficial_7665447710866115871", p: people.raquel },
+      { v: "des.lashverse_7674663569870408991", p: people.des },
+      { v: "mama.justinaa_7666593710146194718", p: people.justinaa },
+      { v: "freedom.lover26_7673968665078893837", p: people.freedom },
+    ],
+  },
+  {
+    side: "r",
+    m: "matrix3d(0.4708587,-0.238725,0,-0.0005555,0,0.6836043,0,0,0,0,1,0,40,177.5,0,1)",
+    cards: [
+      { v: "mama.justinaa_7670906075821903134", p: people.justinaa },
+      { v: "buriticahustle_7673782173006040334", p: people.buritica },
+      { v: "freedom.lover26_7673968665078893837", p: people.freedom },
+      { v: "raquelgardnerofficial_7665447710866115871", p: people.raquel },
+      { v: "mama.justinaa_7663166263023127838", p: people.justinaa },
+      { v: "des.lashverse_7667742225882778911", p: people.des },
+    ],
+  },
+];
+---
+
+<section id="creators" class="relative overflow-hidden bg-white py-16 lg:py-0" aria-labelledby="stories-title">
+  <div class="relative mx-auto flex max-w-[1440px] flex-col items-center lg:block lg:h-[980px]">
+    <!-- Mobile/tablet: walls side by side above the copy -->
+    <div class="pointer-events-none mb-10 flex w-full justify-between gap-2 lg:hidden" aria-hidden="true">
+      <Image src={wallLeft} alt="" widths={[360, 600]} sizes="50vw" class="-ml-[6%] h-auto w-[52%] object-contain" />
+      <Image src={wallRight} alt="" widths={[360, 600]} sizes="50vw" class="-mr-[6%] h-auto w-[52%] object-contain" />
+    </div>
+
+    <!-- Desktop: Figma walls (600×860 at x -62 / 902, y 60); videos sit on each card inside the same warp -->
+    {walls.map((w) => (
+      <div class:list={["absolute top-[60px] hidden h-[860px] w-[600px] lg:block", w.side === "l" ? "left-[calc(50%-782px)]" : "left-[calc(50%+182px)]"]} aria-hidden="true">
+        <div class="warp" style={`transform:${w.m}`}>
+          {w.cards.map((c, i) => (
+            <div class="vcard" style={`left:${slots[i][0]}px;top:${slots[i][1]}px`}>
+              <video data-src={`${V}${c.v}.mp4`} muted loop playsinline autoplay preload="auto"></video>
+              <span class="chip">
+                <Image src={c.p.av} alt="" width={52} class="size-[26px] rounded-full object-cover" />
+                <span class="leading-normal whitespace-nowrap"><b>{c.p.h}</b><i>{c.p.f} followers</i></span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+    <span class="white-fade absolute top-0 left-[calc(50%-410px)] hidden h-[980px] w-[820px] lg:block" aria-hidden="true"></span>
+
+    <div class="relative z-10 flex flex-col items-center gap-5 px-4 text-center lg:absolute lg:top-[321px] lg:left-1/2 lg:-translate-x-1/2 lg:px-0" data-reveal>
+      <p class="text-[16px] leading-normal font-medium text-muted">Creator stories</p>
+      <h2 id="stories-title" class="text-[40px] leading-[1.1] font-semibold tracking-[-0.03em] text-ink sm:text-[52px] sm:leading-[58px] lg:whitespace-nowrap">
+        They use Fypro to<br /><span class="income">create income</span>.
+      </h2>
+      <p class="max-w-[330px] text-[17px] leading-[26px] text-muted">Real creators, real videos, real sales — planned, made and sold with Fypro.</p>
+      <a href="#cta" class="btn-dark glow-btn">
+        Get my free video
+        <span class="btn-orb"><Arrow /></span>
+      </a>
+      <p class="text-[13px] leading-normal font-medium text-muted">30,000+ creators · 10M+ views last quarter</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .white-fade {
+    background: linear-gradient(90deg, #fff0 0%, #fffffff2 22%, #fff 50%, #fffffff2 78%, #fff0 100%);
+  }
+  .income {
+    background: linear-gradient(90deg, #16b9b4 0%, #fe2c55 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .warp {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 696px;
+    height: 738px;
+    transform-origin: 0 0;
+  }
+  /* Video layer per Figma card (220×360, r22); fades in over the baked still once playing */
+  .vcard {
+    position: absolute;
+    width: 220px;
+    height: 360px;
+    overflow: hidden;
+    border-radius: 22px;
+  }
+  .vcard video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .chip {
+    position: absolute;
+    left: 10px;
+    top: 311px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: #00000073;
+    padding: 5px 12px 5px 5px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #fff;
+  }
+  .chip b {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .chip i {
+    display: block;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    color: #ffffffbf;
+  }
+</style>
+
+<script>
+  // Load + play the wall videos only while the section is on screen (desktop, motion allowed).
+  const sec = document.getElementById("creators");
+  const cards = sec ? [...sec.querySelectorAll<HTMLElement>(".vcard")] : [];
+  if (cards.length && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(min-width: 1024px)").matches) {
+    new IntersectionObserver(([e]) => {
+      cards.forEach((c) => {
+        const v = c.querySelector("video")!;
+        if (e.isIntersecting) {
+          if (!v.src) v.src = v.dataset.src!;
+          v.play().catch(() => {});
+        } else v.pause();
+      });
+    }, { rootMargin: "900px 0px" }).observe(sec!);
+  }
+</script>

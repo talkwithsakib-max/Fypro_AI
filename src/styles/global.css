@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Host Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Host Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+
+  --color-ink: #161823;
+  --color-ink-2: #1c1e2c;
+  --color-muted: #5e5f66;
+  --color-subtle: #8a8b93;
+  --color-line: #ececf1;
+  --color-cyan: #25f4ee;
+  --color-pink: #fe2c55;
+  --color-teal: #2fb5ad;
+  --color-night: #0b0b0d;
+
+  --shadow-xs: inset 0 1px 0 #fff, 0 0 0 1px #1214240a, 0 1px 2px #1214240f, 0 4px 10px -2px #12142412;
+  --shadow-float: inset 0 1px 0 #fff, 0 0 0 1px #1214240a, 0 2px 6px #1214240f, 0 18px 36px -10px #12142424,
+    -14px 22px 40px -16px #25f4ee2e, 14px 22px 40px -16px #fe2c5529;
+  --shadow-card: inset 0 1px 0 #fff, inset 0 -1px 0 #12142408, 0 0 0 1px #12142409, 0 2px 4px #1214240a,
+    0 14px 28px -8px #12142412, -26px 36px 64px -24px #25f4ee29, 26px 36px 64px -24px #fe2c5524;
+  --shadow-hero: 0 0 0 1px #1214240d, 0 6px 12px #12142414, 0 28px 56px -10px #1214242e,
+    -18px 40px 70px -20px #25f4ee29, 18px 40px 70px -20px #fe2c5524;
+  /* Figma "glow" drop shadow as rendered on floating pills (dock, handle input, phone screen): 0 spread */
+  /* Card shadow as Figma renders it on unclipped card frames (spread ignored) */
+  --shadow-card-open: inset 0 1px 0 #fff, inset 0 -1px 0 #12142408, 26px 36px 64px #fe2c5524, -26px 36px 64px #25f4ee29,
+    0 14px 28px #12142412, 0 2px 4px #1214240a;
+  --shadow-dark-open: inset 0 1px 0 #ffffff24, 22px 34px 60px #fe2c5538, -22px 34px 60px #25f4ee38, 0 24px 48px #12142459,
+    0 2px 4px #1214241f;
+  --shadow-video: 18px 40px 70px -20px #fe2c5524, -18px 40px 70px -20px #25f4ee29, 0 28px 56px -10px #1214242e,
+    0 6px 12px #12142414, 0 0 0 1px #1214240d;
+  --shadow-dark-chip: 12px 20px 40px -14px #fe2c5533, -12px 20px 40px -14px #25f4ee33, 0 14px 28px -6px #1214244d;
+  --shadow-glow: 14px 22px 40px #fe2c5529, -14px 22px 40px #25f4ee2e, 0 18px 36px #12142424, 0 2px 6px #1214240f;
+  --shadow-dark-card: inset 0 1px 0 #ffffff24, 0 2px 4px #1214241f, 0 24px 48px -12px #12142459,
+    -22px 34px 60px -20px #25f4ee38, 22px 34px 60px -20px #fe2c5538;
+  --shadow-dark-float: inset 0 1px 0 #ffffff29, 0 14px 28px -6px #1214244d, -12px 20px 40px -14px #25f4ee33,
+    12px 20px 40px -14px #fe2c5533;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-white font-sans text-ink;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: #fe2c5533;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-pink);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1264px] px-4 sm:px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply text-[16px] leading-[21px] font-medium text-muted;
+  }
+  .display {
+    @apply font-display font-semibold tracking-[-0.045em] leading-[1.02];
+  }
+  .h2 {
+    @apply font-display font-semibold tracking-[-0.03em] text-[36px] leading-[1.1] sm:text-[46px] lg:text-[52px] lg:leading-[58px];
+  }
+  .lead {
+    @apply text-[16px] leading-[1.6] text-muted sm:text-[18px] sm:leading-[28px];
+  }
+  .card {
+    @apply rounded-[28px] bg-white;
+    box-shadow: var(--shadow-card);
+  }
+  .card-media {
+    @apply relative overflow-hidden rounded-[22px];
+  }
+  .tag {
+    @apply inline-flex items-center rounded-full bg-ink px-2 py-[3px] text-[11px] font-semibold text-white;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] font-medium text-ink;
+    box-shadow: var(--shadow-xs);
+  }
+
+  /* Buttons */
+  .btn-dark {
+    @apply relative inline-flex items-center gap-3 rounded-full bg-ink py-1.5 pr-1.5 pl-5 text-[15px] font-medium text-white transition-transform duration-300;
+    background-image: linear-gradient(180deg, #34363f 0%, #1b1c23 50%, #0b0c10 100%);
+    font-weight: 600;
+    box-shadow: inset 0 1px 0 #ffffff29, 6px 6px 18px #fe2c5547, 12px 20px 40px #fe2c5533, -12px 20px 40px #25f4ee33,
+      0 14px 28px #1214244d;
+  }
+  .btn-dark:hover {
+    transform: translateY(-1px);
+  }
+  .btn-light {
+    @apply relative inline-flex items-center justify-center rounded-full bg-[#f4f4f6] px-5 py-3 text-[15px] font-medium text-ink transition-colors duration-200 hover:bg-[#ececf0];
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px #1214240d, 0 2px 4px #1214240d;
+  }
+  .btn-orb {
+    @apply grid size-8 shrink-0 place-items-center rounded-full text-white transition-transform duration-300;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #25f4ee 0%, #fe2c55 71.4%);
+    box-shadow: inset 0 1px 0 #ffffff59;
+  }
+  .btn-dark:hover .btn-orb,
+  .group:hover .btn-orb {
+    transform: translateX(2px) rotate(-8deg);
+  }
+
+  /* Soft pastel mesh behind media */
+  .mesh {
+    background:
+      radial-gradient(60% 70% at 12% 20%, #f7d9ef 0%, transparent 60%),
+      radial-gradient(55% 65% at 85% 15%, #dfe3fb 0%, transparent 60%),
+      radial-gradient(60% 70% at 85% 90%, #d4f6f3 0%, transparent 60%),
+      radial-gradient(55% 60% at 15% 95%, #fbe1e6 0%, transparent 60%),
+      #f3f1f7;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--noise);
+    background-size: 256px;
+    mix-blend-mode: overlay;
+    opacity: 0.18;
+    border-radius: inherit;
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, #2fb5ad 0%, #8a6a96 45%, #e2456b 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient-rest {
+    background: linear-gradient(90deg, #b75d82 0%, #e04a6c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Scroll reveal (progressive enhancement: only hides when JS has marked the doc) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-8px) rotate(var(--r, 0deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Rotating light ring around a primary button (hero CTA) */
+@property --ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.glow-btn {
+  position: relative;
+}
+.glow-btn::before,
+.glow-btn::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  padding: 2px;
+  pointer-events: none;
+  border-radius: inherit;
+  /* keep only the 2px ring outside the button face */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  background: conic-gradient(from var(--ring-angle), transparent 0 55%, #25f4ee 70%, #fe2c55 85%, transparent 100%);
+  animation: ring-turn 3.5s linear infinite;
+}
+.glow-btn::after {
+  filter: blur(6px);
+  opacity: 0.8;
+}
+@keyframes ring-turn {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow-btn::before,
+  .glow-btn::after {
+    animation: none;
+  }
+}

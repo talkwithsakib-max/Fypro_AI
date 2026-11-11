@@ -1,0 +1,231 @@
+---
+import { Image } from "astro:assets";
+import Arrow from "./ui/Arrow.astro";
+import avDes from "../assets/figma/testi/av-des.jpg";
+import avRaquel from "../assets/figma/testi/av-raquel.jpg";
+import avAlparslan from "../assets/figma/testi/av-alparslan.jpg";
+import avJames from "../assets/figma/testi/av-james.jpg";
+import avSean from "../assets/figma/testi/av-sean.jpg";
+import avHassan from "../assets/figma/testi/av-hassan.jpg";
+import ambient from "../assets/figma/testi/ambient.svg";
+import floor from "../assets/figma/testi/floor.svg";
+import contact from "../assets/figma/testi/contact.svg";
+
+const V = "/videos/creators/";
+const items = [
+  {
+    short: "Des", name: "Des McKillop", result: "Beats her average views", avatar: avDes, handle: "@des.lashverse",
+    video: "des.lashverse_7666647690230517022",
+    quote: "Fypro’s AI tailors each video to my creator profile and audience, helping nearly every piece outperform my average views and drive meaningful revenue growth.",
+  },
+  {
+    short: "Raquel", name: "Raquel Gardner", result: "Hours saved every week", avatar: avRaquel, handle: "@raquelgardnerofficial",
+    video: "raquelgardnerofficial_7673274821379149087",
+    quote: "Creating videos used to be difficult with my busy schedule — now Fypro AI keeps my account active without taking up hours of my day.",
+  },
+];
+// Product Hunt reviews (fypro.ai "On Product Hunt" section) — text reviews, so their cards show a review panel instead of a video
+const reviews = [
+  { name: "Alparslan", avatar: avAlparslan, src: "/videos/reviews/r-8136210.mp4", pos: "50% 30%", handle: "Product Hunt review", quote: "The way it pulls the vibe from your actual content instead of slapping a generic template on you is really smart, feels like the site actually sounds like the creator." },
+  { name: "James", avatar: avJames, src: "/videos/reviews/r-8135595.mp4", pos: "50% 28%", handle: "Sea Imagine AI · Product Hunt", quote: "I have tried Fypro. It’s useful for my TikTok user growth." },
+  { name: "Sean", avatar: avSean, src: "/videos/reviews/r-7414130.mp4", pos: "50% 15%", handle: "Product Hunt review", quote: "The biggest challenge for creators isn’t content anymore. It’s commercialization. Love seeing a product tackle that directly." },
+  { name: "Hassan Ismail Rebe", avatar: avHassan, src: "/videos/reviews/r-7261920.mp4", pos: "50% 42%", handle: "Product Hunt review", quote: "Turning content into an actual business is a much bigger challenge than growing followers. I like that you’re tackling that part." },
+];
+// Drum order alternates video testimonials with reviews
+const all = [
+  { ...items[0], kind: "video" }, { ...reviews[0], short: "Alparslan", result: "Product Hunt ★★★★★", kind: "ph" },
+  { ...reviews[1], short: "James", result: "Product Hunt ★★★★★", kind: "ph" }, { ...items[1], kind: "video" },
+  { ...reviews[2], short: "Sean", result: "Product Hunt ★★★★★", kind: "ph" }, { ...reviews[3], short: "Hassan", result: "Product Hunt ★★★★★", kind: "ph" },
+] as any[];
+const initials = (n: string) => n.split(" ").map((w) => w[0]).slice(0, 2).join("");
+const ring = all.map((it, i) => ({ ...it, i }));
+---
+
+<section id="testimonials" class="px-2 py-4 sm:p-5" aria-labelledby="love-title">
+  <div class="love relative mx-auto flex max-w-[1400px] flex-col overflow-hidden rounded-[28px] bg-[#0a0a0a] pt-20 pb-12 text-white sm:rounded-[40px] lg:block lg:h-[1072px] lg:p-0" data-love>
+    <!-- Header (Figma: top 110, centred) -->
+    <div class="relative z-20 px-4 text-center lg:absolute lg:inset-x-0 lg:top-[110px]" data-reveal>
+      <p class="text-[16px] leading-normal font-medium text-white/60">In their own words</p>
+      <h2 id="love-title" class="mt-5 font-display text-[64px] leading-[1] font-semibold tracking-[-0.05em] sm:text-[96px] lg:text-[112px] lg:leading-[112px]">creator love.</h2>
+      <p class="mt-2.5 text-[16px] leading-normal font-medium text-white/55">They dropped their handles. Here’s what came back.</p>
+    </div>
+
+    <!-- Stage: 1400×680 (Figma origin y=292) — lighting + rotating 3D drum of video cards -->
+    <div class="relative mt-8 lg:absolute lg:inset-x-0 lg:top-[292px] lg:mt-0" data-fit>
+      <div class="relative h-[680px] w-[1400px]" data-w="1400">
+        <img src={ambient.src} alt="" class="pointer-events-none absolute top-[250px] left-[110px] h-[540px] w-[1180px] max-w-none" />
+        <img src={floor.src} alt="" class="pointer-events-none absolute top-[515px] left-[270px] h-[150px] w-[860px] max-w-none" />
+        <span class="horizon absolute top-[590px] left-[380px] h-px w-[640px]"></span>
+        <img src={contact.src} alt="" class="pointer-events-none absolute top-[571px] left-[565px] h-[34px] w-[270px] max-w-none" />
+
+        <div class="drum-stage absolute top-[70px] left-1/2 h-[520px] w-[280px] -translate-x-1/2">
+          <div class="drum" data-drum>
+            {ring.map((c, k) => (
+              <figure class="tcard" style={`--k:${k}`} data-card={k} data-i={c.i}>
+                <div class="relative h-[230px] overflow-hidden bg-[#1a1a1d]">
+                  <video data-src={c.src ?? `${V}${c.video}.mp4`} muted loop playsinline preload="auto" class="size-full object-cover" style={`object-position:${c.pos ?? "50% 22%"}`}></video>
+                  <span class:list={["absolute top-3.5 left-3.5 rounded-md bg-white px-1.5 py-0.5 font-mono text-[9.5px] font-medium tracking-wider", c.kind === "ph" ? "text-[#da552f]" : "text-ink"]}>{c.kind === "ph" ? "PRODUCT HUNT" : "TIKTOK"}</span>
+                  <span class="absolute right-3.5 bottom-3.5 grid size-10 place-items-center rounded-full bg-white text-ink shadow-lg">
+                    <svg class="size-3.5" viewBox="0 0 12 12"><path d="M3.5 2v8L10 6z" fill="currentColor"/></svg>
+                  </span>
+                </div>
+                <blockquote class="flex h-[290px] flex-col px-[18px] pt-5 pb-4 text-ink">
+                  <p class="text-[13px] font-medium text-muted">{c.handle}</p>
+                  <p class="mt-3 text-[15px] leading-[1.42]">{c.quote}</p>
+                  <figcaption class="mt-auto flex items-center gap-2.5 border-t border-line pt-3.5 text-[14px] font-medium">
+                    {c.avatar ? <Image src={c.avatar} alt="" width={60} class="size-7 rounded-full object-cover" /> : <span class="ph-av size-7 text-[11px]">{initials(c.name)}</span>}
+                    {c.name}
+                  </figcaption>
+                </blockquote>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls (Figma: top 958, centred) -->
+    <div class="relative z-20 mt-6 flex items-center justify-center gap-2 px-2 sm:gap-3.5 lg:absolute lg:inset-x-0 lg:top-[958px] lg:mt-0">
+      <button class="t-prev grid size-11 shrink-0 place-items-center rounded-full bg-white/[0.06] transition hover:bg-white/15" aria-label="Previous testimonial"><Arrow dir="left" /></button>
+      <div class="selector flex items-center gap-1.5 rounded-full bg-white/[0.06] p-[5px]" role="tablist" aria-label="Choose a creator">
+        {all.map((it, i) => (
+          <button class="t-tab flex items-center gap-[9px] rounded-full py-[5px] pr-3 pl-[5px] text-left transition-colors" role="tab" aria-selected={i === 0 ? "true" : "false"} data-i={i}>
+            {it.avatar ? <Image src={it.avatar} alt="" width={60} class="t-av size-[30px] rounded-full" /> : <span class="t-av ph-av size-[30px] text-[11px]">{initials(it.name)}</span>}
+            <span class="t-off text-[13px] leading-normal font-semibold whitespace-nowrap text-white/60">{it.short}</span>
+            <span class="t-on hidden flex-col leading-normal whitespace-nowrap">
+              <span class="text-[13px] font-bold text-ink">{it.name}</span>
+              <span class="text-[11px] font-semibold text-[#0a8f8b]">{it.result}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+      <button class="t-next grid size-11 shrink-0 place-items-center rounded-full bg-white/[0.06] transition hover:bg-white/15" aria-label="Next testimonial"><Arrow /></button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .love {
+    box-shadow: inset 0 1px 0 #ffffff29, var(--shadow-dark-chip);
+  }
+  .horizon {
+    background: linear-gradient(90deg, #fff0 0%, #25f4ee2e 28%, #ffffff4d 50%, #fe2c552e 72%, #fff0 100%);
+  }
+  /* 3D drum: 6 cards around a cylinder; the drum turns 60° per step (like the reference recording) */
+  .drum-stage {
+    perspective: 1500px;
+  }
+  .drum {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(-300px) rotateY(var(--rot, 0deg));
+    transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .tcard {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #fff;
+    transform: rotateY(calc(var(--k) * 60deg)) translateZ(300px);
+    transition: filter 0.8s ease, opacity 0.8s ease;
+    box-shadow: 0 40px 80px -20px #000c;
+    -webkit-box-reflect: below 6px linear-gradient(transparent 80%, #ffffff26);
+  }
+  .tcard.is-side {
+    filter: brightness(0.9);
+  }
+  .tcard.is-back {
+    filter: blur(6px) brightness(0.7);
+    opacity: 0.8;
+  }
+  .ph-top {
+    background: radial-gradient(80% 70% at 20% 0%, #ff6154 0%, transparent 70%), radial-gradient(70% 70% at 100% 100%, #da552f 0%, transparent 70%), #2a1712;
+  }
+  .ph-av {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #25f4ee, #fe2c55);
+    font-weight: 700;
+    color: #fff;
+  }
+  .selector {
+    box-shadow: inset 0 1px 0 #ffffff1a;
+  }
+  .t-tab[aria-selected="true"] {
+    background: #fff;
+    padding-right: 14px;
+  }
+  .t-tab[aria-selected="true"] .t-off {
+    display: none;
+  }
+  .t-tab[aria-selected="true"] .t-on {
+    display: flex;
+  }
+  .t-tab:not([aria-selected="true"]) .t-av {
+    opacity: 0.7;
+  }
+  @media (max-width: 480px) {
+    .t-tab:not([aria-selected="true"]) .t-off {
+      display: none;
+    }
+    .t-tab:not([aria-selected="true"]) {
+      padding-right: 5px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .drum {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-love]");
+  const drum = root?.querySelector<HTMLElement>("[data-drum]");
+  if (root && drum) {
+    const cards = [...drum.querySelectorAll<HTMLElement>(".tcard")];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>(".t-tab")];
+    const n = cards.length;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let step = 0; // grows without wrapping so the drum always turns the short way
+    let visible = false;
+    let timer: number | undefined;
+    const front = () => ((step % n) + n) % n;
+    const update = () => {
+      drum.style.setProperty("--rot", `${-step * 60}deg`);
+      const f = front();
+      cards.forEach((c, k) => {
+        let d = Math.abs(k - f);
+        d = Math.min(d, n - d); // 0 front, 1 side, 2+ back
+        c.classList.toggle("is-side", d === 1);
+        c.classList.toggle("is-back", d >= 2);
+        c.setAttribute("aria-hidden", String(d !== 0));
+        const v = c.querySelector("video");
+        if (!v) return;
+        if (visible && d <= 1) {
+          if (!v.src) v.src = v.dataset.src!;
+          if (!reduce) v.play().catch(() => {});
+        } else v.pause();
+      });
+      tabs.forEach((t, k) => t.setAttribute("aria-selected", String(k === f)));
+    };
+    const go = (s: number) => { step = s; update(); };
+    const restart = () => {
+      clearInterval(timer);
+      if (!reduce && visible) timer = window.setInterval(() => go(step + 1), 3500);
+    };
+    root.querySelector(".t-prev")?.addEventListener("click", () => { go(step - 1); restart(); });
+    root.querySelector(".t-next")?.addEventListener("click", () => { go(step + 1); restart(); });
+    tabs.forEach((t, i) => t.addEventListener("click", () => {
+      let d = i - front(); if (d > n / 2) d -= n; if (d < -n / 2) d += n;
+      go(step + d); restart();
+    }));
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; update(); restart(); }, { rootMargin: "300px 0px" }).observe(root);
+    update();
+  }
+</script>

@@ -1,0 +1,220 @@
+---
+import { Image } from "astro:assets";
+import pov from "../assets/img/creator-pov.png";
+import lashes from "../assets/img/creator-lashes.png";
+import city from "../assets/img/creator-city.png";
+import headphones from "../assets/img/creator-headphones.png";
+import park from "../assets/img/creator-park.png";
+import roller from "../assets/img/creator-roller.png";
+import bottle from "../assets/img/bottle.png";
+import lashkit from "../assets/img/product-lashkit.png";
+import serum from "../assets/img/creator-serum.png";
+
+const outlets = ["Yahoo Finance", "Business Insider", "VentureBeat", "CEO Today", "Analytics Insight"];
+// Figma "Press deck" (777:16109): back → front. x/y = card-centre offset from the deck centre, r = tilt.
+const press = [
+  { outlet: "Practical Ecommerce", mast: 24, size: 32, bg: "#f3efe6", dark: false, img: lashkit, x: -52.9, y: 0.5, r: -22,
+    title: "Listed among new e-commerce tools" },
+  { outlet: "CEO Today", mast: 30, size: 32, bg: "#25f4ee", dark: false, img: bottle, x: -36.2, y: -5.6, r: -18,
+    title: "From Traffic Tenants to Brand Landlords" },
+  { outlet: "The AI Journal", mast: 30, size: 27, bg: "#161823", dark: true, img: headphones, x: -19.1, y: -10.5, r: -14,
+    title: "The AI Startup Stack: How fypro.ai Is Rewriting Entrepreneurship Infrastructure" },
+  { outlet: "Influencer Marketing Hub", mast: 24, size: 32, bg: "#ffe4d8", dark: false, img: lashes, x: -1.7, y: -14.2, r: -10,
+    title: "From Algorithm Tenants to Data Landlords" },
+  { outlet: "Net Influencer", mast: 30, size: 32, bg: "#ece6ff", dark: false, img: roller, x: 16, y: -16.7, r: -6,
+    title: "Fypro.ai Is Building an AI Creator Success Manager" },
+  { outlet: "Analytics Insight", mast: 30, size: 27, bg: "#f3efe6", dark: false, img: park, x: 33.7, y: -17.9, r: -2,
+    title: "The Next Decade of Creator Commerce Is About Infrastructure, Not Followers" },
+  { outlet: "Business Insider", mast: 30, size: 32, bg: "#161823", dark: true, img: city, x: 51.5, y: -17.9, r: 2,
+    title: "Fypro.ai Officially Launches at VidCon Anaheim 2026" },
+  { outlet: "VentureBeat", mast: 30, size: 27, bg: "#ffffff", dark: false, img: pov, x: 69.3, y: -16.7, r: 6,
+    title: "How fypro.ai reflects the changing role of AI in creator entrepreneurship" },
+  { outlet: "Yahoo Finance", mast: 30, size: 24, bg: "#fe2c55", dark: true, img: serum, x: 86.9, y: -14.2, r: 10, front: true,
+    title: "Fypro.ai Officially Launches at VidCon Anaheim 2026, Introducing an AI Growth Engine for Creator-Led Commerce" },
+];
+const n = press.length;
+---
+
+<section id="press" class="pt-24 pb-24 [overflow-x:clip] sm:pt-[120px] sm:pb-[132px]" aria-labelledby="press-title">
+  <div class="container-x">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">In the press</p>
+      <h2 id="press-title" class="h2 mt-[18px]">From VidCon to VentureBeat.<br class="hidden sm:block" /> <span class="text-subtle">Making headlines.</span></h2>
+    </div>
+
+    <div class="mt-14 flex flex-wrap items-center justify-center gap-x-9 gap-y-3" data-reveal>
+      <span class="w-full text-center font-mono text-[11px] text-muted sm:w-auto">As seen in</span>
+      {outlets.map((o) => <span class="font-serif text-[22px] leading-[31px] italic tracking-[-0.01em] text-ink sm:text-[27px]">{o}</span>)}
+    </div>
+
+    <!-- Scroll track: the deck pins here and fans out into a cascade as you scroll through it -->
+    <div class="press-track relative mt-14" data-press-track>
+      <div class="press-stage sticky mx-auto w-full" data-fan>
+        {press.map((p, i) => {
+          const k = n - 1 - i; // 0 = front card
+          return (
+            <article
+              class:list={["press-card absolute flex cursor-pointer flex-col", p.front && "is-front", p.dark ? "text-white" : "text-ink"]}
+              style={`background:${p.bg};--sx:${p.x};--sy:${p.y};--sr:${p.r}`}
+              data-k={k}
+              tabindex={k === 0 ? 0 : -1}
+              aria-hidden={k === 0 ? "false" : "true"}
+            >
+              <div class="flex flex-col gap-1.5">
+                <p class="text-center font-serif leading-normal" style={`font-size:${p.mast}px;letter-spacing:-0.01em`}>{p.outlet}</p>
+                <span class="rule"></span>
+                <p class="dateline flex justify-between font-mono text-[10px] leading-normal whitespace-nowrap"><span>Vol. 2026</span><span>Creator economy</span></p>
+                <span class="flex flex-col gap-0.5"><span class="rule"></span><span class="rule"></span></span>
+              </div>
+              <h3 class="font-serif leading-[1.02]" style={`font-size:${p.size}px;letter-spacing:-0.01em`}>{p.title}</h3>
+              <Image src={p.img} alt="" width={560} class="min-h-0 w-full flex-1 rounded-xl object-cover object-[50%_25%]" />
+              <a href="#" class="dateline font-mono text-[10px] leading-normal whitespace-nowrap hover:underline" tabindex="-1">Read on {p.outlet} ↗</a>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Stage keeps the Figma fan footprint (549px); the track adds scroll room for the open animation */
+  .press-stage {
+    --stage-h: 559px;
+    height: var(--stage-h);
+    top: max(16px, calc(50vh - var(--stage-h) / 2));
+    perspective: 1800px;
+  }
+  .press-track {
+    height: calc(var(--stage-h, 559px) + 620px);
+  }
+  .press-card {
+    --w: 320px;
+    --h: 430px;
+    width: var(--w);
+    height: var(--h);
+    left: 50%;
+    top: 50%;
+    margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+    gap: 14px;
+    padding: 16px 22px 20px;
+    border-radius: 20px;
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    will-change: transform;
+    box-shadow: inset 0 -1px 0 #12142408, inset 0 1px 0 #fff, var(--shadow-card);
+  }
+  .press-card.is-front {
+    box-shadow: inset 0 1px 0 #fff, var(--shadow-float);
+  }
+  .press-card .rule {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    opacity: 0.25;
+  }
+  .press-card .dateline {
+    opacity: 0.62;
+  }
+  .press-stage.is-shuffling .press-card {
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @media (max-width: 1023px) {
+    .press-stage { --stage-h: 600px; }
+    .press-track { height: calc(600px + 520px); }
+  }
+  @media (max-width: 640px) {
+    .press-stage { --stage-h: 520px; }
+    .press-track { height: calc(520px + 460px); }
+    .press-card { --w: 240px; --h: 323px; padding: 12px 16px 14px; gap: 10px; zoom: 1; }
+    .press-card h3 { font-size: 20px !important; }
+    .press-card > div > p:first-child { font-size: 20px !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .press-track { height: auto; }
+    .press-stage { position: relative; top: 0; }
+  }
+</style>
+
+<script>
+  const track = document.querySelector<HTMLElement>("[data-press-track]");
+  const stage = track?.querySelector<HTMLElement>("[data-fan]");
+  if (track && stage) {
+    const cards = [...stage.querySelectorAll<HTMLElement>(".press-card")];
+    const hint = stage.querySelector<HTMLElement>(".press-hint");
+    const n = cards.length;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const clamp = (v: number) => Math.min(1, Math.max(0, v));
+    const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const rad = (d: number) => (d * Math.PI) / 180;
+
+    // Stacked deck: exact Figma poses (centre offset + tilt), scaled with the card size
+    const poses = new Map<number, { x: number; y: number; r: number }>();
+    cards.forEach((c) => poses.set(Number(c.dataset.k), {
+      x: Number(c.style.getPropertyValue("--sx")), y: Number(c.style.getPropertyValue("--sy")), r: Number(c.style.getPropertyValue("--sr")),
+    }));
+    const stackPose = (k: number, w: number) => {
+      const sc = w / 320, p = poses.get(k)!;
+      return { x: p.x * sc, y: p.y * sc, rx: 0, ry: 0, rz: p.r, sc: 1 };
+    };
+    // Open cascade: back cards up-left, front card down-right, tilted in perspective
+    const cascadePose = (k: number, w: number, h: number, stageW: number, stageH: number) => {
+      const sc = w < 300 ? 0.86 : 0.88;
+      const j = (n - 1) / 2 - k;
+      const dx = Math.min(168, (stageW - w * sc - 24) / (n - 1));
+      // Allow the cascade to use ~1.3x the stage height (it pins mid-viewport, so there is room)
+      const dy = Math.min(82, (stageH * 1.3 - h * sc) / (n - 1));
+      return { x: j * dx, y: j * dy, rx: 16, ry: -20, rz: 6, sc };
+    };
+
+    let ticking = false;
+    const render = () => {
+      ticking = false;
+      const r = track.getBoundingClientRect();
+      const stageH = stage.offsetHeight;
+      const stickyTop = parseFloat(getComputedStyle(stage).top) || 0;
+      const room = track.offsetHeight - stageH;
+      const p = reduce.matches ? 1 : room > 0 ? clamp((stickyTop - r.top) / room) : 1;
+      const w = cards[0].offsetWidth, h = cards[0].offsetHeight, stageW = stage.offsetWidth;
+      cards.forEach((card) => {
+        const k = Number(card.dataset.k);
+        const t = ease(clamp((p - k * 0.03) / (1 - (n - 1) * 0.03)));
+        const a = stackPose(k, w), b = cascadePose(k, w, h, stageW, stageH);
+        card.style.transform =
+          `translate3d(${lerp(a.x, b.x, t)}px, ${lerp(a.y, b.y, t)}px, 0) ` +
+          `rotateX(${lerp(a.rx, b.rx, t)}deg) rotateY(${lerp(a.ry, b.ry, t)}deg) ` +
+          `rotate(${lerp(a.rz, b.rz, t)}deg) scale(${lerp(a.sc, b.sc, t)})`;
+        card.style.zIndex = String(10 - k);
+      });
+      if (hint) hint.style.opacity = String(1 - Math.min(1, p * 3));
+      stage.dataset.open = p > 0.98 ? "true" : "false";
+    };
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(render); }
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    render();
+
+    const shuffle = () => {
+      stage.classList.add("is-shuffling");
+      cards.forEach((c) => {
+        const k = (Number(c.dataset.k) - 1 + n) % n;
+        c.dataset.k = String(k);
+        c.setAttribute("aria-hidden", k === 0 ? "false" : "true");
+        c.tabIndex = k === 0 ? 0 : -1;
+      });
+      render();
+      setTimeout(() => stage.classList.remove("is-shuffling"), 650);
+    };
+    stage.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) return;
+      shuffle();
+    });
+    stage.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); shuffle(); }
+    });
+  }
+</script>

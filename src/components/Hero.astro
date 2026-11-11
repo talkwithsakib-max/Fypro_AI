@@ -1,0 +1,414 @@
+---
+import { Image, getImage } from "astro:assets";
+import Navbar from "./Navbar.astro";
+import HandleForm from "./ui/HandleForm.astro";
+import AvatarStack from "./ui/AvatarStack.astro";
+import lashes from "../assets/img/creator-lashes.png";
+import pov from "../assets/img/creator-pov.png";
+import serum from "../assets/img/creator-serum.png";
+import bottle from "../assets/img/bottle.png";
+import city from "../assets/img/creator-city.png";
+import headphones from "../assets/img/creator-headphones.png";
+import park from "../assets/img/creator-park.png";
+import roller from "../assets/img/creator-roller.png";
+import pSerum from "../assets/img/product-serum.png";
+import pTumbler from "../assets/img/product-tumbler.png";
+import pLash from "../assets/img/product-lashkit.png";
+import pScrunchie from "../assets/img/product-scrunchie.png";
+import hand from "../assets/img/hand-phone.png";
+
+const tools = [
+  { label: "Viral ideas", icon: "spark", tone: "cyan" },
+  { label: "Remake a video", icon: "remix", tone: "dark", active: true },
+  { label: "Shoppable video", icon: "cart", tone: "pink" },
+  { label: "AI avatar", icon: "user", tone: "light" },
+];
+
+// Coverflow reel: the active creator plays inside the phone, neighbours fan out to each side.
+const products = {
+  serum: { name: "Glow Serum", price: "$24.00", img: pSerum },
+  tumbler: { name: "Tumbler", price: "$32.00", img: pTumbler },
+  lash: { name: "Lash Kit", price: "$18.00", img: pLash },
+  scrunchie: { name: "Silk Scrunchie", price: "$12.00", img: pScrunchie },
+};
+// Videos: Pexels (Pexels License, no attribution required) — faceless product/scene clips so no person implies endorsement.
+// lashes #8558301 · pov #7986315 · serum #8131887 · bottle #7815839 (Mikhail Nilov) · city #9921064
+// headphones #8005691 · park #7815884 (Mikhail Nilov) · roller #3756003 (cottonbro studio)
+const reel = [
+  { img: lashes, video: "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash" },
+  { img: pov, video: "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", product: "scrunchie" },
+  { img: serum, video: "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum" },
+  { img: bottle, video: "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler" },
+  { img: city, video: "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", product: "tumbler" },
+  { img: headphones, video: "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "scrunchie" },
+  { img: park, video: "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "lash" },
+  { img: roller, video: "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "serum" },
+] as const;
+const startIndex = 2;
+const reelData = await Promise.all(
+  reel.map(async (r) => {
+    const p = products[r.product];
+    const thumb = await getImage({ src: p.img, width: 64 });
+    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p.name, price: p.price, thumb: thumb.src };
+  }),
+);
+const first = reelData[startIndex];
+---
+
+<section class="hero relative isolate overflow-hidden" aria-labelledby="hero-title">
+  <div class="hero-bg absolute inset-0 -z-10" aria-hidden="true"></div>
+  <Navbar />
+
+  <div class="container-x relative pt-12 text-center lg:pt-[46px]">
+    <div class="inline-flex items-center gap-2.5 rounded-full bg-white py-[5px] pr-3.5 pl-1.5 text-[14px] text-muted backdrop-blur" style="box-shadow: var(--shadow-xs); --i:0" data-intro>
+      <AvatarStack size={24} count={4} />
+      <span class="font-medium">Loved by <b class="font-bold text-ink">30,000+ creators</b></span>
+    </div>
+
+    <h1 id="hero-title" class="mx-auto mt-[22px] max-w-[760px] font-display text-[42px] leading-[1.05] font-semibold tracking-[-0.03em] text-ink sm:text-[60px] lg:text-[68px] lg:leading-[70px]">
+      <span class="inline-block" data-intro style="--i:1">Drop your TikTok handle.</span>
+      <br class="hidden sm:block" />
+      <span class="inline-block" data-intro style="--i:2">We’ll handle the rest.</span>
+    </h1>
+
+    <p class="lead mx-auto mt-[22px] max-w-[660px] sm:text-[19px] sm:leading-[29px]" data-intro style="--i:3">
+      Fypro is <b class="font-semibold text-ink">your AI creator success manager</b>. It learns your TikTok, creates videos your audience watches, and runs the storefront where they buy.
+    </p>
+
+    <div class="mt-[22px]" data-intro style="--i:4">
+      <HandleForm id="hero-handle" glow />
+    </div>
+  </div>
+
+  <!-- Creator coverflow — slot geometry from the Figma "Hero visual" frame (origin 212,496) -->
+  <div class="stage-wrap relative mx-auto mt-10 flex justify-center lg:-mt-3" aria-hidden="true">
+    <div class="stage relative h-[717px] w-[1016px] shrink-0" data-reel data-start={startIndex} data-reel-info={JSON.stringify(reelData)}>
+      {reel.map((r, i) => (
+        <figure class="reel-slide absolute overflow-hidden" data-slide={i}>
+          <Image src={r.img} alt="" widths={[300, 560]} sizes="260px" class="size-full object-cover" loading={Math.abs(i - startIndex) <= 2 ? "eager" : "lazy"} />
+          {"video" in r && r.video && (
+            <video class="slide-video absolute inset-0 size-full object-cover" src={r.video} muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+          )}
+          <span class="slide-caption overlay-text absolute inset-x-2 top-[14%] text-center">{r.caption}</span>
+        </figure>
+      ))}
+
+      <!-- Screen UI pinned to the phone; its text swaps with each creator -->
+      <div class="screen-ui pointer-events-none absolute left-[378px] top-[105px] z-[40] h-[564px] w-[260px] overflow-hidden rounded-[32px]" data-screen>
+        <span class="absolute inset-x-0 top-[324px] h-[240px] bg-gradient-to-b from-transparent to-black/60"></span>
+        <span class="absolute left-[88px] top-3 h-6 w-[84px] rounded-xl bg-black"></span>
+        <div class="screen-swap" data-swap>
+          <p class="screen-text absolute inset-x-2 top-[228px] text-center text-[28px] leading-[1.2] font-extrabold" data-f="caption">{first.caption}</p>
+          <p class="screen-text absolute inset-x-0 top-[266px] text-center text-[19px] font-bold !text-pink" data-f="sub">{first.sub}</p>
+          <p class="absolute left-3 top-[308px] text-[13px] font-bold text-white" data-f="handle">{first.handle}</p>
+          <div class="absolute left-3 top-[330px] flex items-center gap-2 rounded-[10px] bg-white/95 py-1.5 pr-2 pl-1.5">
+            <img src={first.thumb} alt="" width="30" height="30" class="size-[30px] rounded-md object-cover" data-f="thumb" />
+            <div class="text-left text-[11px] leading-[1.25]">
+              <p class="font-semibold text-ink" data-f="product">{first.product}</p>
+              <p class="font-bold text-pink" data-f="price">{first.price}</p>
+            </div>
+            <span class="rounded-md bg-pink px-[9px] py-[5px] text-[11px] font-bold text-white">Buy</span>
+          </div>
+        </div>
+      </div>
+      <div class="hand-wrap pointer-events-none absolute left-[165px] top-0 z-[45]" data-intro="hand">
+        <Image src={hand} alt="" width={1024} class="h-[1035px] w-[690px] max-w-none" loading="eager" />
+      </div>
+
+      <!-- Floating chips -->
+      <span class="chip-intro absolute left-[286px] top-[225px] z-50" data-intro="pop" style="--i:10">
+        <span class="float-chip [--r:-6deg]">
+          <span class="grid size-6 place-items-center rounded-full bg-cyan text-ink">
+            <svg class="size-3" viewBox="0 0 12 12"><path d="M4 2.5v7l5.5-3.5z" fill="currentColor"/></svg>
+          </span>
+          You post
+        </span>
+      </span>
+      <span class="chip-intro absolute left-[616px] top-[429px] z-50" data-intro="pop" style="--i:11">
+        <span class="float-chip [--r:6deg] [animation-delay:-3s]">
+          <span class="grid size-6 place-items-center rounded-full bg-pink text-white">
+            <svg class="size-3.5" viewBox="0 0 16 16" fill="none"><path d="M2 2.5h2l1.6 7.5h6.6L14 5H5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="13" r="1" fill="currentColor"/><circle cx="11.5" cy="13" r="1" fill="currentColor"/></svg>
+          </span>
+          They buy
+        </span>
+      </span>
+
+      <!-- Tool dock (Figma 733:18320) -->
+      <div class="toolbar absolute left-1/2 top-[607px] z-[60] -translate-x-1/2">
+        <div data-intro style="--i:9" class="dock relative flex h-[54px] items-center gap-1 whitespace-nowrap rounded-full py-1.5 pr-1.5 pl-[18px]">
+          <div class="pr-2.5 text-left leading-normal">
+            <p class="text-[13px] font-semibold text-ink">Try a tool</p>
+            <p class="text-[11px] font-medium text-muted">No account needed</p>
+          </div>
+          <span class="h-7 w-px bg-ink/10"></span>
+          {tools.map((t) => (
+            <span class:list={["tool relative flex items-center gap-2 rounded-full py-1.5 pr-3.5 pl-1.5 text-[14px] font-semibold text-ink", t.active && "tool-active"]}>
+              <span class:list={[
+                "grid size-[30px] place-items-center rounded-[15px]",
+                t.tone === "cyan" && "bg-cyan text-ink",
+                t.tone === "dark" && "bg-ink text-white",
+                t.tone === "pink" && "bg-pink text-white",
+                t.tone === "light" && "tool-icon-light bg-white text-ink",
+              ]}>
+                {t.icon === "spark" && <svg class="size-[15px]" viewBox="0 0 16 16"><path d="M8 1.5 9.6 6.4 14.5 8 9.6 9.6 8 14.5 6.4 9.6 1.5 8l4.9-1.6z" fill="currentColor"/></svg>}
+                {t.icon === "remix" && <svg class="size-[15px]" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2v3h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>}
+                {t.icon === "cart" && <svg class="size-[15px]" viewBox="0 0 16 16"><path d="M1.5 2.2h1.8l.4 1.6h10.1l-1.4 5.6H5.1l-1.7-6.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 3.8h9.8L12.4 9.4H5.1z" fill="currentColor"/><circle cx="6" cy="12.6" r="1.3" fill="currentColor"/><circle cx="11.4" cy="12.6" r="1.3" fill="currentColor"/></svg>}
+                {t.icon === "user" && <svg class="size-[15px]" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.6" fill="currentColor"/><path d="M3 13.5c.6-2.6 2.6-4 5-4s4.4 1.4 5 4z" fill="currentColor"/></svg>}
+              </span>
+              {t.label}
+              {t.active && <svg class="size-[13px]" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-bg {
+    background:
+      radial-gradient(42% 55% at 0% 22%, #b6f7f4 0%, #d9fbf9 35%, transparent 70%),
+      radial-gradient(42% 55% at 100% 20%, #ffd2dc 0%, #ffe6ec 40%, transparent 72%),
+      radial-gradient(40% 40% at 50% 0%, #f1ecfb 0%, transparent 70%),
+      linear-gradient(180deg, #fbfdfd 0%, #fff 70%);
+  }
+  .hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(35% 40% at 6% 80%, #c8f8f5aa 0%, transparent 70%),
+      radial-gradient(35% 40% at 96% 85%, #ffe2e0aa 0%, transparent 70%);
+  }
+  .reel-slide {
+    margin: 0;
+    border-radius: 22px;
+    box-shadow: var(--shadow-hero);
+    transition-property: left, top, width, height, opacity, border-radius, font-size;
+    transition-duration: 0.7s;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: left, top, width, height;
+  }
+  .reel-slide.is-center .slide-caption { opacity: 0; }
+  /* Video fades in over its poster image once it is actually playing */
+  .slide-video { opacity: 0; transition: opacity 0.5s ease; }
+  .slide-video.is-playing { opacity: 1; }
+  .slide-caption { transition: opacity 0.3s; line-height: 1.1; }
+  .screen-swap { transition: opacity 0.25s ease; }
+  .screen-swap.is-swapping { opacity: 0; }
+  .overlay-text {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-shadow: 0 1px 0 #0003, 0 2px 12px #0006;
+    -webkit-text-stroke: 0.5px #0003;
+  }
+  .float-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: #fff;
+    padding: 6px 16px 6px 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    box-shadow: var(--shadow-float);
+    animation: var(--animate-float);
+    transform: rotate(var(--r));
+  }
+  .dock {
+    background: rgb(255 255 255 / 0.78);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 #fff, var(--shadow-glow);
+  }
+  .tool-active,
+  .tool-icon-light {
+    background: #fff;
+    box-shadow: inset 0 1px 0 #fff;
+    filter: drop-shadow(0 4px 5px #12142412) drop-shadow(0 1px 1px #1214240f);
+  }
+  .screen-ui {
+    box-shadow: var(--shadow-glow);
+  }
+  .screen-text {
+    color: #fff;
+    text-shadow: 0 1px 2px #000000d9, 0 3px 12px #00000080;
+  }
+  /* Load intro: staggered blur-up for copy, then the reel spreads, the hand rises and chips pop */
+  :global(.js) .hero [data-intro] {
+    opacity: 0;
+    translate: 0 18px;
+    filter: blur(10px);
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      translate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      filter 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: calc(var(--i, 0) * 110ms + 120ms);
+  }
+  :global(.js) .hero [data-intro="hand"] {
+    translate: 0 160px;
+    filter: none;
+    transition-duration: 1.2s;
+    transition-delay: 0.75s;
+  }
+  :global(.js) .hero [data-intro="pop"] {
+    scale: 0.6;
+    translate: 0 10px;
+    filter: none;
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-property: opacity, scale, translate;
+    transition-duration: 0.6s;
+    transition-delay: calc(var(--i) * 110ms + 300ms);
+  }
+  :global(.js) .hero.is-ready [data-intro] {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    filter: none;
+  }
+  @media (min-width: 1024px) {
+    .hero { height: 1213px; }
+  }
+  /* Scale the fixed-size stage on smaller screens */
+  @media (max-width: 1080px) {
+    .stage { zoom: 0.84; }
+  }
+  @media (max-width: 860px) {
+    .stage { zoom: 0.7; }
+  }
+  @media (max-width: 640px) {
+    .stage { zoom: 0.52; }
+  }
+  @media (max-width: 420px) {
+    .stage { zoom: 0.46; }
+  }
+</style>
+
+<script>
+  type Info = { caption: string; sub: string; handle: string; product: string; price: string; thumb: string };
+  const hero = document.querySelector<HTMLElement>(".hero");
+  const stage = document.querySelector<HTMLElement>("[data-reel]");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (hero && stage) {
+    const slides = [...stage.querySelectorAll<HTMLElement>(".reel-slide")];
+    const info: Info[] = JSON.parse(stage.dataset.reelInfo || "[]");
+    const swap = stage.querySelector<HTMLElement>("[data-swap]")!;
+    const n = slides.length;
+    let active = Number(stage.dataset.start || 0);
+
+    // Slot geometry (stage px) taken from the Figma hero frame; ±3 is an off-stage fade slot.
+    const C = 508;
+    const slot = (d: number) => {
+      const a = Math.abs(d), side = Math.sign(d);
+      if (a === 0) return { w: 260, h: 564, top: 105, cx: C, r: 32, o: 1, z: 30 };
+      if (a === 1) return { w: 230, h: 380, top: 141, cx: C + side * 237, r: 22, o: 1, z: 20 };
+      if (a === 2) return { w: 180, h: 300, top: 191, cx: C + side * 418, r: 20, o: 1, z: 10 };
+      return { w: 140, h: 233, top: 225, cx: C + side * 560, r: 18, o: 0, z: 5 };
+    };
+    const offset = (i: number) => {
+      let d = (i - active) % n;
+      if (d > n / 2) d -= n;
+      if (d < -n / 2 + 0.5) d += n;
+      return d;
+    };
+    const prevD = new Map<HTMLElement, number>();
+
+    // Slide videos: play only on the phone or right beside it, while the hero is on screen.
+    let heroVisible = true;
+    const syncVideos = () => {
+      slides.forEach((el, i) => {
+        const v = el.querySelector<HTMLVideoElement>(".slide-video");
+        if (!v) return;
+        const near = Math.abs(offset(i)) <= 1;
+        if (!reduce && near && heroVisible && !document.hidden) {
+          if (v.preload === "none") v.preload = "auto";
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    };
+    slides.forEach((el) => {
+      const v = el.querySelector<HTMLVideoElement>(".slide-video");
+      v?.addEventListener("playing", () => v.classList.add("is-playing"));
+    });
+
+    const layout = (opts: { instant?: boolean; stagger?: boolean } = {}) => {
+      slides.forEach((el, i) => {
+        const d = offset(i);
+        const s = slot(Math.max(-3, Math.min(3, d)));
+        const before = prevD.get(el);
+        // A slide wrapping from one side to the other travels hidden: skip its transition.
+        const wraps = before !== undefined && Math.sign(before) !== Math.sign(d) && Math.abs(before) >= 3;
+        el.style.transition = opts.instant || wraps ? "none" : "";
+        el.style.transitionDelay = opts.stagger ? `${Math.abs(d) * 90}ms` : "";
+        el.style.left = `${s.cx - s.w / 2}px`;
+        el.style.top = `${s.top}px`;
+        el.style.width = `${s.w}px`;
+        el.style.height = `${s.h}px`;
+        el.style.borderRadius = `${s.r}px`;
+        el.style.fontSize = `${Math.round(s.w * 0.085)}px`;
+        el.style.opacity = String(Math.abs(d) >= 3 ? 0 : s.o);
+        el.style.zIndex = String(s.z);
+        el.classList.toggle("is-center", d === 0);
+        prevD.set(el, d);
+      });
+      syncVideos();
+    };
+
+    const fill = (k: Info) => {
+      const set = (f: string, v: string) => {
+        const node = swap.querySelector<HTMLElement>(`[data-f="${f}"]`);
+        if (!node) return;
+        if (node instanceof HTMLImageElement) node.src = v;
+        else node.textContent = v;
+      };
+      set("caption", k.caption); set("sub", k.sub); set("handle", k.handle);
+      set("product", k.product); set("price", k.price); set("thumb", k.thumb);
+    };
+
+    const advance = () => {
+      active = (active + 1) % n;
+      swap.classList.add("is-swapping");
+      layout();
+      setTimeout(() => { fill(info[active]); swap.classList.remove("is-swapping"); }, 380);
+    };
+
+    // Intro: slides start collapsed into the phone, then fan out once the copy has landed.
+    if (reduce) {
+      layout({ instant: true });
+      hero.classList.add("is-ready");
+    } else {
+      slides.forEach((el) => prevD.set(el, 0));
+      const s0 = slot(0);
+      slides.forEach((el, i) => {
+        el.style.transition = "none";
+        const isActive = i === active;
+        Object.assign(el.style, {
+          left: `${s0.cx - s0.w / 2}px`, top: `${s0.top}px`, width: `${s0.w}px`, height: `${s0.h}px`,
+          borderRadius: "32px", opacity: isActive ? "1" : "0", zIndex: isActive ? "30" : "1",
+        });
+        el.classList.toggle("is-center", isActive);
+      });
+      const ready = () => hero.classList.add("is-ready");
+      requestAnimationFrame(() => requestAnimationFrame(ready));
+      setTimeout(ready, 60); // fallback: rAF is paused in background tabs
+      setTimeout(() => layout({ stagger: true }), 900);
+    }
+
+    // Autoplay every 2s (700ms move), only while the hero is on screen and the tab is visible.
+    let timer: number | undefined;
+    let visible = true;
+    const run = () => {
+      clearInterval(timer);
+      if (!reduce && visible && !document.hidden) timer = window.setInterval(advance, 2000);
+    };
+    new IntersectionObserver(([e]) => { visible = heroVisible = e.isIntersecting; run(); syncVideos(); }).observe(stage);
+    document.addEventListener("visibilitychange", () => { run(); syncVideos(); });
+    setTimeout(run, reduce ? 0 : 2200);
+  }
+</script>

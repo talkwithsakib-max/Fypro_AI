@@ -1,0 +1,407 @@
+---
+import { Image } from "astro:assets";
+import SectionHeading from "./ui/SectionHeading.astro";
+import Arrow from "./ui/Arrow.astro";
+// Shared photography / panels
+import mesh1 from "../assets/img/mesh-1.jpg";
+import mesh2 from "../assets/img/mesh-2.jpg";
+import mesh3 from "../assets/img/mesh-3.jpg";
+import pov from "../assets/img/creator-pov.png";
+import lashes from "../assets/img/creator-lashes.png";
+import serum from "../assets/img/creator-serum.png";
+import pSerum from "../assets/img/product-serum.png";
+import pLash from "../assets/img/product-lashkit.png";
+import pTumbler from "../assets/img/product-tumbler.png";
+import pScrunchie from "../assets/img/product-scrunchie.png";
+// Figma assets (src/assets/figma/how)
+import creator from "../assets/figma/how/creator.png";
+import orbit from "../assets/figma/how/orbit.svg";
+import hub from "../assets/figma/how/hub.svg";
+import dotCyan from "../assets/figma/how/dot-cyan.svg";
+import dotPink from "../assets/figma/how/dot-pink.svg";
+import connPath from "../assets/figma/how/connector-path.svg";
+import connStart from "../assets/figma/how/connector-start.svg";
+import connEnd from "../assets/figma/how/connector-end.svg";
+import aiIcon from "../assets/figma/how/ai.svg";
+import trend from "../assets/figma/how/trend.svg";
+import check from "../assets/figma/how/check.svg";
+import checkOutlined from "../assets/figma/how/check-outlined.svg";
+import sparklePink from "../assets/figma/how/sparkle-pink.svg";
+import trendCyan from "../assets/figma/how/trend-cyan.svg";
+import a1 from "../assets/figma/how/start-a1.png";
+import a2 from "../assets/figma/how/start-a2.png";
+import a3 from "../assets/figma/how/start-a3.png";
+import a4 from "../assets/figma/how/start-a4.png";
+import glowCyan from "../assets/figma/how/glow-cyan.svg";
+import glowPink from "../assets/figma/how/glow-pink.svg";
+import shield from "../assets/figma/how/shield.svg";
+import siteAvatar from "../assets/figma/how/site-avatar.png";
+import dotRed from "../assets/figma/how/dot-red.svg";
+import dotYellow from "../assets/figma/how/dot-yellow.svg";
+import dotGreen from "../assets/figma/how/dot-green.svg";
+import lock from "../assets/figma/how/lock.svg";
+import users from "../assets/figma/how/users.svg";
+import cartWhite from "../assets/figma/how/cart-white.svg";
+
+// Coordinates below are taken 1:1 from the Figma "How it works" bento (node 544:17661).
+const insights = [
+  { x: 36.34, y: 194, w: 123.754, h: 44.523, r: 7, dot: dotCyan, k: "Niche", v: "Skincare" },
+  { x: 213.39, y: 88, w: 168.979, h: 44.441, r: 5, dot: dotCyan, k: "Best seller", v: "Glow Serum" },
+  { x: 82, y: 111.45, w: 123.154, h: 40.432, r: -5, dot: dotPink, k: "Hook score", v: "92" },
+  { x: 311, y: 130.52, w: 129.709, h: 45.254, r: -7, dot: dotPink, k: "Peak time", v: "7 PM" },
+];
+const tasks = [
+  { t: "Post at 7:00 PM — your peak", done: true },
+  { t: "Hook: “POV: the serum that sold…”", done: true },
+  { t: "Add Glow Serum to your store" },
+  { t: "Reply to 12 buyer comments" },
+];
+const storeItems = [
+  { x: 18.67, img: pSerum, name: "Glow Serum", price: "$24" },
+  { x: 132.53, img: pLash, name: "Lash Kit", price: "$18" },
+  { x: 246.4, img: pTumbler, name: "Tumbler", price: "$32" },
+  { x: 360.27, img: pScrunchie, name: "Silk Scrunchie", price: "$12" },
+];
+const orders = [
+  { x: 518, y: 56.36, w: 151.312, h: 43.904, o: 0.55, r: 12, pad: "7.84px 12.544px 7.84px 9.408px", gap: 7.84, icon: 25.088, ir: 8, cart: 12.544, label: "New order · Silk Scrunchie", ls: 9, amount: "+$12.00", as: 13 },
+  { x: 511, y: 70.18, w: 165.723, h: 48.085, o: 0.8, r: 14, pad: "8.587px 13.739px 8.587px 10.304px", gap: 8.587, icon: 27.477, ir: 8, cart: 13.739, label: "New order · Lash Kit", ls: 9, amount: "+$18.00", as: 14 },
+  { x: 504, y: 84, w: 180.133, h: 52.267, o: 1, r: 14, pad: "9.333px 14.933px 9.333px 11.2px", gap: 9.333, icon: 29.867, ir: 10, cart: 14.933, label: "New order · Glow Serum", ls: 10, amount: "+$48.00", as: 15 },
+];
+const startAvatars = [a1, a2, a3, a4];
+---
+
+<section id="how-it-works" class="pt-24 pb-24 sm:pt-[120px] sm:pb-[132px]" aria-labelledby="how-title">
+  <div class="container-x">
+    <SectionHeading
+      id="how-title"
+      eyebrow="How Fypro works"
+      title="From first video to first sale."
+      muted="Your growth, managed."
+      lead="Top creators have a manager watching their growth. Now you do too — one engine that plans, creates and sells, with you approving every step."
+      leadClass="max-w-[640px]"
+    />
+
+    <div class="mt-14 grid gap-5 lg:grid-cols-[780fr_400fr]">
+      <!-- 01 · The analysis -->
+      <article class="how-card relative overflow-hidden rounded-[28px] bg-white" data-hc style="--i:0">
+        <div data-fit>
+          <div class="relative h-[350px] w-[780px]" data-w="780">
+            <Image src={mesh1} alt="" width={1520} class="absolute top-2.5 left-2.5 h-[320px] w-[760px] rounded-[18px] object-cover" />
+            <img src={orbit.src} alt="" class="absolute top-2.5 left-2.5 h-[320px] w-[760px]" />
+            <img src={hub.src} alt="" class="absolute top-[190px] left-[162px] h-[150px] w-[172px] max-w-none" />
+            <Image src={creator} alt="" width={240} style="--p:0ms" class="a-pop absolute top-[194px] left-[188px] size-[120px] max-w-none" />
+            {insights.map((p) => (
+              <div class="absolute flex items-center justify-center" style={`left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px`}>
+                <div class="pill a-pop flex items-center gap-2 rounded-[14px] bg-white py-[7px] pr-3 pl-[7px] whitespace-nowrap" style={`rotate:${p.r}deg;--p:${120 + insights.indexOf(p) * 90}ms`}>
+                  <img src={p.dot.src} alt="" class="size-3" />
+                  <span class="flex gap-1 text-[12px] leading-normal"><span class="font-medium text-muted">{p.k}</span><b class="font-bold text-ink">{p.v}</b></span>
+                </div>
+              </div>
+            ))}
+            <img src={connPath.src} alt="" class="a-draw absolute top-[175px] left-[296px] h-[89px] w-[172px] max-w-none" />
+            <img src={connStart.src} alt="" style="--p:420ms" class="a-pop absolute top-[229px] left-[285px] size-[30px] max-w-none" />
+            <span style="--p:620ms" class="pill a-pop absolute top-[209px] left-[365px] grid size-[26px] place-items-center rounded-[13px] bg-white"><img src={aiIcon.src} alt="" class="size-3.5" /></span>
+            <div class="pill absolute top-[62px] left-[464px] flex w-[272px] flex-col gap-3 rounded-[20px] bg-white p-[18px]">
+              <div class="flex items-center gap-2">
+                <span class="grid size-7 place-items-center rounded-lg bg-ink"><img src={trend.src} alt="" class="size-4" /></span>
+                <div class="leading-normal whitespace-nowrap"><p class="text-[14px] font-bold text-ink">Today’s plan</p><p class="text-[11px] font-medium text-muted">Updated 2 min ago</p></div>
+              </div>
+              {tasks.map((t) => (
+                <div class="flex items-center gap-2.5">
+                  {t.done
+                    ? <span class="grid size-[18px] shrink-0 place-items-center rounded-[10px] bg-ink"><img src={check.src} alt="" class="size-3" /></span>
+                    : <img src={checkOutlined.src} alt="" class="size-[18px] shrink-0" />}
+                  <span class:list={["text-[13px] leading-normal whitespace-nowrap", t.done ? "font-medium text-muted" : "font-semibold text-ink"]}>{t.t}</span>
+                </div>
+              ))}
+              <div class="flex items-center gap-2.5">
+                <span class="relative h-[5px] w-[190px] overflow-hidden rounded-[3px] bg-[#ededf0]"><span class="absolute inset-y-0 left-0 w-[95px] rounded-[3px] bg-gradient-to-r from-cyan to-pink"></span></span>
+                <span class="text-[11px] leading-normal font-semibold text-muted">2 / 4</span>
+              </div>
+            </div>
+            <span class="absolute top-[286px] left-[196.5px] rounded-full bg-ink px-2.5 py-1 text-[11px] leading-normal font-semibold whitespace-nowrap text-white shadow-[inset_0_1px_0_#ffffff29,0_4px_10px_-2px_#12142440]">@mama.justinaa</span>
+            <img src={connEnd.src} alt="" style="--p:820ms" class="a-pop absolute top-[180px] left-[449px] size-[30px] max-w-none" />
+          </div>
+        </div>
+        <div class="how-text" style="--tt:352px">
+          <p class="flex items-center gap-2 text-[13px] leading-normal font-semibold text-muted"><span class="step">01</span>The analysis</p>
+          <h3>A growth plan on day one</h3>
+          <p class="body max-w-[560px]">Fypro studies your account and niche, then tells you what to post, what to sell — and why. The plan keeps updating as your account moves.</p>
+        </div>
+      </article>
+
+      <!-- 02 · The studio -->
+      <article class="how-card relative overflow-hidden rounded-[28px] bg-white" data-hc style="--i:1">
+        <div data-fit>
+          <div class="relative h-[350px] w-[400px]" data-w="400">
+            <Image src={mesh2} alt="" width={760} class="absolute top-2.5 left-2.5 h-[297px] w-[380px] rounded-[18px] object-cover" />
+            <!-- Deck: right card comes to the front, front moves left, left goes round the back (influenceable "Creator Match" style) -->
+            <div class="deck absolute inset-0 z-0" data-deck>
+              {[{ img: serum, cap: "SOLD OUT", hook: "“POV: the serum that sold out in 48 hours…”" },
+                { img: lashes, cap: "YOU NEED THIS", hook: "“The lash kit everyone keeps asking about…”" },
+                { img: pov, cap: "POV:", hook: "“POV: you found it before it went viral…”" }].map((d, i) => (
+                <div class="deck-card video absolute overflow-hidden rounded-2xl" data-pos={["c", "r", "l"][i]} data-hook={d.hook} style="left:138.06px;top:30px;width:137.015px;height:244px">
+                  <Image src={d.img} alt="" width={300} class="size-full object-cover" />
+                  <p class="shot-text absolute inset-x-0 top-[140.77px] text-center text-[17px] leading-normal font-extrabold whitespace-nowrap">{d.cap}</p>
+                </div>
+              ))}
+            </div>
+            <div class="pill absolute flex flex-col justify-center rounded-2xl bg-white" style="left:40.46px;top:213.94px;width:273.091px;height:58.184px;padding:11.261px 13.138px;gap:5.631px">
+              <p class="flex items-center gap-[5.631px]"><img src={sparklePink.src} alt="" class="size-[12.2px]" /><span class="text-[10px] leading-normal font-bold tracking-[0.4px] text-pink">HOOK · 0–3s</span></p>
+              <p class="hook-text text-[12px] leading-normal font-semibold whitespace-nowrap text-ink" data-hook-out>“POV: the serum that sold out in 48 hours…”</p>
+            </div>
+            <div class="absolute flex items-center rounded-full bg-ink" style="left:239.42px;top:30px;width:120.122px;height:26.277px;padding:5.631px 9.385px;gap:5.631px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
+              <img src={trendCyan.src} alt="" class="size-[12.2px]" />
+              <span class="text-[11px] leading-normal font-semibold whitespace-nowrap text-white">Retention +<span data-ret>38</span>%</span>
+            </div>
+          </div>
+        </div>
+        <div class="how-text" style="--tt:329px">
+          <p class="flex items-center gap-2 text-[13px] leading-normal font-semibold text-muted"><span class="step">02</span>The studio</p>
+          <h3>Content that knows why it works</h3>
+          <p class="body max-w-[336px]">Turn ideas into scripts and videos that look like you made them. Paste any viral link to borrow its structure.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="mt-5 grid gap-5 lg:grid-cols-[400fr_780fr]">
+      <!-- Start (dark) -->
+      <article class="how-card dark-card relative overflow-hidden rounded-[28px] text-white" data-hc style="--i:2">
+        <div data-fit>
+          <div class="relative h-[350px] w-[400px] overflow-hidden" data-w="400">
+            <img src={glowCyan.src} alt="" class="absolute top-[-150px] left-[-170px] size-[480px] max-w-none" />
+            <img src={glowPink.src} alt="" class="absolute top-[-100px] left-[90px] size-[480px] max-w-none" />
+            <div class="absolute top-10 left-8 flex flex-col items-start gap-3.5">
+              <div class="flex">
+                {startAvatars.map((a, i) => <Image src={a} alt="" width={88} class="size-11" style={i < 3 ? "margin-right:-12px" : ""} />)}
+              </div>
+              <p class="text-[20px] leading-[26px] font-semibold tracking-[-0.2px] whitespace-nowrap">30,000+ creators already<br />running Fypro</p>
+              <span class="flex items-center gap-1.5 rounded-full bg-white/[0.08] px-2.5 py-1.5 text-[12px] leading-normal font-medium text-white/85 shadow-[inset_0_1px_0_#ffffff40,0_4px_10px_-2px_#12142412]">
+                <img src={shield.src} alt="" class="size-[13px]" />Official TikTok API
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="how-text" style="--tt:330px">
+          <h3 class="!text-white">Ready when you are.</h3>
+          <p class="body max-w-[336px] !text-white/65">Connect your TikTok in 30 seconds. Your first AI growth plan is on us.</p>
+          <a href="#cta" class="btn-dark w-fit !gap-2.5 !pl-5">Get started free <span class="btn-orb"><Arrow /></span></a>
+        </div>
+      </article>
+
+      <!-- 03 · The site -->
+      <article class="how-card relative overflow-hidden rounded-[28px] bg-white" data-hc style="--i:3">
+        <div data-fit>
+          <div class="relative h-[350px] w-[780px]" data-w="780">
+            <Image src={mesh3} alt="" width={1520} class="absolute top-2.5 left-2.5 h-[320px] w-[760px] rounded-[18px] object-cover" />
+            <div class="pill absolute overflow-hidden rounded-2xl bg-white" style="left:55.87px;top:30px;width:485.333px;height:280px">
+              <div class="flex h-[37.333px] items-center bg-[#f4f4f7]" style="padding-left:13.067px;gap:5.6px">
+                <img src={dotRed.src} alt="" class="size-[9.333px]" /><img src={dotYellow.src} alt="" class="size-[9.333px]" /><img src={dotGreen.src} alt="" class="size-[9.333px]" />
+                <span class="flex items-center rounded-full bg-white" style="padding:3.733px 11.2px;gap:4.667px"><img src={lock.src} alt="" class="size-[10.267px]" /><span class="text-[11px] leading-normal font-medium text-ink">justinaa.store</span></span>
+              </div>
+              <div class="absolute flex items-center" style="left:18.67px;top:52.27px;gap:9.333px">
+                <Image src={siteAvatar} alt="" width={56} class="size-7" />
+                <div class="leading-normal whitespace-nowrap"><p class="text-[14px] font-bold text-ink">Justina’s picks</p><p class="text-[10px] text-muted">Skincare &amp; home finds I actually use</p></div>
+              </div>
+              {storeItems.map((it) => (
+                <div class="a-stag absolute flex flex-col" style={`left:${it.x}px;top:97.07px;gap:5.6px;--p:${200 + storeItems.indexOf(it) * 90}ms`}>
+                  <Image src={it.img} alt="" width={202} class="size-[100.8px] rounded-xl object-cover" />
+                  <p class="flex w-[100.8px] justify-between text-[10px] leading-normal whitespace-nowrap text-ink"><span class="font-medium">{it.name}</span><b class="font-bold">{it.price}</b></p>
+                </div>
+              ))}
+            </div>
+            <div class="absolute flex flex-col rounded-2xl bg-ink" style="left:569.2px;top:170px;width:154.933px;height:117.6px;padding:13.067px 14.933px;gap:9.333px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
+              <p class="flex items-center gap-[7.467px]"><img src={users.src} alt="" class="size-[14.933px]" /><span class="text-[11px] leading-normal font-medium whitespace-nowrap text-white/70">Customers you own</span></p>
+              <p class="text-[26px] leading-normal font-bold tracking-[-0.52px] text-white">1,284</p>
+              <span class="w-fit rounded-full bg-white/10 text-[10px] leading-normal font-semibold whitespace-nowrap text-white" style="padding:4.667px 9.333px">Export CSV ↗</span>
+            </div>
+            {/* Notification stack: same card size for all, depth via slot (0 front, 1 middle, 2 back) — matches the Figma stack */}
+            {orders.map((o, i) => (
+              <div class="pill a-slide absolute flex items-center rounded-[14px] bg-white" data-slot={2 - i} style="left:504px;top:84px;width:180.133px;height:52.267px;padding:9.333px 14.933px 9.333px 11.2px;gap:9.333px">
+                <span class="grid size-[29.867px] shrink-0 place-items-center rounded-[10px] bg-pink"><img src={cartWhite.src} alt="" class="size-[14.933px]" /></span>
+                <span class="leading-normal whitespace-nowrap"><span class="block text-[10px] font-medium text-muted">{o.label}</span><b class="block text-[15px] font-bold text-ink">{o.amount}</b></span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="how-text" style="--tt:352px">
+          <p class="flex items-center gap-2 text-[13px] leading-normal font-semibold text-muted"><span class="step">03</span>The site</p>
+          <h3>Where followers become customers</h3>
+          <p class="body max-w-[560px]">Your branded storefront builds itself from your handle. Fypro picks products for your niche, partners ship them — and every customer is yours to keep.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how-card {
+    box-shadow: var(--shadow-card-open);
+  }
+  .dark-card {
+    background: linear-gradient(180deg, #23252e 0%, #0c0d12 100%);
+    box-shadow: var(--shadow-dark-open);
+  }
+  .pill {
+    box-shadow: inset 0 1px 0 #fff, var(--shadow-float);
+  }
+  .video {
+    box-shadow: var(--shadow-video);
+  }
+  .shot-text {
+    color: #fff;
+    text-shadow: 0 1px 2px #000000d9, 0 3px 12px #00000080;
+  }
+  .how-text {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px 32px 32px;
+  }
+  .how-text h3 {
+    font-size: 24px;
+    line-height: normal;
+    font-weight: 600;
+    letter-spacing: -0.48px;
+    color: var(--color-ink);
+  }
+  .how-text .body {
+    font-size: 15px;
+    line-height: 23px;
+    color: var(--color-muted);
+  }
+  .step {
+    border-radius: 999px;
+    background: var(--color-ink);
+    padding: 3px 9px;
+    font-size: 12px;
+    line-height: normal;
+    font-weight: 700;
+    color: #fff;
+  }
+  /* ---------- Card animations (run only while the section is visible: .is-live) ---------- */
+  .deck-card {
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.9s, filter 0.9s;
+    will-change: transform;
+  }
+  .deck-card[data-pos="c"] { transform: none; z-index: 3; }
+  .deck-card[data-pos="l"] { transform: translate(-64.4px, 13.9px) rotate(-8deg) scale(0.89); z-index: 1; }
+  .deck-card[data-pos="r"] { transform: translate(68.8px, 19.6px) rotate(8deg) scale(0.89); z-index: 2; }
+  .deck-card[data-pos="l"] .shot-text,
+  .deck-card[data-pos="r"] .shot-text { opacity: 0; }
+  .deck-card .shot-text { transition: opacity 0.5s; }
+  .deck-card.is-wrapping { opacity: 0.4; filter: blur(2px); z-index: 0; }
+  .hook-text { transition: opacity 0.35s, translate 0.35s; }
+  .hook-text.is-out { opacity: 0; translate: 0 4px; }
+
+  /* Scroll reveal (once): fade + 18px rise + slight scale, staggered 110ms in reading order */
+  :global(.js) .how-card[data-hc] {
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --base: calc(var(--i) * 110ms);
+    opacity: 0;
+    translate: 0 18px;
+    scale: 0.98;
+    transition: opacity 0.6s var(--ease) var(--base), translate 0.6s var(--ease) var(--base), scale 0.6s var(--ease) var(--base), box-shadow 0.35s var(--ease);
+  }
+  :global(.js) .how-card[data-hc].in { opacity: 1; translate: 0 0; scale: 1; }
+  /* One-time micro-animations inside the cards */
+  :global(.js) .how-card .a-pop { opacity: 0; scale: 0.6; transition: opacity 0.5s var(--ease), scale 0.6s var(--ease); transition-delay: calc(var(--base) + 250ms + var(--p, 0ms)); }
+  :global(.js) .how-card .a-draw { clip-path: inset(0 100% 0 0); transition: clip-path 0.7s var(--ease) calc(var(--base) + 500ms); }
+  :global(.js) .how-card .a-stag { opacity: 0; translate: 0 10px; transition: opacity 0.5s var(--ease), translate 0.6s var(--ease); transition-delay: calc(var(--base) + var(--p, 0ms)); }
+  :global(.js) .how-card.in .a-pop { opacity: 1; scale: 1; }
+  :global(.js) .how-card.in .a-draw { clip-path: inset(0 0 0 0); }
+  :global(.js) .how-card.in .a-stag { opacity: 1; translate: 0 0; }
+  /* Notification stack: cards never leave — each step the back card slides down from behind into the front */
+  .a-slide {
+    transform-origin: 50% 0;
+    transition:
+      translate 0.75s cubic-bezier(0.34, 1.4, 0.64, 1),
+      scale 0.75s cubic-bezier(0.34, 1.4, 0.64, 1),
+      opacity 0.5s ease,
+      z-index 0s linear 0.3s;
+  }
+  .a-slide[data-slot="0"] { translate: 0 0; scale: 1; opacity: 1; z-index: 3; }
+  .a-slide[data-slot="1"] { translate: 0 -13.8px; scale: 0.92; opacity: 0.8; z-index: 2; }
+  .a-slide[data-slot="2"] { translate: 0 -27.6px; scale: 0.84; opacity: 0.55; z-index: 1; }
+  :global(.js) .how-card:not(.in) .a-slide { opacity: 0; scale: 0.8; }
+  /* Desktop hover: subtle 3px lift + deeper shadow */
+  @media (hover: hover) and (min-width: 1024px) {
+    .how-card.in:hover { translate: 0 -3px; transition-delay: 0s; }
+    .how-card:not(.dark-card).in:hover { box-shadow: var(--shadow-card-open), 0 22px 44px -16px #12142429; }
+    .dark-card.in:hover { box-shadow: var(--shadow-dark-open), 0 22px 44px -16px #12142466; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .how-card[data-hc], :global(.js) .how-card .a-pop, :global(.js) .how-card .a-draw, :global(.js) .how-card .a-stag, :global(.js) .how-card .a-slide { transition: none; }
+    .deck-card, .hook-text { transition: none; }
+  }
+
+  /* Desktop: fixed 500px cards with the text block at its Figma offset */
+  @media (min-width: 1024px) {
+    .how-card {
+      height: 500px;
+    }
+    .how-text h3 {
+      white-space: nowrap;
+    }
+    .how-text {
+      position: absolute;
+      left: 0;
+      top: var(--tt);
+      padding: 0 32px;
+    }
+  }
+</style>
+
+<script>
+  const how = document.getElementById("how-it-works");
+  if (how) {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // 1, 7: reveal each card once when it scrolls into view
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const el = e.target as HTMLElement;
+        el.classList.add("in");
+        revealIO.unobserve(el);
+        // once the entrance (and its micro-animations) finish, drop the stagger delay so hover feels instant
+        setTimeout(() => el.style.setProperty("--base", "0ms"), 2000);
+      });
+    }, { threshold: 0.2, rootMargin: "0px 0px -6% 0px" });
+    how.querySelectorAll("[data-hc]").forEach((c) => revealIO.observe(c));
+
+    // Card 03 order notifications: rotate the stack (back → front, others step back); nothing disappears
+    const notes = [...how.querySelectorAll<HTMLElement>(".a-slide")];
+    let noteLoop: number | undefined;
+    const rotateNotes = () => notes.forEach((n) => { n.dataset.slot = String((Number(n.dataset.slot) + 1) % 3); });
+    const startNotes = () => { clearInterval(noteLoop); if (!reduce) noteLoop = window.setInterval(rotateNotes, 2200); };
+    const stopNotes = () => clearInterval(noteLoop);
+
+    // Card 02 "Creator Match" deck shuffle (runs only while visible)
+    const deck = [...how.querySelectorAll<HTMLElement>("[data-deck] .deck-card")];
+    const hookOut = how.querySelector<HTMLElement>("[data-hook-out]");
+    const ret = how.querySelector<HTMLElement>("[data-ret]");
+    let timer: number | undefined;
+    const shuffle = () => {
+      deck.forEach((c) => {
+        const p = c.dataset.pos;
+        c.classList.toggle("is-wrapping", p === "l");
+        c.dataset.pos = p === "r" ? "c" : p === "c" ? "l" : "r";
+      });
+      setTimeout(() => deck.forEach((c) => c.classList.remove("is-wrapping")), 900);
+      const front = deck.find((c) => c.dataset.pos === "c");
+      if (hookOut && front) {
+        hookOut.classList.add("is-out");
+        setTimeout(() => { hookOut.textContent = front.dataset.hook!; hookOut.classList.remove("is-out"); }, 350);
+      }
+      if (ret) ret.textContent = String(34 + Math.floor(Math.random() * 9));
+    };
+    new IntersectionObserver(([e]) => {
+      clearInterval(timer);
+      if (e.isIntersecting && !reduce) timer = window.setInterval(shuffle, 2800);
+    }, { threshold: 0.15 }).observe(how);
+    const siteCard = notes[0]?.closest<HTMLElement>(".how-card");
+    if (siteCard) new IntersectionObserver(([e]) => (e.isIntersecting ? startNotes() : stopNotes()), { threshold: 0.3 }).observe(siteCard);
+  }
+</script>

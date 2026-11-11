@@ -1,0 +1,115 @@
+---
+import { Image } from "astro:assets";
+import Arrow from "./ui/Arrow.astro";
+import mesh3 from "../assets/img/mesh-3.jpg";
+import plus from "../assets/figma/faq/plus.svg";
+import minus from "../assets/figma/faq/minus.svg";
+import paperclip from "../assets/figma/faq/paperclip.svg";
+
+// Copy + open state from the Figma "Note board" (731:18173). Open notes tilt ±2.5° and get a paperclip.
+const faqs = [
+  { q: "What is Fypro?", a: "Your AI creator success manager. It reads your account, tells you what to post, makes and publishes the content, then adjusts to what performs.", open: true, tilt: 2.5 },
+  { q: "Will it still sound like me?", a: "Yes. Fypro learns your topics, hooks and tone from your posts — your Creator DNA — so the same topic becomes a different script for you.", tilt: -2.5 },
+  { q: "What do I need to start?", a: "Just an idea, or a product link and a few photos. Add your own clips or voice for a closer match.", tilt: 2.5 },
+  { q: "Can I remake a viral video?", a: "Paste the link into Ideation. Fypro reuses the structure that works — not the footage, lines or audio — and writes it in your voice.", tilt: -2.5 },
+  { q: "What if I don’t want to be on camera?", a: "Use no-filming formats: explainers, product showcases, UGC-style reviews, image-to-video, or an AI avatar with your voice.", open: true, tilt: -2.5 },
+  { q: "How is it different from other AI video tools?", a: "Your product and character stay consistent across every shot, and scripts follow a shoppable structure — no complex prompting.", tilt: 2.5 },
+];
+---
+
+<section id="faq" class="pt-24 pb-24 sm:pt-[120px] sm:pb-[138px]" aria-labelledby="faq-title">
+  <div class="container-x">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-reveal>
+      <div>
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title" class="h2 mt-4">Questions, answered.</h2>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="mr-1 text-[14.5px] text-muted">Still curious?</span>
+        <a href="#" class="inline-flex items-center gap-1 rounded-full bg-ink px-4 py-2.5 text-[14px] font-medium text-white transition-transform hover:-translate-y-px">Help center <Arrow dir="up-right" class="size-3.5" /></a>
+        <a href="#" class="btn-light !px-4 !py-2.5 !text-[14px]">Ask on Discord</a>
+      </div>
+    </div>
+
+    <div class="faq-board relative mt-11 rounded-[32px] bg-white p-2.5" data-reveal>
+      <div class="relative grid gap-4 overflow-visible rounded-[22px] p-4 sm:grid-cols-2 sm:gap-6 sm:p-8 lg:grid-cols-3 lg:px-[34px] lg:py-[34px]">
+        <Image src={mesh3} alt="" width={1400} class="absolute inset-0 size-full rounded-[22px] object-cover" />
+        {faqs.map((f, i) => (
+          <div class="faq-item relative" data-open={f.open ? "true" : "false"} style={`--tilt:${f.tilt}deg`}>
+            <img src={paperclip.src} alt="" class="clip absolute top-[-26px] right-[40px] z-10 h-[82px] w-[35px] max-w-none" aria-hidden="true" />
+            <h3>
+              <button
+                class="faq-btn flex min-h-[150px] w-full flex-col gap-3 rounded-[20px] px-7 pt-7 pb-6 text-left sm:min-h-[244px] lg:h-[244px]"
+                aria-expanded={f.open ? "true" : "false"}
+                aria-controls={`faq-a-${i}`}
+                id={`faq-q-${i}`}
+              >
+                <span class="text-[20px] leading-[26px] font-semibold tracking-[-0.4px] text-ink">{f.q}</span>
+                <span id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} class="faq-a text-[14px] leading-[21px] text-muted">{f.a}</span>
+                <span class="mt-auto flex items-center gap-2 text-[14px] leading-normal font-semibold text-ink">
+                  <span class="faq-ico grid size-[26px] place-items-center rounded-[13px]">
+                    <img src={plus.src} alt="" class="ico-plus size-3.5" /><img src={minus.src} alt="" class="ico-minus size-3.5" />
+                  </span>
+                  <span class="faq-label"></span>
+                </span>
+              </button>
+            </h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-board {
+    box-shadow: inset 0 -1px 0 #12142408, inset 0 1px 0 #fff, 26px 36px 64px #fe2c5524, -26px 36px 64px #25f4ee29,
+      0 14px 28px #12142412, 0 2px 4px #1214240a;
+  }
+  .faq-btn {
+    position: relative;
+    background: linear-gradient(180deg, #f8f8fa 0%, #f2f2f5 100%);
+    box-shadow: inset 0 -1px 0 #12142408, inset 0 1px 0 #fff, 26px 36px 64px #fe2c5524, -26px 36px 64px #25f4ee29,
+      0 14px 28px #12142412, 0 2px 4px #1214240a;
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s, box-shadow 0.4s;
+  }
+  .faq-btn:hover { background: #fafafb; }
+  .faq-a { display: none; }
+  .clip {
+    opacity: 0;
+    rotate: 8deg;
+    translate: 0 -6px;
+    transition: opacity 0.3s, translate 0.4s;
+    pointer-events: none;
+  }
+  .faq-ico {
+    background: #fff;
+    box-shadow: inset 0 1px 0 #fff, 0 4px 10px -2px #12142412, 0 1px 2px #1214240f, 0 0 0 1px #1214240a;
+  }
+  .ico-minus { display: none; }
+  .faq-label::after { content: "See answer"; }
+  [data-open="true"] .faq-btn {
+    background: #fff;
+    transform: rotate(var(--tilt));
+    box-shadow: 18px 40px 70px #fe2c5524, -18px 40px 70px #25f4ee29, 0 28px 56px #1214242e, 0 6px 12px #12142414;
+  }
+  [data-open="true"] .faq-a { display: block; animation: fade 0.4s ease both; }
+  [data-open="true"] .clip { opacity: 1; translate: 0 0; }
+  [data-open="true"] .faq-ico { background: var(--color-ink); box-shadow: inset 0 1px 0 #ffffff29, 0 4px 10px -2px #12142440; }
+  [data-open="true"] .ico-plus { display: none; }
+  [data-open="true"] .ico-minus { display: block; }
+  [data-open="true"] .faq-label::after { content: "Close"; }
+  [data-open="true"] { z-index: 2; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".faq-item").forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>(".faq-btn")!;
+    btn.addEventListener("click", () => {
+      const open = item.dataset.open !== "true";
+      item.dataset.open = String(open);
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  });
+</script>

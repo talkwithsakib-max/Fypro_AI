@@ -1,0 +1,20 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  muted?: string;
+  lead?: string;
+  id?: string;
+  class?: string;
+  leadClass?: string;
+}
+const { eyebrow, title, muted, lead, id, class: cls = "", leadClass = "max-w-[680px]" } = Astro.props;
+---
+<div class={`text-center ${cls}`} data-reveal>
+  <p class="eyebrow">{eyebrow}</p>
+  <h2 id={id} class="h2 mt-[18px]">
+    {title}
+    {muted && (<><br class="hidden sm:block" /> <span class="text-subtle">{muted}</span></>)}
+  </h2>
+  {lead && <p class={`lead mx-auto mt-[18px] ${leadClass}`}>{lead}</p>}
+</div>

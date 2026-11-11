@@ -1,0 +1,88 @@
+---
+import "../styles/global.css";
+import noise from "../assets/img/noise.png";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Fypro — Your AI creator success manager for TikTok",
+  description = "Drop your TikTok handle. Fypro learns your account, creates videos your audience watches, and runs the storefront where they buy.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://fypro.ai");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Fypro" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>if (!/[?&]noanim/.test(location.search)) document.documentElement.classList.add("js");</script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "Fypro",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      description,
+      offers: [
+        { "@type": "Offer", name: "Free", price: "0", priceCurrency: "USD" },
+        { "@type": "Offer", name: "Pro", price: "29", priceCurrency: "USD" },
+        { "@type": "Offer", name: "Max", price: "200", priceCurrency: "USD" },
+      ],
+    })} />
+  </head>
+  <body style={`--noise:url(${noise.src})`}>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+    <slot />
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-in");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+      );
+      document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+
+      // Scale fixed-size Figma compositions ([data-fit] > child with data-w) down to their container width.
+      const fit = (box: HTMLElement) => {
+        const inner = box.firstElementChild as HTMLElement | null;
+        if (!inner) return;
+        const w = Number(inner.dataset.w || inner.offsetWidth);
+        inner.style.zoom = String(Math.min(1, box.clientWidth / w));
+      };
+      const ro = new ResizeObserver((entries) => entries.forEach((e) => fit(e.target as HTMLElement)));
+      document.querySelectorAll<HTMLElement>("[data-fit]").forEach((el) => { fit(el); ro.observe(el); });
+    </script>
+  </body>
+</html>

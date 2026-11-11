@@ -1,0 +1,79 @@
+---
+import Logo from "./Logo.astro";
+import wordmark from "../assets/figma/footer/wordmark.svg";
+import glow1 from "../assets/figma/footer/glow-1.svg";
+import glow2 from "../assets/figma/footer/glow-2.svg";
+import glow3 from "../assets/figma/footer/glow-3.svg";
+
+const cols = [
+  { title: "Features", links: ["Growth Plan", "Ideation", "Script", "AI Product Video", "UGC Video", "Creator Store"] },
+  { title: "Resources", links: ["Pricing", "Blog", "Help center", "About", "Fypro vs ChatGPT"] },
+  { title: "Legal", links: ["Terms of Service", "Privacy Policy", "Privacy Choices"] },
+];
+---
+
+<footer class="footer relative overflow-hidden text-white" aria-labelledby="footer-title">
+  <h2 id="footer-title" class="sr-only">Footer</h2>
+  <div class="container-x relative z-10 pt-6 lg:pt-8">
+    <div class="grid gap-12 lg:grid-cols-[1fr_auto]">
+      <div class="max-w-[340px]">
+        <Logo dark class="h-[36px] w-auto" />
+        <p class="mt-6 text-[15px] leading-[1.55] text-white/60">The AI growth engine for creators. A personalized plan and end-to-end execution — from audience to monetization.</p>
+        <div class="mt-7 flex gap-2.5">
+          <a href="#" aria-label="Fypro on TikTok" class="grid size-10 place-items-center rounded-full bg-white/[0.07] ring-1 ring-white/10 transition hover:bg-white/15">
+            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9a7.4 7.4 0 0 0 4.3 1.4V7.3a4.3 4.3 0 0 1-3.2-1.5z"/></svg>
+          </a>
+          <a href="#" aria-label="Fypro on Instagram" class="grid size-10 place-items-center rounded-full bg-white/[0.07] ring-1 ring-white/10 transition hover:bg-white/15">
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="Fypro on X" class="grid size-10 place-items-center rounded-full bg-white/[0.07] ring-1 ring-white/10 transition hover:bg-white/15">
+            <svg class="size-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.9 2.3h7l4.8 6.4zm-1.2 17.9h1.9L7 4.2H5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <nav class="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16 lg:gap-20" aria-label="Footer">
+        {cols.map((c) => (
+          <div>
+            <p class="font-mono text-[11.5px] text-white/50">{c.title}</p>
+            <ul class="mt-4 space-y-3 text-[15px]">
+              {c.links.map((l) => <li><a href="#" class="text-white/90 transition-colors hover:text-cyan">{l}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+
+    <div class="mt-[54px] flex flex-col-reverse gap-4 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+      <p class="font-mono text-[11.5px] text-white/50">© 2026 Fypro.ai. All rights reserved.</p>
+      <div class="flex gap-6 text-white/80">
+        <a href="#" class="hover:text-white">Contact</a>
+        <a href="#" class="hover:text-white">Terms</a>
+        <a href="#" class="hover:text-white">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Figma "Giant wordmark" vector + glows (601:17973–76), cropped by the frame bottom -->
+  <div class="wm-wrap pointer-events-none relative mx-auto mt-10 w-full max-w-[1392px] select-none" data-fit aria-hidden="true">
+    <div class="relative h-[491px] w-[1392px]" data-w="1392">
+      <img src={glow1.src} alt="" class="absolute top-[49.6px] left-[-114px] h-[660px] w-[920px] max-w-none" />
+      <img src={glow2.src} alt="" class="absolute top-[49.6px] left-[586px] h-[660px] w-[920px] max-w-none" />
+      <img src={glow3.src} alt="" class="absolute top-[199.6px] left-[276px] h-[480px] w-[840px] max-w-none" />
+      <img src={wordmark.src} alt="" class="absolute top-0 left-0 h-[570.39px] w-[1392px] max-w-none" />
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-rule {
+    background: linear-gradient(90deg, transparent, #ffffff1f 20%, #ffffff1f 80%, transparent);
+  }
+  .footer {
+    background: #0b0b0d;
+  }
+  .wm-wrap {
+    overflow-x: visible;
+    overflow-y: clip;
+  }
+</style>
