@@ -1,7 +1,9 @@
+// @ts-check
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
+  output: 'static',
   site: 'https://github.io',
   base: '/Fypro_AI',
-  // keep any existing integrations (like tailwind) below this line
+  devToolbar: { enabled: false },
 });
