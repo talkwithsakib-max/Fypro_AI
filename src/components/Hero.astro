@@ -1,6 +1,7 @@
 ---
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 import { Image, getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import Navbar from "./Navbar.astro";
 import HandleForm from "./ui/HandleForm.astro";
 import AvatarStack from "./ui/AvatarStack.astro";
@@ -15,7 +16,6 @@ import roller from "../assets/img/creator-roller.png";
 import pSerum from "../assets/img/product-serum.png";
 import pTumbler from "../assets/img/product-tumbler.png";
 import pLash from "../assets/img/product-lashkit.png";
-import pScrunchie from "../assets/img/product-scrunchie.png";
 import hand from "../assets/img/hand-phone.png";
 
 // Each tool swaps the phone screen to a preview of what that tool produces, plus the two floating chips.
@@ -31,41 +31,51 @@ const chips = {
   shop: ["You post", "They buy"],
   avatar: ["No repeat filming", "Sounds like you"],
 } as const;
-const ideas = [
-  { hook: "POV: you found it first", views: "2.4M" },
-  { hook: "3 things I’d rebuy tomorrow", views: "1.1M" },
-  { hook: "Get ready with me, 60s", views: "890K" },
-];
-const avatarLine = ["Okay,", "this", "is", "the", "serum", "I", "keep", "rebuying."];
-
 // Coverflow reel: the active creator plays inside the phone, neighbours fan out to each side.
 const products = {
   serum: { name: "Glow Serum", price: "$24.00", img: pSerum },
   tumbler: { name: "Tumbler", price: "$32.00", img: pTumbler },
   lash: { name: "Lash Kit", price: "$18.00", img: pLash },
-  scrunchie: { name: "Silk Scrunchie", price: "$12.00", img: pScrunchie },
+  headphones: { name: "Headphones", price: "$59.00", img: headphones },
+  perfume: { name: "Eau de Parfum", price: "$42.00", img: park },
+  roller: { name: "Face Roller", price: "$16.00", img: roller },
 };
 // Videos: Pexels (Pexels License, no attribution required) — faceless product/scene clips so no person implies endorsement.
 // lashes #8558301 · pov #7986315 · serum #8131887 · bottle #7815839 (Mikhail Nilov) · city #9921064
 // headphones #8005691 · park #7815884 (Mikhail Nilov) · roller #3756003 (cottonbro studio)
-const reel = [
-  { img: lashes, video: BASE + "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash" },
-  { img: pov, video: BASE + "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", product: "scrunchie" },
-  { img: serum, video: BASE + "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum" },
-  { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler" },
-  { img: city, video: BASE + "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", product: "tumbler" },
-  { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "scrunchie" },
-  { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "lash" },
-  { img: roller, video: BASE + "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "serum" },
-] as const;
+//
+// `tools` lists the dock tools a clip can front: product clips carry a shop tag / remake, talking clips carry the avatar.
+// Hooks and view counts in `ideas` are illustrative examples, not real data.
+type Tool = "ideas" | "remake" | "shop" | "avatar";
+type Slide = {
+  img: ImageMetadata; video: string; caption: string; sub: string; handle: string; tools: Tool[];
+  product?: keyof typeof products; ideas?: { niche: string; hooks: [string, string][] }; line?: string;
+};
+const reel: Slide[] = [
+  { img: lashes, video: BASE + "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash", tools: ["shop", "remake", "ideas"],
+    ideas: { niche: "Beauty", hooks: [["My lash routine in 30 seconds", "1.9M"], ["I tested 5 lash kits for a week", "1.2M"], ["What I’d skip next time", "740K"]] } },
+  { img: pov, video: BASE + "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", tools: ["avatar"],
+    line: "Three things I wish I knew before posting daily." },
+  { img: serum, video: BASE + "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum", tools: ["shop", "remake", "ideas"],
+    ideas: { niche: "Skincare", hooks: [["POV: you found it first", "2.4M"], ["3 serums I’d rebuy tomorrow", "1.1M"], ["Get ready with me, 60s", "890K"]] } },
+  { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler", tools: ["shop", "remake", "ideas"],
+    ideas: { niche: "Wellness", hooks: [["One bottle, 24 hours of ice", "1.6M"], ["My 6am routine, honestly", "980K"], ["What’s in my gym bag", "610K"]] } },
+  { img: city, video: BASE + "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", tools: [] }, // street scene: only ever a side card
+  { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "headphones", tools: ["shop", "remake", "ideas"],
+    ideas: { niche: "Tech", hooks: [["$60 vs $300: can you tell?", "2.2M"], ["Unboxing with me, no talking", "1.3M"], ["3 features nobody mentions", "820K"]] } },
+  { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "perfume", tools: ["shop", "remake"] },
+  { img: roller, video: BASE + "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "roller", tools: ["shop", "remake"] },
+];
 const startIndex = 2;
 const reelData = await Promise.all(
   reel.map(async (r) => {
-    const p = products[r.product];
-    const thumb = await getImage({ src: p.img, width: 64 });
-    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p.name, price: p.price, thumb: thumb.src };
+    const p = r.product ? products[r.product] : undefined;
+    const thumb = p ? (await getImage({ src: p.img, width: 64, height: 64, fit: "cover" })).src : "";
+    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p?.name ?? "", price: p?.price ?? "", thumb, tools: r.tools, ideas: r.ideas, line: r.line };
   }),
 );
+const firstIdeas = reel[startIndex].ideas!;
+const firstLine = reel.find((r) => r.line)!.line!.split(" ");
 const first = reelData[startIndex];
 const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cover" });
 ---
@@ -115,18 +125,18 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
 
         <!-- Viral ideas: hooks trending in the creator's niche -->
         <div class="panel absolute inset-0" data-panel="ideas">
-          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="size-1.5 rounded-full bg-cyan"></span>Trending in Skincare</span>
+          <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="size-1.5 rounded-full bg-cyan"></span>Trending in <span data-f="niche">{firstIdeas.niche}</span></span>
           <div class="screen-card absolute inset-x-2.5 top-[318px] p-2.5">
             <div class="mb-1.5 flex items-center justify-between px-0.5">
               <p class="text-[11.5px] font-semibold text-ink">Proven hooks in your niche</p>
               <span class="rounded-full bg-pink/10 px-1.5 py-px text-[10px] font-bold text-pink">3 new</span>
             </div>
-            {ideas.map((it, i) => (
+            {firstIdeas.hooks.map(([hook, views], i) => (
               <div class="idea-row flex items-center gap-2 rounded-[10px] px-1.5 py-[7px]" style={`--d:${i * 90 + 120}ms`}>
                 <span class="grid size-[22px] shrink-0 place-items-center rounded-full bg-cyan text-[11px] font-bold text-ink">{i + 1}</span>
-                <p class="min-w-0 flex-1 truncate text-left text-[11.5px] font-semibold text-ink">{it.hook}</p>
+                <p class="min-w-0 flex-1 truncate text-left text-[11.5px] font-semibold text-ink" data-f={`hook${i}`}>{hook}</p>
                 <span class="flex shrink-0 items-center gap-0.5 text-[10.5px] font-medium text-muted">
-                  <svg class="size-2.5" viewBox="0 0 12 12"><path d="M3.5 2v8l6.5-4z" fill="currentColor"/></svg>{it.views}
+                  <svg class="size-2.5" viewBox="0 0 12 12"><path d="M3.5 2v8l6.5-4z" fill="currentColor"/></svg><span data-f={`views${i}`}>{views}</span>
                 </span>
               </div>
             ))}
@@ -150,7 +160,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
             ))}
             <div class="idea-row mt-1.5" style="--d:360ms">
               <div class="flex items-center justify-between text-[11px]">
-                <p class="font-semibold text-ink">Rebuilding with your product</p>
+                <p class="truncate font-semibold text-ink">Rebuilding with <span data-f="rproduct">{first.product}</span></p>
                 <p class="font-bold text-pink" data-progress-label>0%</p>
               </div>
               <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-ink/10">
@@ -179,7 +189,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
         <div class="panel absolute inset-0" data-panel="avatar">
           <span class="screen-pill absolute left-1/2 top-[48px] -translate-x-1/2"><span class="rec-dot size-1.5 rounded-full bg-pink"></span>AI avatar · your voice</span>
           <p class="screen-text absolute inset-x-4 top-[226px] text-center text-[19px] leading-[1.25] font-extrabold" data-captions>
-            {avatarLine.map((w, i) => <span class="cap-word" style={`--w:${i}`}>{w} </span>)}
+            {firstLine.map((w, i) => <span class="cap-word" style={`--w:${i}`}>{w} </span>)}
           </p>
           <div class="screen-card absolute inset-x-2.5 top-[440px] flex items-center gap-2.5 p-2.5">
             <img src={avatarThumb.src} alt="" width="34" height="34" class="size-[34px] rounded-full object-cover object-top" />
@@ -372,7 +382,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
   }
   .panel.is-on .idea-row { opacity: 1; translate: 0 0; transition-delay: var(--d); }
   [data-panel="ideas"] .idea-row:nth-child(2) { background: #25f4ee1f; }
-  .panel.screen-swap.is-swapping { opacity: 0; transition-delay: 0s; }
+  .panel.is-on.is-swapping { opacity: 0; transition-delay: 0s; transition-duration: 0.25s; }
   .progress-bar {
     width: 0;
     background: linear-gradient(90deg, #25f4ee, #fe2c55);
@@ -466,7 +476,10 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
 </style>
 
 <script>
-  type Info = { caption: string; sub: string; handle: string; product: string; price: string; thumb: string };
+  type Info = {
+    caption: string; sub: string; handle: string; product: string; price: string; thumb: string;
+    tools: string[]; ideas?: { niche: string; hooks: [string, string][] }; line?: string;
+  };
   const hero = document.querySelector<HTMLElement>(".hero");
   const stage = document.querySelector<HTMLElement>("[data-reel]");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -474,8 +487,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
   if (hero && stage) {
     const slides = [...stage.querySelectorAll<HTMLElement>(".reel-slide")];
     const info: Info[] = JSON.parse(stage.dataset.reelInfo || "[]");
-    const swap = stage.querySelector<HTMLElement>("[data-swap]")!;
-    const n = slides.length;
+        const n = slides.length;
     let active = Number(stage.dataset.start || 0);
 
     // Slot geometry (stage px) taken from the Figma hero frame; ±3 is an off-stage fade slot.
@@ -538,22 +550,54 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
       syncVideos();
     };
 
+    // Write the active clip's details into every tool preview, so the text always matches the video.
     const fill = (k: Info) => {
       const set = (f: string, v: string) => {
-        const node = swap.querySelector<HTMLElement>(`[data-f="${f}"]`);
-        if (!node) return;
-        if (node instanceof HTMLImageElement) node.src = v;
-        else node.textContent = v;
+        stage.querySelectorAll<HTMLElement>(`[data-f="${f}"]`).forEach((node) => {
+          if (node instanceof HTMLImageElement) node.src = v;
+          else node.textContent = v;
+        });
       };
       set("caption", k.caption); set("sub", k.sub); set("handle", k.handle);
-      set("product", k.product); set("price", k.price); set("thumb", k.thumb);
+      if (k.product) { set("product", k.product); set("price", k.price); set("thumb", k.thumb); set("rproduct", k.product); }
+      if (k.ideas) {
+        set("niche", k.ideas.niche);
+        k.ideas.hooks.forEach(([hook, views], i) => { set(`hook${i}`, hook); set(`views${i}`, views); });
+      }
+      const caps = stage.querySelector<HTMLElement>("[data-captions]");
+      if (k.line && caps) {
+        caps.replaceChildren(...k.line.split(" ").map((w, i) => {
+          const span = document.createElement("span");
+          span.className = "cap-word";
+          span.style.setProperty("--w", String(i));
+          span.textContent = `${w} `;
+          return span;
+        }));
+      }
     };
 
-    const advance = () => {
-      active = (active + 1) % n;
-      swap.classList.add("is-swapping");
+    // Each tool only fronts the clips that suit it (see `tools` in the reel data).
+    const fits = (i: number) => info[i].tools.includes(stage.dataset.tool || "shop");
+    const nextFit = (from: number) => {
+      for (let step = 1; step <= n; step++) if (fits((from + step) % n)) return (from + step) % n;
+      return from;
+    };
+    const show = (i: number) => {
+      active = i;
+      const panel = stage.querySelector<HTMLElement>(".panel.is-on");
+      panel?.classList.add("is-swapping");
       layout();
-      setTimeout(() => { fill(info[active]); swap.classList.remove("is-swapping"); }, 380);
+      setTimeout(() => { fill(info[active]); panel?.classList.remove("is-swapping"); }, 380);
+    };
+    const advance = () => { const next = nextFit(active); if (next !== active) show(next); };
+
+    let timer: number | undefined;
+    let visible = true;
+    const run = () => {
+      clearInterval(timer);
+      // Shoppable clips flip quickly; the other previews hold longer so their content can be read.
+      const delay = stage.dataset.tool === "shop" ? 2000 : 3800;
+      if (!reduce && visible && !document.hidden) timer = window.setInterval(advance, delay);
     };
 
     // Intro: slides start collapsed into the phone, then fan out once the copy has landed.
@@ -588,6 +632,11 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
     let progressTimer: number | undefined;
     const setTool = (id: string, animate = true) => {
       stage.dataset.tool = id;
+      if (animate) {
+        if (!fits(active)) { active = nextFit(active); layout(); }
+        fill(info[active]);
+        run();
+      }
       buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.toolBtn === id)));
       panels.forEach((p) => {
         const on = p.dataset.panel === id;
@@ -610,18 +659,13 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
         }, 80);
       }
     };
-    buttons.forEach((b) => b.addEventListener("click", () => {
+    buttons.forEach((b) => b.addEventListener("click", (e) => {
       if (b.dataset.toolBtn && b.dataset.toolBtn !== stage.dataset.tool) setTool(b.dataset.toolBtn);
+      if (e.detail > 0) b.blur(); // pointer click: don't leave a focus ring behind (keyboard keeps it)
     }));
     setTool(stage.dataset.tool || "shop", false);
 
-    // Autoplay every 2s (700ms move), only while the hero is on screen and the tab is visible.
-    let timer: number | undefined;
-    let visible = true;
-    const run = () => {
-      clearInterval(timer);
-      if (!reduce && visible && !document.hidden) timer = window.setInterval(advance, 2000);
-    };
+    // Autoplay only while the hero is on screen and the tab is visible.
     new IntersectionObserver(([e]) => { visible = heroVisible = e.isIntersecting; run(); syncVideos(); }).observe(stage);
     document.addEventListener("visibilitychange", () => { run(); syncVideos(); });
     setTimeout(run, reduce ? 0 : 2200);
