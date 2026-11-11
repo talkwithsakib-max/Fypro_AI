@@ -10,11 +10,12 @@ interface Props {
 }
 const { eyebrow, title, muted, lead, id, class: cls = "", leadClass = "max-w-[680px]" } = Astro.props;
 ---
-<div class={`text-center ${cls}`} data-reveal>
+<div class={`mx-auto w-fit max-w-full text-center ${cls}`} data-reveal>
   <p class="eyebrow">{eyebrow}</p>
   <h2 id={id} class="h2 mt-[18px]">
     {title}
     {muted && (<><br class="hidden sm:block" /> <span class="text-subtle">{muted}</span></>)}
   </h2>
-  {lead && <p class={`lead mx-auto mt-[18px] ${leadClass}`}>{lead}</p>}
+  {/* Lead never grows wider than the title: w-0 + min-w-full keeps it out of the block's intrinsic width */}
+  {lead && <p class={`lead mx-auto mt-[18px] w-0 min-w-full text-balance ${leadClass}`}>{lead}</p>}
 </div>

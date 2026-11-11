@@ -22,10 +22,10 @@ const items = [
   {
     short: "Raquel", name: "Raquel Gardner", result: "Hours saved every week", avatar: avRaquel, handle: "@raquelgardnerofficial",
     video: "raquelgardnerofficial_7673274821379149087",
-    quote: "Creating videos used to be difficult with my busy schedule — now Fypro AI keeps my account active without taking up hours of my day.",
+    quote: "Creating videos used to be difficult with my busy schedule. Now Fypro AI keeps my account active without taking up hours of my day.",
   },
 ];
-// Product Hunt reviews (fypro.ai "On Product Hunt" section) — text reviews, so their cards show a review panel instead of a video
+// Product Hunt reviews (fypro.ai "On Product Hunt" section): text reviews, so their cards show a review panel instead of a video
 const reviews = [
   { name: "Alparslan", avatar: avAlparslan, src: BASE + "/videos/reviews/r-8136210.mp4", pos: "50% 30%", handle: "Product Hunt review", quote: "The way it pulls the vibe from your actual content instead of slapping a generic template on you is really smart, feels like the site actually sounds like the creator." },
   { name: "James", avatar: avJames, src: BASE + "/videos/reviews/r-8135595.mp4", pos: "50% 28%", handle: "Sea Imagine AI · Product Hunt", quote: "I have tried Fypro. It’s useful for my TikTok user growth." },
@@ -51,7 +51,7 @@ const ring = all.map((it, i) => ({ ...it, i }));
       <p class="mt-2.5 text-[16px] leading-normal font-medium text-white/55">They dropped their handles. Here’s what came back.</p>
     </div>
 
-    <!-- Stage: 1400×680 (Figma origin y=292) — lighting + rotating 3D drum of video cards -->
+    <!-- Stage: 1400×680 (Figma origin y=292): lighting + rotating 3D drum of video cards -->
     <div class="relative mt-8 lg:absolute lg:inset-x-0 lg:top-[292px] lg:mt-0" data-fit>
       <div class="relative h-[680px] w-[1400px]" data-w="1400">
         <img src={ambient.src} alt="" class="pointer-events-none absolute top-[250px] left-[110px] h-[540px] w-[1180px] max-w-none" />

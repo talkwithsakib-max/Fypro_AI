@@ -44,7 +44,7 @@ const plans = [
               <p class:list={["mt-0.5 text-[14px] leading-[17px]", p.featured ? "text-white/60" : "text-muted"]}>{p.tagline}</p>
             </div>
             {p.featured && (
-              <span class="rounded-full bg-gradient-to-r from-cyan via-[#b77a96] to-pink px-2.5 py-1 text-[11.5px] font-semibold text-white shadow-[0_6px_16px_-6px_#fe2c55aa]">✦ Most popular</span>
+              <span class="rounded-full bg-white px-2.5 py-1 text-[12px] font-semibold text-ink">Most popular</span>
             )}
           </div>
 
@@ -54,7 +54,7 @@ const plans = [
           </p>
 
           <span class:list={["mt-6 inline-flex h-[29px] w-fit items-center gap-1.5 rounded-full px-3 text-[14px] font-semibold", p.featured ? "bg-white/10" : "bg-[#f4f4f6]"]}>
-            <span class={p.featured ? "text-cyan" : "text-pink"}>✦</span>{p.credits}
+            {p.credits}
           </span>
 
           {p.featured ? (

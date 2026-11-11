@@ -3,7 +3,7 @@
 @theme {
   --font-sans: "Host Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Host Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: "Host Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
 
   --color-ink: #161823;
@@ -71,10 +71,10 @@
     @apply text-[16px] leading-[21px] font-medium text-muted;
   }
   .display {
-    @apply font-display font-semibold tracking-[-0.045em] leading-[1.02];
+    @apply font-display font-semibold tracking-[-0.035em] leading-[1.04];
   }
   .h2 {
-    @apply font-display font-semibold tracking-[-0.03em] text-[36px] leading-[1.1] sm:text-[46px] lg:text-[52px] lg:leading-[58px];
+    @apply font-display font-semibold tracking-[-0.025em] text-[36px] leading-[1.1] sm:text-[46px] lg:text-[52px] lg:leading-[58px];
   }
   .lead {
     @apply text-[16px] leading-[1.6] text-muted sm:text-[18px] sm:leading-[28px];
@@ -141,18 +141,6 @@
     border-radius: inherit;
   }
 
-  .text-gradient {
-    background: linear-gradient(90deg, #2fb5ad 0%, #8a6a96 45%, #e2456b 80%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .text-gradient-rest {
-    background: linear-gradient(90deg, #b75d82 0%, #e04a6c 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
 }
 
 /* Scroll reveal (progressive enhancement: only hides when JS has marked the doc) */
