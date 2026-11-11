@@ -5,14 +5,14 @@ import type { ImageMetadata } from "astro";
 import Navbar from "./Navbar.astro";
 import HandleForm from "./ui/HandleForm.astro";
 import AvatarStack from "./ui/AvatarStack.astro";
-import lashes from "../assets/img/creator-lashes.png";
-import pov from "../assets/img/creator-pov.png";
-import serum from "../assets/img/creator-serum.png";
-import bottle from "../assets/img/bottle.png";
-import city from "../assets/img/creator-city.png";
-import headphones from "../assets/img/creator-headphones.png";
-import park from "../assets/img/creator-park.png";
-import roller from "../assets/img/creator-roller.png";
+import lashes from "../assets/img/poster-p-lashes.jpg";
+import pov from "../assets/img/poster-p-pov.jpg";
+import serum from "../assets/img/poster-p-serum.jpg";
+import bottle from "../assets/img/poster-bottle-ice.jpg";
+import makeup from "../assets/img/poster-p-makeup.jpg";
+import headphones from "../assets/img/poster-p-headphones.jpg";
+import park from "../assets/img/poster-p-park.jpg";
+import roller from "../assets/img/poster-p-roller.jpg";
 import pSerum from "../assets/img/product-serum.png";
 import pTumbler from "../assets/img/product-tumbler.png";
 import pLash from "../assets/img/product-lashkit.png";
@@ -32,6 +32,7 @@ const chips = {
   avatar: ["No repeat filming", "Sounds like you"],
 } as const;
 // Coverflow reel: the active creator plays inside the phone, neighbours fan out to each side.
+// Each poster is a frame of its own video, so a card looks the same before and after the video starts.
 const products = {
   serum: { name: "Glow Serum", price: "$24.00", img: pSerum },
   tumbler: { name: "Tumbler", price: "$32.00", img: pTumbler },
@@ -39,9 +40,10 @@ const products = {
   headphones: { name: "Headphones", price: "$59.00", img: headphones },
   perfume: { name: "Eau de Parfum", price: "$42.00", img: park },
   roller: { name: "Face Roller", price: "$16.00", img: roller },
+  brushes: { name: "Brush Set", price: "$22.00", img: makeup },
 };
 // Videos: Pexels (Pexels License, no attribution required) — faceless product/scene clips so no person implies endorsement.
-// lashes #8558301 · pov #7986315 · serum #8131887 · bottle #7815839 (Mikhail Nilov) · city #9921064
+// lashes #8558301 · pov #7986315 · serum #8131887 · bottle #7815839 (Mikhail Nilov) · makeup #6944152 (George Milton)
 // headphones #8005691 · park #7815884 (Mikhail Nilov) · roller #3756003 (cottonbro studio)
 //
 // `tools` lists the dock tools a clip can front: product clips carry a shop tag / remake, talking clips carry the avatar.
@@ -60,7 +62,9 @@ const reel: Slide[] = [
     ideas: { niche: "Skincare", hooks: [["POV: you found it first", "2.4M"], ["3 serums I’d rebuy tomorrow", "1.1M"], ["Get ready with me, 60s", "890K"]] } },
   { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Wellness", hooks: [["One bottle, 24 hours of ice", "1.6M"], ["My 6am routine, honestly", "980K"], ["What’s in my gym bag", "610K"]] } },
-  { img: city, video: BASE + "/videos/p-city.mp4", caption: "GAME CHANGER", sub: "1.6M views", handle: "@buriticahustle", tools: [] }, // street scene: only ever a side card
+  { img: makeup, video: BASE + "/videos/p-makeup.mp4", caption: "MY 5-MIN FACE", sub: "every single day", handle: "@kristencollective", product: "brushes", tools: ["avatar", "shop", "remake", "ideas"],
+    line: "Okay, this brush changed my whole routine.",
+    ideas: { niche: "Makeup", hooks: [["My 5-minute everyday face", "2.0M"], ["Brushes I’d buy again", "1.4M"], ["Drugstore vs luxury, blind test", "930K"]] } },
   { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "headphones", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Tech", hooks: [["$60 vs $300: can you tell?", "2.2M"], ["Unboxing with me, no talking", "1.3M"], ["3 features nobody mentions", "820K"]] } },
   { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "perfume", tools: ["shop", "remake"] },
@@ -71,13 +75,13 @@ const reelData = await Promise.all(
   reel.map(async (r) => {
     const p = r.product ? products[r.product] : undefined;
     const thumb = p ? (await getImage({ src: p.img, width: 64, height: 64, fit: "cover" })).src : "";
-    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p?.name ?? "", price: p?.price ?? "", thumb, tools: r.tools, ideas: r.ideas, line: r.line };
+    const face = r.line ? (await getImage({ src: r.img, width: 72, height: 72, fit: "cover", position: "top" })).src : "";
+    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p?.name ?? "", price: p?.price ?? "", thumb, tools: r.tools, ideas: r.ideas, line: r.line, face };
   }),
 );
 const firstIdeas = reel[startIndex].ideas!;
 const firstLine = reel.find((r) => r.line)!.line!.split(" ");
 const first = reelData[startIndex];
-const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cover" });
 ---
 
 <section class="hero relative isolate overflow-hidden" aria-labelledby="hero-title">
@@ -192,7 +196,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
             {firstLine.map((w, i) => <span class="cap-word" style={`--w:${i}`}>{w} </span>)}
           </p>
           <div class="screen-card absolute inset-x-2.5 top-[440px] flex items-center gap-2.5 p-2.5">
-            <img src={avatarThumb.src} alt="" width="34" height="34" class="size-[34px] rounded-full object-cover object-top" />
+            <img src={reelData.find((r) => r.face)!.face} alt="" width="34" height="34" class="size-[34px] rounded-full object-cover object-top" data-f="face" />
             <div class="min-w-0 flex-1 text-left leading-[1.25]">
               <p class="text-[11.5px] font-semibold text-ink">Your avatar</p>
               <p class="text-[10.5px] font-medium text-muted">From 1 photo + a voice clip</p>
@@ -478,7 +482,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
 <script>
   type Info = {
     caption: string; sub: string; handle: string; product: string; price: string; thumb: string;
-    tools: string[]; ideas?: { niche: string; hooks: [string, string][] }; line?: string;
+    tools: string[]; ideas?: { niche: string; hooks: [string, string][] }; line?: string; face?: string;
   };
   const hero = document.querySelector<HTMLElement>(".hero");
   const stage = document.querySelector<HTMLElement>("[data-reel]");
@@ -564,6 +568,7 @@ const avatarThumb = await getImage({ src: pov, width: 72, height: 72, fit: "cove
         set("niche", k.ideas.niche);
         k.ideas.hooks.forEach(([hook, views], i) => { set(`hook${i}`, hook); set(`views${i}`, views); });
       }
+      if (k.face) set("face", k.face);
       const caps = stage.querySelector<HTMLElement>("[data-captions]");
       if (k.line && caps) {
         caps.replaceChildren(...k.line.split(" ").map((w, i) => {
