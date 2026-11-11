@@ -1,11 +1,7 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 
-import tailwindcss from '@tailwindcss/vite';
-
-// https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  site: 'https://github.io',
+  base: '/Fypro_AI',
+  // keep any existing integrations (like tailwind) below this line
 });
