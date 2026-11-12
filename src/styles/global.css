@@ -59,7 +59,8 @@
     font-family: var(--font-display);
   }
   p {
-    text-wrap: pretty;
+    /* text-wrap-style only: the text-wrap shorthand would also reset wrapping and break inherited nowrap */
+    text-wrap-style: pretty;
   }
   /* Inter's sharper display forms: open digits, flat-topped 1, straight-sided l */
   body {
