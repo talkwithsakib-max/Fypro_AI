@@ -49,26 +49,28 @@ const products = {
 // `tools` lists the dock tools a clip can front: product clips carry a shop tag / remake, talking clips carry the avatar.
 // Hooks and view counts in `ideas` are illustrative examples, not real data.
 type Tool = "ideas" | "remake" | "shop" | "avatar";
+// Caption looks, modelled on the text styles creators actually use in Reels/TikTok
+type Look = "pill-white" | "pill-pink" | "pill-dark" | "highlight" | "serif" | "neon" | "glitch";
 type Slide = {
-  img: ImageMetadata; video: string; caption: string; sub: string; handle: string; tools: Tool[];
+  img: ImageMetadata; video: string; caption: string; look: Look; sub: string; handle: string; tools: Tool[];
   product?: keyof typeof products; ideas?: { niche: string; hooks: [string, string][] }; line?: string;
 };
 const reel: Slide[] = [
-  { img: lashes, video: BASE + "/videos/p-lashes.mp4", caption: "YOU NEED THIS", sub: "restocked today", handle: "@des.lashverse", product: "lash", tools: ["shop", "remake", "ideas"],
+  { img: lashes, video: BASE + "/videos/p-lashes.mp4", caption: "YOU NEED THIS", look: "pill-white", sub: "restocked today", handle: "@des.lashverse", product: "lash", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Beauty", hooks: [["My lash routine in 30 seconds", "1.9M"], ["I tested 5 lash kits for a week", "1.2M"], ["What I’d skip next time", "740K"]] } },
-  { img: pov, video: BASE + "/videos/p-pov.mp4", caption: "POV:", sub: "you found it first", handle: "@raquelgardner", tools: ["avatar"],
+  { img: pov, video: BASE + "/videos/p-pov.mp4", caption: "POV:", look: "serif", sub: "you found it first", handle: "@raquelgardner", tools: ["avatar"],
     line: "Three things I wish I knew before posting daily." },
-  { img: serum, video: BASE + "/videos/p-serum.mp4", caption: "SOLD OUT", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum", tools: ["shop", "remake", "ideas"],
+  { img: serum, video: BASE + "/videos/p-serum.mp4", caption: "SOLD OUT", look: "pill-pink", sub: "in 48 hours", handle: "@mama.justinaa", product: "serum", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Skincare", hooks: [["POV: you found it first", "2.4M"], ["3 serums I’d rebuy tomorrow", "1.1M"], ["Get ready with me, 60s", "890K"]] } },
-  { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler", tools: ["shop", "remake", "ideas"],
+  { img: bottle, video: BASE + "/videos/bottle-ice.mp4", caption: "LINK IN BIO", look: "neon", sub: "before it’s gone", handle: "@kristencollective", product: "tumbler", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Wellness", hooks: [["One bottle, 24 hours of ice", "1.6M"], ["My 6am routine, honestly", "980K"], ["What’s in my gym bag", "610K"]] } },
-  { img: makeup, video: BASE + "/videos/p-makeup.mp4", caption: "MY 5-MIN FACE", sub: "every single day", handle: "@kristencollective", product: "brushes", tools: ["avatar", "shop", "remake", "ideas"],
+  { img: makeup, video: BASE + "/videos/p-makeup.mp4", caption: "MY 5-MIN FACE", look: "serif", sub: "every single day", handle: "@kristencollective", product: "brushes", tools: ["avatar", "shop", "remake", "ideas"],
     line: "Okay, this brush changed my whole routine.",
     ideas: { niche: "Makeup", hooks: [["My 5-minute everyday face", "2.0M"], ["Brushes I’d buy again", "1.4M"], ["Drugstore vs luxury, blind test", "930K"]] } },
-  { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", sub: "dropped again", handle: "@ugcnikkif", product: "headphones", tools: ["shop", "remake", "ideas"],
+  { img: headphones, video: BASE + "/videos/p-headphones.mp4", caption: "WAIT, THESE JUST", look: "pill-dark", sub: "dropped again", handle: "@ugcnikkif", product: "headphones", tools: ["shop", "remake", "ideas"],
     ideas: { niche: "Tech", hooks: [["$60 vs $300: can you tell?", "2.2M"], ["Unboxing with me, no talking", "1.3M"], ["3 features nobody mentions", "820K"]] } },
-  { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", sub: "2.1M views", handle: "@kristencollective", product: "perfume", tools: ["shop", "remake"] },
-  { img: roller, video: BASE + "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", sub: "from one video", handle: "@freedom.lover26", product: "roller", tools: ["shop", "remake"] },
+  { img: park, video: BASE + "/videos/p-park.mp4", caption: "OBSESSED", look: "glitch", sub: "2.1M views", handle: "@kristencollective", product: "perfume", tools: ["shop", "remake"] },
+  { img: roller, video: BASE + "/videos/p-roller.mp4", caption: "$2.1K THIS WEEK", look: "highlight", sub: "from one video", handle: "@freedom.lover26", product: "roller", tools: ["shop", "remake"] },
 ];
 const startIndex = 2;
 const reelData = await Promise.all(
@@ -76,7 +78,7 @@ const reelData = await Promise.all(
     const p = r.product ? products[r.product] : undefined;
     const thumb = p ? (await getImage({ src: p.img, width: 64, height: 64, fit: "cover" })).src : "";
     const face = r.line ? (await getImage({ src: r.img, width: 72, height: 72, fit: "cover", position: "top" })).src : "";
-    return { caption: r.caption, sub: r.sub, handle: r.handle, product: p?.name ?? "", price: p?.price ?? "", thumb, tools: r.tools, ideas: r.ideas, line: r.line, face };
+    return { caption: r.caption, look: r.look, sub: r.sub, handle: r.handle, product: p?.name ?? "", price: p?.price ?? "", thumb, tools: r.tools, ideas: r.ideas, line: r.line, face };
   }),
 );
 const firstIdeas = reel[startIndex].ideas!;
@@ -94,13 +96,13 @@ const first = reelData[startIndex];
       <span class="font-medium">Loved by <b class="font-bold text-ink">30,000+ creators</b></span>
     </div>
 
-    <h1 id="hero-title" class="mx-auto mt-[22px] max-w-[760px] font-display text-[42px] leading-[1.05] font-semibold tracking-[-0.03em] text-ink sm:text-[60px] lg:text-[68px] lg:leading-[70px]">
-      <span class="inline-block" data-intro style="--i:1">Drop your TikTok handle.</span>
+    <h1 id="hero-title" class="display mx-auto mt-[22px] max-w-[760px] text-ink">
+      <span class="inline-block" data-intro style="--i:1">Drop your <span class="tt-wrap"><span class="tt-icon" role="img" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" fill="#25F4EE" transform="translate(-0.75 -0.75)"/><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" fill="#FE2C55" transform="translate(0.75 0.75)"/><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" fill="#fff"/></svg></span></span> handle.</span>
       <br class="hidden sm:block" />
       <span class="inline-block" data-intro style="--i:2">We’ll handle the rest.</span>
     </h1>
 
-    <p class="lead mx-auto mt-[22px] max-w-[660px] sm:text-[19px] sm:leading-[29px]" data-intro style="--i:3">
+    <p class="lead-lg mx-auto mt-[22px] max-w-[720px]" data-intro style="--i:3">
       Fypro is <b class="font-semibold text-ink">your AI creator success manager</b>. It learns your TikTok, creates videos your audience watches, and runs the storefront where they buy.
     </p>
 
@@ -175,9 +177,11 @@ const first = reelData[startIndex];
         </div>
 
         <!-- Shoppable video: product tag on the post; text swaps with each creator -->
-        <div class="panel screen-swap absolute inset-0" data-panel="shop" data-swap>
-          <p class="screen-text absolute inset-x-2 top-[228px] text-center text-[28px] leading-[1.2] font-extrabold" data-f="caption">{first.caption}</p>
-          <p class="screen-text absolute inset-x-0 top-[266px] text-center text-[19px] font-bold !text-pink" data-f="sub">{first.sub}</p>
+        <div class="panel screen-swap absolute inset-0" data-panel="shop" data-swap data-look={first.look}>
+          <!-- Scrim: a soft, edgeless dark wash behind plain-text captions (pill styles carry their own background) -->
+          <span class="caption-scrim" aria-hidden="true"></span>
+          <p class="absolute inset-x-2 top-[226px] text-center"><span class="cap" data-f="caption">{first.caption}</span></p>
+          <p class="absolute inset-x-2 top-[266px] text-center"><span class="cap-sub" data-f="sub">{first.sub}</span></p>
           <p class="absolute left-3 top-[308px] text-[13px] font-bold text-white" data-f="handle">{first.handle}</p>
           <div class="absolute left-3 top-[330px] flex items-center gap-2 rounded-[10px] bg-white/95 py-1.5 pr-2 pl-1.5">
             <img src={first.thumb} alt="" width="30" height="30" class="size-[30px] rounded-md object-cover" data-f="thumb" />
@@ -302,6 +306,53 @@ const first = reelData[startIndex];
     text-shadow: 0 1px 0 #0003, 0 2px 12px #0006;
     -webkit-text-stroke: 0.5px #0003;
   }
+  /* Inline TikTok icon: a glossy brand-coloured squircle with a soft cyan/pink underglow */
+  .tt-wrap {
+    position: relative;
+    isolation: isolate;
+    display: inline-block;
+    margin: 0 0.2em;
+    vertical-align: -0.11em;
+    line-height: 0;
+  }
+  .tt-icon {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 0.94em;
+    height: 0.94em;
+    overflow: hidden;
+    border-radius: 0.24em;
+    corner-shape: squircle;
+    /* Glossy brand tile: lighter at the top, deep black at the base */
+    background: linear-gradient(180deg, #3a3c48 0%, #17181f 46%, #000 100%);
+    box-shadow:
+      inset 0 1.5px 0.5px #ffffff59,
+      inset 0 -2px 4px #00000080,
+      0 1px 2px #0000002e,
+      0 10px 18px -8px #00000059,
+      -8px 14px 22px -12px #25f4ee99,
+      8px 14px 22px -12px #fe2c5599;
+    transition: translate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* Curved specular highlight across the top of the tile */
+  .tt-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 50% 0;
+    background: linear-gradient(180deg, #ffffff40, #ffffff00);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .tt-icon svg {
+    position: relative;
+    z-index: 1;
+    width: 0.56em;
+    height: 0.56em;
+    translate: 0.01em 0;
+    filter: drop-shadow(0 0.02em 0.04em #00000066);
+  }
+  h1:hover .tt-icon { translate: 0 -0.04em; }
   .float-chip {
     display: inline-flex;
     align-items: center;
@@ -425,6 +476,104 @@ const first = reelData[startIndex];
   .screen-ui {
     box-shadow: var(--shadow-glow);
   }
+  /* Edgeless scrim: one radial falloff that reaches zero well inside its box, so no band edge shows */
+  .caption-scrim {
+    position: absolute;
+    left: -40px;
+    right: -40px;
+    top: 150px;
+    height: 260px;
+    background: radial-gradient(closest-side, #00000066 0%, #0000003d 40%, #00000014 75%, transparent 100%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  [data-look^="pill"] .caption-scrim,
+  [data-look="highlight"] .caption-scrim { opacity: 0.35; }
+
+  /* ---- Caption looks ---- */
+  .cap,
+  .cap-sub {
+    display: inline-block;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .cap {
+    font-family: var(--font-sans);
+    font-size: 24px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .cap-sub {
+    margin-top: 2px;
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  /* Classic TikTok background text: tight rounded box per line */
+  [data-look^="pill"] .cap,
+  [data-look="highlight"] .cap {
+    padding: 3px 10px 4px;
+    border-radius: 8px;
+    font-size: 21px;
+  }
+  [data-look^="pill"] .cap-sub,
+  [data-look="highlight"] .cap-sub {
+    margin-top: 6px;
+    padding: 2px 9px 3px;
+    border-radius: 7px;
+    font-size: 14px;
+  }
+  [data-look="pill-white"] .cap { background: #fff; color: var(--color-ink); }
+  [data-look="pill-white"] .cap-sub { background: var(--color-pink); }
+  [data-look="pill-pink"] .cap { background: var(--color-pink); }
+  [data-look="pill-pink"] .cap-sub { background: #fff; color: var(--color-ink); }
+  [data-look="pill-dark"] .cap {
+    background: #000000a6;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  [data-look="pill-dark"] .cap-sub { background: #000000a6; color: var(--color-cyan); }
+  [data-look="highlight"] .cap { background: var(--color-cyan); color: var(--color-ink); }
+  [data-look="highlight"] .cap-sub { padding: 0; background: none; font-size: 16px; text-shadow: 0 1px 2px #000000b3, 0 2px 10px #00000080; }
+  /* Editorial serif, the "aesthetic vlog" look */
+  [data-look="serif"] .cap {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+    text-shadow: 0 1px 2px #00000080, 0 4px 18px #00000066;
+  }
+  [data-look="serif"] .cap-sub {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #ffffffe6;
+    text-shadow: 0 1px 2px #000000b3;
+  }
+  /* Neon: soft cyan light around white letters */
+  [data-look="neon"] .cap {
+    font-size: 25px;
+    text-shadow: 0 0 2px #fff, 0 0 8px #25f4ee, 0 0 18px #25f4eecc, 0 0 32px #25f4ee80;
+  }
+  [data-look="neon"] .cap-sub {
+    color: #ffd1dc;
+    text-shadow: 0 0 6px #fe2c55, 0 0 14px #fe2c55b3;
+  }
+  /* TikTok's own split-colour offset */
+  [data-look="glitch"] .cap {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-shadow: -2px -1px 0 #25f4ee, 2px 1px 0 #fe2c55, 0 4px 16px #00000066;
+  }
+  [data-look="glitch"] .cap-sub {
+    color: #fff;
+    text-shadow: 0 1px 2px #000000b3, 0 2px 10px #00000080;
+  }
   .screen-text {
     color: #fff;
     text-shadow: 0 1px 2px #000000d9, 0 3px 12px #00000080;
@@ -481,7 +630,7 @@ const first = reelData[startIndex];
 
 <script>
   type Info = {
-    caption: string; sub: string; handle: string; product: string; price: string; thumb: string;
+    caption: string; look: string; sub: string; handle: string; product: string; price: string; thumb: string;
     tools: string[]; ideas?: { niche: string; hooks: [string, string][] }; line?: string; face?: string;
   };
   const hero = document.querySelector<HTMLElement>(".hero");
@@ -563,6 +712,7 @@ const first = reelData[startIndex];
         });
       };
       set("caption", k.caption); set("sub", k.sub); set("handle", k.handle);
+      stage.querySelector<HTMLElement>('[data-panel="shop"]')!.dataset.look = k.look;
       if (k.product) { set("product", k.product); set("price", k.price); set("thumb", k.thumb); set("rproduct", k.product); }
       if (k.ideas) {
         set("niche", k.ideas.niche);

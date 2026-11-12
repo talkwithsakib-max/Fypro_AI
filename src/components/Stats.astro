@@ -1,201 +1,117 @@
 ---
-import { Image } from "astro:assets";
-import SectionHeading from "./ui/SectionHeading.astro";
 import AvatarStack from "./ui/AvatarStack.astro";
-import mesh1 from "../assets/img/mesh-1.jpg";
-import mesh3 from "../assets/img/mesh-3.jpg";
-import mesh4 from "../assets/img/mesh-4.jpg";
-import hotAvatar from "../assets/figma/engine/hot-avatar.png";
 
-// Figma "Metric / Videos" matrix (567:19073): viral block columns per row (16 cols × 7 rows)
+// Compact metrics, modelled on Aave's "Building the future" and Robot.com's "Already working at scale":
+// the heading sits beside a small bento of numbers, each number carrying one tiny visual instead of a full chart.
+
+// Dot matrix for 4M+: viral columns per row (16 cols × 7 rows), from the Figma "Metric / Videos" matrix (567:19073)
 const viralRows = [[3, 4], [1, 2, 3, 6], [3, 4, 8], [1, 2, 3, 7, 15], [0, 2, 6, 14, 15], [0, 13, 14], [0, 11, 12, 14]];
-const days = [
-  { d: "M", h: 65 }, { d: "T", h: 80 }, { d: "W", h: 73 }, { d: "T", h: 94 },
-  { d: "F", h: 87, dark: true }, { d: "S", h: 109, dark: true }, { d: "S", h: 118, hot: true },
-];
+// Rising weekly views for 10M+
 const weeks = [25, 31, 36, 42, 49, 56, 64, 73, 84, 95, 109, 140];
 ---
 
-<section id="engine" class="pt-24 pb-24 sm:pt-[120px] sm:pb-[132px]" aria-labelledby="engine-title">
+<section id="engine" class="pt-24 pb-24 sm:pt-[120px] sm:pb-[120px]" aria-labelledby="engine-title">
   <div class="container-x">
-    <SectionHeading
-      id="engine-title"
-      eyebrow="The engine behind the engine"
-      title="Built only for your growth."
-      muted="Tuned by experts."
-      lead="Deep learning across millions of videos, refined by 30,000+ creators and the strategists behind them. Fypro’s model doesn’t guess. It’s trained on patterns that work."
-    />
+    <div class="mx-auto grid max-w-[1198px] items-center gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] lg:gap-14">
+      <!-- Heading -->
+      <div data-reveal>
+        <p class="eyebrow">The engine behind the engine</p>
+        <h2 id="engine-title" class="h2 mt-[18px] text-ink">Built only for your growth.<br /><span class="text-muted">Tuned by experts.</span></h2>
+        <p class="lead mt-[18px] max-w-[440px]">Trained on millions of videos and sharpened every week by 30,000+ creators and the strategists behind them.</p>
+      </div>
 
-    <div class="mx-auto mt-14 grid max-w-[1198px] gap-5 lg:grid-cols-3">
-      <!-- Training data -->
-      <article class="metric" data-reveal>
-        <div class="metric-top">
-          <p class="metric-tag"><i></i>Training data</p>
-          <p class="metric-num">4M+</p>
-          <h3 class="metric-title">Viral TikToks analyzed</h3>
-          <p class="metric-body">Every idea and script starts from patterns that already worked.</p>
-        </div>
-        <div class="viz">
-          <Image src={mesh3} alt="" width={760} class="viz-bg" />
-          <p class="mono relative">Each block ≈ 35K videos</p>
-          <div class="relative" data-fit><div class="flex w-[299px] flex-col gap-[5px]" data-w="299" aria-hidden="true">
-            {viralRows.map((row) => (
-              <div class="flex gap-[5px]">
-                {Array.from({ length: 16 }, (_, c) => <span class:list={["h-[22px] w-[14px] shrink-0 rounded-[3px]", row.includes(c) ? "bg-gradient-to-b from-cyan to-pink" : "bg-white/75"]}></span>)}
-              </div>
-            ))}
-          </div></div>
-          <div class="relative flex gap-4">
-            <span class="mono flex items-center gap-1.5"><i class="h-3 w-2 rounded-[2px] bg-gradient-to-b from-cyan to-pink"></i>Viral patterns</span>
-            <span class="mono flex items-center gap-1.5"><i class="h-3 w-2 rounded-[2px] bg-[#ededf0]"></i>Analyzed</span>
+      <!-- Bento -->
+      <div class="grid gap-3 sm:grid-cols-2 sm:grid-rows-2">
+        <!-- 4M+: dot matrix -->
+        <article class="stat sm:row-span-2" data-reveal style="--d:80ms">
+          <div>
+            <p class="stat-num">4M+</p>
+            <h3 class="stat-label">Viral TikToks analyzed</h3>
           </div>
-        </div>
-      </article>
+          <div class="mt-auto pt-8" aria-hidden="true">
+            <div class="grid grid-cols-[repeat(16,minmax(0,1fr))] gap-[5px]">
+              {viralRows.map((row) =>
+                Array.from({ length: 16 }, (_, c) => (
+                  <span class:list={["aspect-square rounded-full", row.includes(c) ? "dot-hot" : "bg-[#e3e4ec]"]}></span>
+                ))
+              )}
+            </div>
+            <p class="mt-3 flex items-center gap-1.5 text-[12px] font-medium text-muted"><i class="dot-hot size-2 rounded-full"></i>Patterns that went viral</p>
+          </div>
+        </article>
 
-      <!-- Community -->
-      <article class="metric" data-reveal style="--d:100ms">
-        <div class="metric-top">
-          <p class="metric-tag"><i></i>Community</p>
-          <p class="metric-num">30,000+</p>
-          <h3 class="metric-title">Active creators every week</h3>
-          <p class="metric-body">Planning, posting and selling, and sharpening the model as they go.</p>
-        </div>
-        <div class="viz">
-          <Image src={mesh4} alt="" width={760} class="viz-bg" />
-          <p class="mono relative">Creators active · this week</p>
-          <div class="relative flex items-end gap-2.5" aria-hidden="true">
-            {days.map((d) => (
-              <div class="flex flex-col items-center gap-2">
-                <span class:list={["relative w-[34px] overflow-hidden rounded-[10px]", d.hot ? "bg-gradient-to-b from-pink to-cyan" : d.dark ? "bg-[#2a2c35]" : "bg-white/75"]} style={`height:${d.h}px`}>
-                  {d.hot && <Image src={hotAvatar} alt="" width={52} class="absolute top-1 left-1 size-[26px]" />}
-                </span>
-                <span class="mono tracking-[0.44px]">{d.d}</span>
-              </div>
-            ))}
+        <!-- 30,000+: faces -->
+        <article class="stat" data-reveal style="--d:160ms">
+          <div>
+            <p class="stat-num">30,000+</p>
+            <h3 class="stat-label">Creators every week</h3>
           </div>
-          <div class="relative flex items-center gap-2.5">
-            <AvatarStack size={24} count={5} />
-            <span class="text-[12px] leading-normal font-semibold whitespace-nowrap text-ink">+30K creators this week</span>
+          <div class="mt-auto flex items-center gap-2.5 pt-6">
+            <AvatarStack size={30} count={5} ring="#f4f4f7" />
+            <span class="flex items-center gap-1.5 text-[12px] font-medium text-muted"><i class="live size-1.5 rounded-full bg-[#0a8f8b]"></i>Active now</span>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <!-- Results -->
-      <article class="metric" data-reveal style="--d:200ms">
-        <div class="metric-top">
-          <p class="metric-tag"><i></i>Results</p>
-          <p class="metric-num">10M+</p>
-          <h3 class="metric-title">Views last quarter</h3>
-          <p class="metric-body">Generated by content planned with Fypro, across creators of every size.</p>
-        </div>
-        <div class="viz">
-          <Image src={mesh1} alt="" width={760} class="viz-bg" />
-          <p class="mono relative">Weekly views · last quarter</p>
-          <div class="relative" data-fit><div class="relative h-[150px] w-[330px]" data-w="330" aria-hidden="true">
-            {[10, 56, 102, 148].map((y) => <span class="absolute left-0 h-px w-[330px] bg-white/75" style={`top:${y}px`}></span>)}
+        <!-- 10M+: rising bars -->
+        <article class="stat" data-reveal style="--d:240ms">
+          <div>
+            <p class="stat-num">10M+</p>
+            <h3 class="stat-label">Views last quarter</h3>
+          </div>
+          <div class="mt-auto flex h-16 items-end gap-[5px] pt-6" aria-hidden="true">
             {weeks.map((h, i) => (
-              <span
-                class:list={["absolute w-5 rounded-t-[6px] rounded-b-[2px]", i === 11 ? "bg-gradient-to-b from-pink to-cyan" : i > 7 ? "bg-[#2a2c35]" : "bg-white/75"]}
-                style={`left:${i * 28}px;top:${150 - h}px;height:${h}px`}
-              ></span>
+              <span class="bar flex-1 rounded-[4px]" style={`height:${Math.round((h / 140) * 100)}%;--i:${i}`}></span>
             ))}
-            <span class="absolute top-[-26px] left-[279px] rounded-[10px] bg-ink px-2.5 py-1.5 text-[12px] leading-normal font-bold text-white shadow-[inset_0_1px_0_#ffffff29,0_4px_10px_-2px_#12142440]">10M+</span>
-          </div></div>
-          <div class="mono relative flex h-3.5 w-full max-w-[330px] justify-between"><span>Week 1</span><span>Week 12</span></div>
-        </div>
-      </article>
+          </div>
+        </article>
+      </div>
     </div>
-
-    <p class="mt-14 text-center font-mono text-[11px] leading-[14px] font-medium text-subtle">Refined weekly by professional growth strategists</p>
   </div>
 </section>
 
 <style>
-  .metric {
+  .stat {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    border-radius: 28px;
-    background: #fff;
-    padding: 0 10px 10px;
-    box-shadow: inset 0 -1px 0 #12142408, inset 0 1px 0 #fff, var(--shadow-card);
+    min-height: 190px;
+    border-radius: 22px;
+    background: #f4f4f7;
+    padding: 24px;
   }
-  @media (max-width: 1023px) {
-    .viz {
-      min-height: 300px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .metric {
-      height: 540px;
-    }
-  }
-  .metric-top {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 28px 18px 20px;
-  }
-  .metric-tag {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    line-height: normal;
-    color: var(--color-subtle);
-  }
-  .metric-tag i {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--color-subtle);
-  }
-  .metric-num {
-    font-size: 64px;
-    line-height: normal;
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1;
     font-weight: 600;
-    letter-spacing: -1.92px;
+    letter-spacing: -0.05em;
     color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
   }
-  .metric-title {
-    font-size: 18px;
-    line-height: normal;
-    font-weight: 600;
-    letter-spacing: -0.18px;
-    color: var(--color-ink);
-  }
-  .metric-body {
-    max-width: 330px;
+  .stat-label {
+    margin-top: 10px;
+    font-family: var(--font-sans);
     font-size: 15px;
     line-height: 22px;
+    font-weight: 500;
+    letter-spacing: 0;
     color: var(--color-muted);
   }
-  .viz {
-    position: relative;
-    display: flex;
-    flex: 1 0 0;
-    flex-direction: column;
-    gap: 14px;
-    overflow: hidden;
-    border-radius: 18px;
-    padding: 20px 20px 18px;
+  .dot-hot {
+    background: linear-gradient(160deg, var(--color-cyan), var(--color-pink));
+    box-shadow: 0 2px 6px -1px #fe2c5559;
   }
-  .viz :global(.viz-bg) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .bar {
+    background: linear-gradient(180deg, var(--color-pink), #fe2c5533);
+    opacity: calc(0.35 + var(--i) * 0.06);
+    transform-origin: bottom;
   }
-  .mono {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    line-height: normal;
-    color: var(--color-subtle);
-    white-space: nowrap;
+  .bar:last-child { background: linear-gradient(180deg, var(--color-cyan), var(--color-pink)); opacity: 1; }
+  :global(.js) .stat .bar { scale: 1 0; transition: scale 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: calc(300ms + var(--i) * 45ms); }
+  :global(.js) .stat:global(.is-in) .bar { scale: 1 1; }
+  .live { animation: live 1.6s ease-in-out infinite; }
+  @keyframes live { 50% { opacity: 0.3; } }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .stat .bar { scale: 1 1; transition: none; }
+    .live { animation: none; }
   }
 </style>

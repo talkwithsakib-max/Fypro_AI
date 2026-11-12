@@ -44,8 +44,8 @@ const faqs = [
                 aria-controls={`faq-a-${i}`}
                 id={`faq-q-${i}`}
               >
-                <span class="text-[20px] leading-[26px] font-semibold tracking-[-0.4px] text-ink">{f.q}</span>
-                <span id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} class="faq-a text-[14px] leading-[21px] text-muted">{f.a}</span>
+                <span class="title-md text-ink">{f.q}</span>
+                <span id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} class="faq-a text-[14px] leading-[22px] text-muted">{f.a}</span>
                 <span class="mt-auto flex items-center gap-2 text-[14px] leading-normal font-semibold text-ink">
                   <span class="faq-ico grid size-[26px] place-items-center rounded-[13px]">
                     <img src={plus.src} alt="" class="ico-plus size-3.5" /><img src={minus.src} alt="" class="ico-minus size-3.5" />

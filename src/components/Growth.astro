@@ -4,6 +4,7 @@ import SectionHeading from "./ui/SectionHeading.astro";
 import Arrow from "./ui/Arrow.astro";
 // Shared photography / panels
 import mesh1 from "../assets/img/mesh-1.jpg";
+import mesh4 from "../assets/img/mesh-4.jpg";
 import mesh2 from "../assets/img/mesh-2.jpg";
 import mesh3 from "../assets/img/mesh-3.jpg";
 import pov from "../assets/img/creator-pov.png";
@@ -15,6 +16,7 @@ import pTumbler from "../assets/img/product-tumbler.png";
 import pScrunchie from "../assets/img/product-scrunchie.png";
 // Figma assets (src/assets/figma/how)
 import creator from "../assets/figma/how/creator.png";
+import justinaa from "../assets/img/poster-p-serum.jpg";
 import orbit from "../assets/figma/how/orbit.svg";
 import hub from "../assets/figma/how/hub.svg";
 import dotCyan from "../assets/figma/how/dot-cyan.svg";
@@ -32,8 +34,7 @@ import a1 from "../assets/figma/how/start-a1.png";
 import a2 from "../assets/figma/how/start-a2.png";
 import a3 from "../assets/figma/how/start-a3.png";
 import a4 from "../assets/figma/how/start-a4.png";
-import glowCyan from "../assets/figma/how/glow-cyan.svg";
-import glowPink from "../assets/figma/how/glow-pink.svg";
+import noise from "../assets/img/noise.png";
 import shield from "../assets/figma/how/shield.svg";
 import siteAvatar from "../assets/figma/how/site-avatar.png";
 import dotRed from "../assets/figma/how/dot-red.svg";
@@ -86,22 +87,29 @@ const startAvatars = [a1, a2, a3, a4];
       <article class="how-card relative overflow-hidden rounded-[28px] bg-white" data-hc style="--i:0">
         <div data-fit>
           <div class="relative h-[350px] w-[780px]" data-w="780">
-            <Image src={mesh1} alt="" width={1520} class="absolute top-2.5 left-2.5 h-[320px] w-[760px] rounded-[18px] object-cover" />
-            <img src={orbit.src} alt="" class="absolute top-2.5 left-2.5 h-[320px] w-[760px]" />
-            <img src={hub.src} alt="" class="absolute top-[190px] left-[162px] h-[150px] w-[172px] max-w-none" />
-            <Image src={creator} alt="" width={240} style="--p:0ms" class="a-pop absolute top-[194px] left-[188px] size-[120px] max-w-none" />
-            {insights.map((p) => (
-              <div class="absolute flex items-center justify-center" style={`left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px`}>
-                <div class="pill a-pop flex items-center gap-2 rounded-[14px] bg-white py-[7px] pr-3 pl-[7px] whitespace-nowrap" style={`rotate:${p.r}deg;--p:${120 + insights.indexOf(p) * 90}ms`}>
-                  <img src={p.dot.src} alt="" class="size-3" />
-                  <span class="flex gap-1 text-[12px] leading-normal"><span class="font-medium text-muted">{p.k}</span><b class="font-bold text-ink">{p.v}</b></span>
+            <Image src={mesh4} alt="" width={1520} class="absolute top-2.5 left-2.5 h-[320px] w-[760px] rounded-[18px] object-cover" />
+            <!-- Creator profile: what Fypro learned from the account (Circle/Assembly-style document card, no orbit) -->
+            <div class="pill a-pop absolute top-[46px] left-[42px] w-[352px] rounded-[20px] bg-white p-[18px]" style="--p:0ms">
+              <div class="flex items-center gap-3">
+                <Image src={justinaa} alt="" width={96} class="size-11 rounded-full object-cover object-[50%_20%]" />
+                <div class="min-w-0 leading-normal">
+                  <p class="text-[14px] font-semibold text-ink">@mama.justinaa</p>
+                  <p class="text-[11.5px] font-medium text-muted">Skincare · 48.2K followers</p>
                 </div>
+                <span class="ml-auto rounded-full bg-[#f4f4f7] px-2.5 py-1 text-[11px] font-semibold text-ink">Analyzed</span>
               </div>
-            ))}
-            <img src={connPath.src} alt="" class="a-draw absolute top-[175px] left-[296px] h-[89px] w-[172px] max-w-none" />
-            <img src={connStart.src} alt="" style="--p:420ms" class="a-pop absolute top-[229px] left-[285px] size-[30px] max-w-none" />
-            <span style="--p:620ms" class="pill a-pop absolute top-[209px] left-[365px] grid size-[26px] place-items-center rounded-[13px] bg-white"><img src={aiIcon.src} alt="" class="size-3.5" /></span>
-            <div class="pill absolute top-[62px] left-[464px] flex w-[272px] flex-col gap-3 rounded-[20px] bg-white p-[18px]">
+              <div class="mt-4 grid grid-cols-[1.3fr_1fr_1fr] gap-2">
+                {insights.filter((p) => p.k !== "Niche").map((p) => (
+                  <div class="rounded-[12px] bg-[#f4f4f7] px-3 py-2.5 leading-normal">
+                    <p class="text-[11px] font-medium text-muted">{p.k}</p>
+                    <p class="mt-0.5 text-[13.5px] font-semibold whitespace-nowrap text-ink">{p.v}</p>
+                  </div>
+                ))}
+              </div>
+              <p class="mt-3.5 flex items-center gap-2 text-[12px] leading-[17px] text-ink"><img src={aiIcon.src} alt="" class="size-3.5" />POV hooks get <b class="font-semibold">2.3×</b> your average views</p>
+            </div>
+            <span style="--p:300ms" class="pill a-pop absolute top-[152px] left-[404px] grid size-[26px] place-items-center rounded-[13px] bg-white"><img src={trend.src} alt="" class="size-3.5 invert" /></span>
+            <div class="pill a-pop absolute top-[46px] left-[440px] flex w-[296px] flex-col gap-3 rounded-[20px] bg-white p-[18px]" style="--p:200ms">
               <div class="flex items-center gap-2">
                 <span class="grid size-7 place-items-center rounded-lg bg-ink"><img src={trend.src} alt="" class="size-4" /></span>
                 <div class="leading-normal whitespace-nowrap"><p class="text-[14px] font-bold text-ink">Today’s plan</p><p class="text-[11px] font-medium text-muted">Updated 2 min ago</p></div>
@@ -119,8 +127,6 @@ const startAvatars = [a1, a2, a3, a4];
                 <span class="text-[11px] leading-normal font-semibold text-muted">2 / 4</span>
               </div>
             </div>
-            <span class="absolute top-[286px] left-[196.5px] rounded-full bg-ink px-2.5 py-1 text-[11px] leading-normal font-semibold whitespace-nowrap text-white shadow-[inset_0_1px_0_#ffffff29,0_4px_10px_-2px_#12142440]">@mama.justinaa</span>
-            <img src={connEnd.src} alt="" style="--p:820ms" class="a-pop absolute top-[180px] left-[449px] size-[30px] max-w-none" />
           </div>
         </div>
         <div class="how-text" style="--tt:352px">
@@ -147,7 +153,7 @@ const startAvatars = [a1, a2, a3, a4];
               ))}
             </div>
             <div class="pill absolute flex flex-col justify-center rounded-2xl bg-white" style="left:40.46px;top:213.94px;width:273.091px;height:58.184px;padding:11.261px 13.138px;gap:5.631px">
-              <p class="flex items-center gap-[5.631px]"><img src={sparklePink.src} alt="" class="size-[12.2px]" /><span class="text-[10px] leading-normal font-bold tracking-[0.4px] text-pink">HOOK · 0-3s</span></p>
+              <p class="flex items-center gap-[5.631px]"><img src={sparklePink.src} alt="" class="size-[12.2px]" /><span class="text-[10px] leading-normal font-bold text-pink">Hook · 0–3s</span></p>
               <p class="hook-text text-[12px] leading-normal font-semibold whitespace-nowrap text-ink" data-hook-out>“POV: the serum that sold out in 48 hours…”</p>
             </div>
             <div class="absolute flex items-center rounded-full bg-ink" style="left:239.42px;top:30px;width:120.122px;height:26.277px;padding:5.631px 9.385px;gap:5.631px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
@@ -169,8 +175,13 @@ const startAvatars = [a1, a2, a3, a4];
       <article class="how-card dark-card relative overflow-hidden rounded-[28px] text-white" data-hc style="--i:2">
         <div data-fit>
           <div class="relative h-[350px] w-[400px] overflow-hidden" data-w="400">
-            <img src={glowCyan.src} alt="" class="absolute top-[-150px] left-[-170px] size-[480px] max-w-none" />
-            <img src={glowPink.src} alt="" class="absolute top-[-100px] left-[90px] size-[480px] max-w-none" />
+            <!-- One light source + a brand-lit horizon, instead of two colour blobs -->
+            <span class="dc-light" aria-hidden="true"></span>
+            <span class="dc-rim dc-haze" aria-hidden="true"></span>
+            <span class="dc-rim dc-core" aria-hidden="true"></span>
+            <span class="dc-sun" aria-hidden="true"></span>
+            <span class="dc-planet" aria-hidden="true"></span>
+            <span class="dc-grain" aria-hidden="true" style={`background-image:url(${noise.src})`}></span>
             <div class="absolute top-10 left-8 flex flex-col items-start gap-3.5">
               <div class="flex">
                 {startAvatars.map((a, i) => <Image src={a} alt="" width={88} class="size-11" style={i < 3 ? "margin-right:-12px" : ""} />)}
@@ -210,7 +221,7 @@ const startAvatars = [a1, a2, a3, a4];
                 </div>
               ))}
             </div>
-            <div class="absolute flex flex-col rounded-2xl bg-ink" style="left:569.2px;top:170px;width:154.933px;height:117.6px;padding:13.067px 14.933px;gap:9.333px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
+            <div class="surface-dark absolute flex flex-col rounded-2xl" style="left:569.2px;top:170px;width:154.933px;height:117.6px;padding:13.067px 14.933px;gap:9.333px;box-shadow:inset 0 1px 0 #ffffff29, var(--shadow-dark-chip)">
               <p class="flex items-center gap-[7.467px]"><img src={users.src} alt="" class="size-[14.933px]" /><span class="text-[11px] leading-normal font-medium whitespace-nowrap text-white/70">Customers you own</span></p>
               <p class="text-[26px] leading-normal font-bold tracking-[-0.52px] text-white">1,284</p>
               <span class="mini-btn flex w-fit items-center gap-1.5 rounded-full bg-white py-[3px] pr-[3px] pl-2.5 text-[10.5px] leading-normal font-semibold whitespace-nowrap text-ink">Export CSV<span class="grid size-[17px] place-items-center rounded-full bg-ink text-white"><svg class="size-[9px]" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5 8.5 3.5M4.5 3.5h4v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
@@ -239,8 +250,76 @@ const startAvatars = [a1, a2, a3, a4];
     box-shadow: var(--shadow-card-open);
   }
   .dark-card {
-    background: linear-gradient(180deg, #23252e 0%, #0c0d12 100%);
+    background: linear-gradient(180deg, #17181f 0%, #0b0c10 62%, #0a0a0d 100%); /* base for the horizon art; other black cards use .surface-dark */
     box-shadow: var(--shadow-dark-open);
+  }
+  /* Soft key light from the top, like a studio light falling on the card */
+  .dc-light {
+    position: absolute;
+    top: -180px;
+    left: 50%;
+    width: 520px;
+    height: 360px;
+    translate: -50% 0;
+    background: radial-gradient(closest-side, #ffffff1f, #ffffff0a 55%, transparent);
+    pointer-events: none;
+  }
+  /* Horizon: a dark planet whose rim is lit in the brand colours */
+  .dc-rim,
+  .dc-planet {
+    position: absolute;
+    left: 50%;
+    width: 760px;
+    height: 520px;
+    translate: -50% 0;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* The glow is light from behind the planet: a tight bright core on the edge,
+     a wide soft haze around it, both strongest at the crest and fading to the sides. */
+  .dc-rim {
+    background: linear-gradient(90deg, #25f4ee 12%, #9a8cff 50%, #fe2c55 88%);
+    -webkit-mask-image: radial-gradient(48% 100% at 50% 0%, #000 25%, transparent 80%);
+    mask-image: radial-gradient(48% 100% at 50% 0%, #000 25%, transparent 80%);
+  }
+  .dc-haze {
+    top: 222px;
+    filter: blur(44px);
+    opacity: 0.5;
+  }
+  .dc-core {
+    top: 247px;
+    filter: blur(10px);
+    opacity: 0.75;
+    /* Taper the bright edge so it melts into the haze instead of running across the card as a line */
+    -webkit-mask-image: radial-gradient(34% 100% at 50% 0%, #000 10%, #0008 45%, transparent 78%);
+    mask-image: radial-gradient(34% 100% at 50% 0%, #000 10%, #0008 45%, transparent 78%);
+  }
+  /* A small white-hot point at the crest, like the sun just about to rise */
+  .dc-sun {
+    position: absolute;
+    top: 238px;
+    left: 50%;
+    width: 220px;
+    height: 34px;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #ffffffb3, #c9c4ff59 45%, transparent);
+    filter: blur(8px);
+    pointer-events: none;
+  }
+  .dc-planet {
+    top: 252px;
+    background: radial-gradient(120% 60% at 50% 0%, #15161c 0%, #0b0c10 45%);
+    box-shadow: inset 0 16px 32px -20px #ffffff38;
+  }
+  .dc-grain {
+    position: absolute;
+    inset: 0;
+    background-size: 160px;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
   .pill {
     box-shadow: inset 0 1px 0 #fff, var(--shadow-float);
@@ -262,14 +341,14 @@ const startAvatars = [a1, a2, a3, a4];
   }
   .how-text h3 {
     font-size: 24px;
-    line-height: normal;
+    line-height: 30px;
     font-weight: 600;
-    letter-spacing: -0.48px;
+    letter-spacing: -0.03em;
     color: var(--color-ink);
   }
   .how-text .body {
     font-size: 15px;
-    line-height: 23px;
+    line-height: 24px;
     color: var(--color-muted);
   }
   .step {

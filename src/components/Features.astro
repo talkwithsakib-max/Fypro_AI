@@ -21,12 +21,11 @@ import play from "../assets/figma/feat/play.svg";
 import fire from "../assets/figma/feat/fire.svg";
 import sparkleWhite from "../assets/figma/feat/sparkle-white.svg";
 import arrowWhite from "../assets/figma/feat/arrow-white18.svg";
-import ring from "../assets/figma/feat/ring.svg";
-import avatar150 from "../assets/figma/feat/avatar-150.png";
+import avatarPoster from "../assets/img/poster-p-park.jpg";
+import avatarSource from "../assets/img/poster-p-park.jpg";
 import mic from "../assets/figma/feat/mic.svg";
-import curves from "../assets/figma/feat/curves.svg";
+import optVideo from "../assets/img/poster-p-headphones.jpg";
 import sparkleOpt from "../assets/figma/feat/sparkle-opt.svg";
-import checkCyan from "../assets/figma/feat/check-cyan.svg";
 import dotPub from "../assets/figma/feat/dot-pub.svg";
 import shieldPub from "../assets/figma/feat/shield-pub.svg";
 
@@ -75,7 +74,7 @@ const week = [
                 </div>
               ))}
             </div>
-            <div class="dark-float absolute top-[60px] left-[370px] flex flex-col gap-3 rounded-[20px] bg-ink p-[18px]">
+            <div class="dark-float surface-dark absolute top-[60px] left-[370px] flex flex-col gap-3 rounded-[20px] p-[18px]">
               <p class="flex items-center gap-1.5"><img src={sparkleDna.src} alt="" class="size-3.5" /><span class="text-[12px] leading-normal font-semibold whitespace-nowrap text-white/75">New script · in your voice</span></p>
               <div class="flex flex-col gap-[3px]"><p class="text-[10px] leading-normal font-bold text-pink">Hook</p><p class="w-[300px] text-[13px] leading-[18px] font-medium text-white">“POV: you found the serum that sold out in 48 hrs…”</p></div>
               <div class="flex flex-col gap-[3px]"><p class="text-[10px] leading-normal font-bold text-cyan">Body</p><p class="w-[300px] text-[13px] leading-[18px] font-medium text-white">Show texture → before/after → price reveal</p></div>
@@ -156,7 +155,7 @@ const week = [
               </div>
               <div class="absolute top-[97px] left-2 z-10 rounded-[10px] bg-white/[0.92] px-2 py-1.5 leading-normal whitespace-nowrap"><p class="text-[13px] font-bold text-ink">Glow Serum</p><p class="text-[12px] font-semibold text-ink/70">$24.00</p></div>
             </div>
-            <div class="absolute top-[206px] left-[33.5px] flex w-[320px] flex-wrap content-start justify-center gap-2" data-chips>
+            <div class="scn-row absolute top-[200px] left-2.5 flex w-[366px] gap-1.5 overflow-x-auto px-5 pt-3.5 pb-5" data-chips>
               {scenarios.map((c) => (
                 <span class:list={["scn rounded-full px-3 py-[7px] text-[12px] leading-normal font-semibold whitespace-nowrap", c.dark && "on"]}>{c.t}</span>
               ))}
@@ -201,12 +200,29 @@ const week = [
         <div data-fit>
           <div class="relative h-[320px] w-[386px]" data-w="386">
             <Image src={mesh4} alt="" width={740} class="absolute top-2.5 left-2.5 h-[273px] w-[366px] rounded-[18px] object-cover" />
-            <img src={ring.src} alt="" class="absolute top-[30px] left-[108px] size-[170px]" />
-            <Image src={avatar150} alt="" width={300} class="absolute top-10 left-[118px] size-[150px]" />
-            <div class="float absolute top-[218px] left-[92px] flex items-center gap-2.5 rounded-full bg-white px-3.5 py-2">
-              <span class="grid size-[26px] place-items-center rounded-[14px] bg-pink"><img src={mic.src} alt="" class="size-3.5" /></span>
+            <!-- Live avatar demo: the inputs (1 photo + a voice clip) become a talking video with live captions -->
+            <div class="video av-stage absolute top-2.5 left-2.5 h-[273px] w-[366px] overflow-hidden rounded-[18px]">
+              <video data-av-video src={`${BASE}/videos/p-park.mp4`} poster={avatarPoster.src} muted loop playsinline preload="none" class="size-full object-cover object-[50%_22%]"></video>
+              <span class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/55 via-black/20 to-transparent"></span>
+              <span class="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-black/35 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur"><span class="av-rec size-1.5 rounded-full bg-pink"></span>AI avatar · live</span>
+              <p class="av-caps absolute inset-x-6 top-[150px] text-center text-[17px] leading-[1.25] font-extrabold text-white">
+                {["Can’t", "stop", "wearing", "this", "one."].map((w, i) => <span class="av-word" style={`--w:${i}`}>{w} </span>)}
+              </p>
+            </div>
+            <!-- Inputs card: what the creator gave Fypro -->
+            <div class="float av-inputs absolute top-[22px] right-[22px] flex flex-col gap-1.5 rounded-[14px] bg-white/90 p-1.5 backdrop-blur">
+              <div class="flex items-center gap-2 rounded-[10px] py-1 pr-2.5 pl-1">
+                <Image src={avatarSource} alt="" width={64} class="size-8 rounded-[8px] object-cover object-[50%_20%]" />
+                <span class="text-[11px] leading-tight font-semibold text-ink">1 photo</span>
+              </div>
+              <div class="flex items-center gap-2 rounded-[10px] py-1 pr-2.5 pl-1">
+                <span class="grid size-8 place-items-center rounded-[8px] bg-pink"><img src={mic.src} alt="" class="size-3.5" /></span>
+                <span class="text-[11px] leading-tight font-semibold text-ink">12s voice</span>
+              </div>
+            </div>
+            <div class="float absolute top-[228px] left-1/2 flex -translate-x-1/2 items-center gap-2.5 rounded-full bg-white px-3.5 py-2">
               <span class="flex items-center gap-[3px]">{bars.map((h, i) => <i class="wave w-[3px] rounded-[2px] bg-ink" style={`height:${h}px;animation-delay:${i * -90}ms`}></i>)}</span>
-              <span class="text-[12px] leading-normal font-semibold whitespace-nowrap text-ink">Your voice</span>
+              <span class="text-[12px] leading-normal font-semibold whitespace-nowrap text-ink">Speaking in your voice</span>
             </div>
           </div>
         </div>
@@ -224,18 +240,37 @@ const week = [
         <div data-fit>
           <div class="relative h-[340px] w-[780px]" data-w="780">
             <Image src={mesh1} alt="" width={1520} class="absolute top-2.5 left-2.5 h-[319px] w-[760px] rounded-[18px] object-cover" />
-            <div class="float absolute top-9 left-10 h-[250px] w-[470px] overflow-hidden rounded-[20px] bg-white">
-              <p class="absolute top-4 left-5 text-[13px] leading-normal font-bold text-ink">Viewer retention</p>
-              <p class="absolute top-[18px] left-[300px] flex gap-3.5 text-[11px] leading-normal whitespace-nowrap"><span class="font-medium text-muted"><i class="mr-1.5 inline-block w-4 border-t border-dashed border-current align-middle"></i>Before</span><span class="font-semibold text-pink"><i class="mr-1.5 inline-block w-4 border-t-2 border-current align-middle"></i>With Fypro</span></p>
-              <img src={curves.src} alt="" class="absolute top-[60px] left-5 h-40 w-[430px]" />
-              <span class="chip-xs absolute top-[150px] left-[110px] flex items-center gap-1.5 rounded-full bg-white px-3 py-[7px]"><img src={sparkleOpt.src} alt="" class="size-[13px]" /><span class="text-[12px] leading-normal font-semibold whitespace-nowrap text-ink">Drop-off at 0:03 fixed</span></span>
+            <!-- The clip being reviewed -->
+            <div class="video absolute top-[34px] left-10 h-[272px] w-[153px] overflow-hidden rounded-[18px]">
+              <Image src={optVideo} alt="" width={320} class="size-full object-cover" />
+              <span class="absolute top-2.5 left-2.5 rounded-full bg-black/45 px-2 py-[3px] text-[10px] font-semibold text-white backdrop-blur">0:24</span>
+              <span class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent"></span>
+              <span class="absolute right-2.5 bottom-3 left-2.5 h-[3px] overflow-hidden rounded-full bg-white/35"><i class="block h-full w-[12%] rounded-full bg-white"></i></span>
             </div>
-            <div class="dark-float absolute top-[60px] left-[540px] flex flex-col gap-1.5 rounded-[20px] bg-ink px-5 py-[18px]">
-              <p class="text-[12px] leading-normal font-medium text-white/65">Pre-post score</p>
-              <p class="text-[48px] leading-normal font-semibold tracking-[-1.92px] text-white">92</p>
-              {["Hook lands in 1.2s", "Caption + hashtags ready", "Best time: 7:00 PM"].map((t) => (
-                <p class="flex items-center gap-1.5"><img src={checkCyan.src} alt="" class="size-[13px]" /><span class="text-[12px] leading-normal font-medium whitespace-nowrap text-white/85">{t}</span></p>
-              ))}
+
+            <!-- Pre-post check: an editor timeline that shows where viewers leave and the fix -->
+            <div class="float absolute top-[46px] left-[218px] w-[522px] rounded-[20px] bg-white p-[18px]">
+              <div class="flex items-center justify-between">
+                <p class="text-[13px] leading-normal font-semibold text-ink">Pre-post check</p>
+                <span class="flex items-center gap-1.5 text-[11px] font-medium text-muted">Score <b class="rounded-md bg-ink px-1.5 py-px text-[11px] font-semibold text-white tabular-nums">92</b></span>
+              </div>
+              <div class="relative mt-3.5">
+                <div class="flex gap-[3px] overflow-hidden rounded-[10px]">
+                  {[8, 22, 36, 50, 64, 78, 90, 100].map((x) => (
+                    <Image src={optVideo} alt="" width={120} class="h-[70px] min-w-0 flex-1 object-cover" style={`object-position:${x}% 30%`} />
+                  ))}
+                </div>
+                <span class="opt-drop absolute inset-y-0 left-0 w-[17%] rounded-l-[10px]"></span>
+                <span class="absolute -top-[9px] left-[17%] h-[88px] w-[2px] -translate-x-1/2 rounded-full bg-ink"></span>
+                <span class="absolute -top-[13px] left-[17%] size-2 -translate-x-1/2 rounded-full bg-ink"></span>
+              </div>
+              <div class="mt-1.5 flex justify-between text-[10px] font-medium text-muted tabular-nums"><span>0:00</span><span>0:06</span><span>0:12</span><span>0:18</span><span>0:24</span></div>
+              <p class="mt-2 flex items-center gap-1.5 text-[11.5px] font-medium text-ink"><span class="size-1.5 rounded-full bg-pink"></span>41% of viewers leave in the first 3 seconds</p>
+              <div class="mt-3 flex items-center gap-3 rounded-[14px] bg-[#f4f4f7] py-2 pr-2 pl-3">
+                <img src={sparkleOpt.src} alt="" class="size-[15px]" />
+                <p class="min-w-0 flex-1 text-[12px] leading-[17px] text-ink">Open on the product reveal and cut the 2.4s intro.</p>
+                <span class="rounded-full bg-ink px-3 py-1.5 text-[11.5px] font-semibold whitespace-nowrap text-white">Apply fix</span>
+              </div>
             </div>
           </div>
         </div>
@@ -314,15 +349,15 @@ const week = [
     padding: 12px 32px 32px;
   }
   .feat-text h3 {
-    font-size: 22px;
-    line-height: normal;
+    font-size: 20px;
+    line-height: 26px;
     font-weight: 600;
-    letter-spacing: -0.44px;
+    letter-spacing: -0.02em;
     color: var(--color-ink);
   }
   .feat-text .body {
     font-size: 15px;
-    line-height: 23px;
+    line-height: 24px;
     color: var(--color-muted);
   }
   .tag-dark {
@@ -416,6 +451,34 @@ const week = [
     }
   }
   .vid-label { background: rgb(22 24 35 / 0.5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 #ffffff26; }
+  /* Drop-off segment on the timeline: a pink wash over the frames viewers skip */
+  .opt-drop {
+    background: linear-gradient(90deg, #fe2c5573, #fe2c5533);
+  }
+  /* Scenario picker as one scrollable row (Butter/Descript tag-bar style) instead of a chip cloud */
+  .scn-row {
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .scn-row::-webkit-scrollbar { display: none; }
+  .scn-row .scn { flex: none; }
+  /* Avatar demo: words light up as they are "spoken" */
+  .av-word { opacity: 0.35; text-shadow: 0 1px 2px #00000080, 0 4px 14px #00000066; }
+  :global(.is-in) .av-word { animation: av-speak 3.6s steps(1) infinite; animation-delay: calc(var(--w) * 0.42s); }
+  @keyframes av-speak {
+    0% { opacity: 1; color: var(--color-cyan); }
+    10% { opacity: 1; color: #fff; }
+    82% { opacity: 1; color: #fff; }
+    100% { opacity: 0.35; }
+  }
+  .av-rec { animation: av-blink 1.4s ease-in-out infinite; }
+  @keyframes av-blink { 50% { opacity: 0.25; } }
+  .av-inputs { box-shadow: inset 0 1px 0 #fff, 0 10px 24px -10px #12142440, -6px 10px 22px -14px #25f4ee80, 6px 10px 22px -14px #fe2c5573; }
+  @media (prefers-reduced-motion: reduce) {
+    .av-word { opacity: 1; animation: none !important; }
+    .av-rec { animation: none; }
+  }
 </style>
 
 <script>
@@ -435,10 +498,24 @@ const week = [
       setTimeout(() => deck.forEach((c) => c.classList.remove("is-wrapping")), 900);
     };
     const views = [...feat.querySelectorAll<HTMLElement>("[data-scn-preview] .scn-view")];
+    // Keep the active chip on screen: the first chips light up in place, then the row slides left
+    // as the active one reaches the edge, and slides back to the start when it loops.
+    const revealChip = (chip?: HTMLElement) => {
+      const row = chip?.parentElement;
+      if (!chip || !row) return;
+      const pad = 20;
+      const left = chip.offsetLeft - pad;
+      const right = chip.offsetLeft + chip.offsetWidth + pad - row.clientWidth;
+      let to = row.scrollLeft;
+      if (right > row.scrollLeft) to = right;
+      if (left < row.scrollLeft) to = Math.max(0, left);
+      if (to !== row.scrollLeft) row.scrollTo({ left: to, behavior: reduce ? "auto" : "smooth" });
+    };
     const nextChip = () => {
       chips[k]?.classList.remove("on");
       k = (k + 1) % chips.length;
       chips[k]?.classList.add("on");
+      revealChip(chips[k]);
       views.forEach((v, i) => {
         v.classList.toggle("on", i === k);
         const vid = v.querySelector("video");
@@ -453,5 +530,16 @@ const week = [
         t2 = window.setInterval(nextChip, 2200);
       }
     }, { threshold: 0.1 }).observe(feat);
+  }
+
+  // Avatar demo video: only load and play while the card is on screen
+  {
+    const v = document.querySelector<HTMLVideoElement>("[data-av-video]");
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (v && !still) {
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { v.preload = "auto"; v.play().catch(() => {}); } else v.pause();
+      }, { threshold: 0.3 }).observe(v);
+    }
   }
 </script>
