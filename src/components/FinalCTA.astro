@@ -2,82 +2,137 @@
 import { Image } from "astro:assets";
 import HandleForm from "./ui/HandleForm.astro";
 import AvatarStack from "./ui/AvatarStack.astro";
-import roller from "../assets/img/creator-roller.png";
-import lashes from "../assets/img/creator-lashes.png";
-import pov from "../assets/img/creator-pov.png";
-import serum from "../assets/img/creator-serum.png";
-import bottle from "../assets/img/bottle.png";
-import headphones from "../assets/img/creator-headphones.png";
-import city from "../assets/img/creator-city.png";
+import clip from "../assets/img/poster-p-serum.jpg";
+import serum from "../assets/img/product-serum.png";
+import mesh1 from "../assets/img/mesh-1.jpg";
+import mesh2 from "../assets/img/mesh-2.jpg";
+import mesh3 from "../assets/img/mesh-3.jpg";
+import mesh4 from "../assets/img/mesh-4.jpg";
+const meshes = [mesh2, mesh4, mesh3, mesh1];
+// The cord sags like a real string: a quadratic curve 6px high at the ends, 30px at the middle (viewBox 1200×60).
+// y(t) = 6 + 96·t·(1−t), with x running linearly with t.
+const cord = "M0 6 Q600 54 1200 6";
+const cordY = (t: number) => 6 + 96 * t * (1 - t);
+// Each card hangs a little differently, like prints pinned on a cord
+const tilts = [-1.2, 0.8, -0.8, 1.2];
+// Clip positions: card centres along the cord (4 columns, 20px gaps in 1200px). Each card drops to the cord's height there,
+// and its clip turns to the cord's slope so it grips the line, not the air.
+const hang = [0.119, 0.373, 0.627, 0.881].map((t, i) => ({
+  y: cordY(t).toFixed(1),
+  clip: ((Math.atan((96 * (1 - 2 * t)) / 1200) * 180) / Math.PI - tilts[i]).toFixed(2),
+}));
 
-const reel = [
-  { img: roller, views: "842K", text: "POV:" },
-  { img: lashes, views: "1.2M" },
-  { img: pov, views: "2.1M", text: "LINK IN BIO" },
-  { img: serum, views: "3.4M", text: "SOLD OUT" },
-  { img: bottle, views: "615K" },
-  { img: headphones, views: "980K", text: "WAIT, THESE JUST" },
-  { img: city, views: "1.6M" },
-];
-const mid = (reel.length - 1) / 2;
-// Card geometry measured from the Figma "Video fan" frame (1440-wide stage, card centre x/y, size, tilt)
-const place = [
-  { x: 172, y: 338, w: 170, h: 288, r: -10 },
-  { x: 353, y: 272, w: 168, h: 280, r: -7 },
-  { x: 530, y: 229, w: 176, h: 306, r: -4 },
-  { x: 720, y: 201, w: 190, h: 338, r: 0 },
-  { x: 910, y: 229, w: 176, h: 306, r: 4 },
-  { x: 1087, y: 272, w: 168, h: 280, r: 7 },
-  { x: 1268, y: 338, w: 170, h: 288, r: 10 },
+// The CTA tells the whole product story in four beats, so the last thing a visitor sees is what happens
+// after they type their handle. Layout borrows Giga's "how Scout works" track (one cyan→pink progress line
+// with numbered beats) and Dovetail's "from noise to knowledge" (real UI fragments feeding one result).
+const beats = [
+  { n: "01", kicker: "You", title: "Drop your handle", body: "No forms, no setup. Just your TikTok @." },
+  { n: "02", kicker: "The analysis", title: "Fypro learns you", body: "Your niche, your audience, your best hours." },
+  { n: "03", kicker: "The studio", title: "Videos that fit", body: "Scripts and edits that sound like you." },
+  { n: "04", kicker: "The store", title: "Followers buy", body: "Your store sells while you keep posting." },
 ];
 ---
 
 <div id="cta" class="cta-wrap relative z-10 -mb-px">
-  <div class="cta-glow-top" aria-hidden="true"></div>
-  <section class="relative px-4 pt-24 text-center text-white sm:pt-[130px]" aria-labelledby="cta-title">
-    <div data-reveal>
+  <div class="cta-light" aria-hidden="true"></div>
+  <section class="relative px-4 pt-24 pb-24 text-white sm:pt-[130px] sm:pb-[120px]" aria-labelledby="cta-title">
+    <div class="text-center" data-reveal>
       <p class="eyebrow !text-white/60">Ready when you are</p>
       <h2 id="cta-title" class="display-xl mx-auto mt-6 max-w-[1040px]">
-        One handle is all it takes.<br class="hidden sm:block" /> We’ll do the <span class="text-white/55">rest</span>.
+        Your next viral video<br /> is one @ away.
       </h2>
       <p class="mx-auto mt-[26px] max-w-[620px] text-[16px] text-white/65 sm:text-[18px]">Connect your TikTok in 30 seconds. Your first AI growth plan is on us.</p>
     </div>
     <div class="mt-[26px]" data-reveal style="--d:120ms">
-      <HandleForm id="cta-handle" dark large glow />
+      <HandleForm id="cta-handle" dark glow />
     </div>
-    <div class="mt-[26px] flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13.5px] text-white/65" data-reveal style="--d:200ms">
+    <div class="mt-[26px] flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[13.5px] text-white/65" data-reveal style="--d:200ms">
       <AvatarStack size={30} count={4} ring="#0b0b0d" />
       <span>Join <b class="font-semibold text-white">30,000+ creators</b> already running Fypro</span>
-      <span class="hidden size-1 rounded-full bg-white/30 sm:block"></span>
-      <span class="flex items-center gap-1.5">
-        <svg class="size-3.5 text-cyan" viewBox="0 0 16 16"><path d="M8 1 2.5 3v4.5C2.5 11 5 13.6 8 15c3-1.4 5.5-4 5.5-7.5V3z" fill="currentColor"/><path d="m5.5 8 1.8 1.8L10.8 6" stroke="#0b0b0d" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-        Official TikTok API
-      </span>
     </div>
 
-    <!-- Video fan: cards fade into the glows and run into the footer -->
-    <div class="fan-wrap relative mx-auto mt-[78px] h-[440px] max-w-[1440px]" aria-hidden="true">
-      <span class="fan-glow fan-glow-l"></span>
-      <span class="fan-glow fan-glow-r"></span>
-      <div class="fan-row absolute left-1/2 top-0 h-[440px] w-[1440px] -translate-x-1/2">
-        {reel.map((r, i) => {
-          const o = i - mid;
-          const p = place[i];
-          const left = p.x - p.w / 2;
-          const top = p.y - p.h / 2;
-          return (
-            <figure
-              class="fan-card absolute overflow-hidden rounded-[22px]"
-              style={`left:${left}px;top:${top}px;width:${p.w}px;height:${p.h}px;--o:${o};--r:${p.r}deg;z-index:${10 - Math.abs(o)}`}
-            >
-              <Image src={r.img} alt="" width={380} class="size-full object-cover" />
-              {r.text && <span class="absolute inset-x-0 top-[44%] text-center text-[17px] font-bold [text-shadow:0_2px_10px_#000a]">{r.text}</span>}
-              <span class="absolute bottom-[26%] left-4 text-[12px] font-medium text-white/80">▶ {r.views}</span>
-            </figure>
-          );
-        })}
+    <!-- Story: what happens after you press the button. Cards share the How it works / Features card language
+         (white card, watercolor visual panel, UI fragment on top, step tag + title + copy) and reveal one by one with scroll. -->
+    <!-- Pin (wide screens): the story holds in place while its four cards play in; the extra bottom padding is the scroll runway -->
+    <div class="story-pin mt-20 sm:mt-24" data-pin>
+    <div class="story mx-auto max-w-[1200px] md:sticky" data-story>
+      <p class="text-center text-[13px] font-medium text-white/50">What happens next</p>
+
+      <!-- Cord (wide screens): a sagging curve that fills with scroll; the dot rides it -->
+      <div class="track relative mt-6 hidden h-[60px] md:block" aria-hidden="true">
+        <svg class="absolute inset-0 size-full overflow-visible" viewBox="0 0 1200 60" preserveAspectRatio="none" fill="none">
+          <defs>
+            <linearGradient id="cord-fill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+              <stop offset="0" stop-color="#25f4ee" /><stop offset="0.55" stop-color="#9a8cff" /><stop offset="1" stop-color="#fe2c55" />
+            </linearGradient>
+          </defs>
+          <path d={cord} stroke="#ffffff24" stroke-width="2" vector-effect="non-scaling-stroke" />
+          <path class="cord-fill" d={cord} pathLength="1" stroke="url(#cord-fill)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+        </svg>
+        <span class="track-dot absolute left-0 size-3 rounded-full bg-white"></span>
       </div>
-      <span class="fan-fade" aria-hidden="true"></span>
+
+      <div class="mt-6 grid gap-4 md:-mt-[60px] md:grid-cols-4 md:gap-5">
+        {beats.map((b, i) => (
+          <article class="story-card card relative" data-card={i} style={`--tilt:${tilts[i]}deg;--y:${hang[i].y};--clip:${hang[i].clip}deg`}>
+            <span class="clip hidden md:block" aria-hidden="true"></span>
+            <div class="relative m-2.5 flex h-[196px] items-center justify-center overflow-hidden rounded-[18px] p-5">
+              <Image src={meshes[i]} alt="" width={560} class="absolute inset-0 size-full object-cover" />
+              {i === 0 && (
+                <div class="pill relative flex w-full items-center gap-2 rounded-full bg-white py-1.5 pr-1.5 pl-3">
+                  <span class="text-[15px] font-semibold text-pink">@</span>
+                  <span class="type text-[14px] font-medium text-ink">mama.justinaa</span>
+                  <span class="ml-auto grid size-7 place-items-center rounded-full bg-ink text-white">
+                    <svg class="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </div>
+              )}
+              {i === 1 && (
+                <div class="pill relative w-full rounded-[16px] bg-white p-2">
+                  {[["Niche", "Skincare"], ["Best time", "7:00 PM"], ["Hook score", "92"]].map(([k, v], j) => (
+                    <div class="fact flex items-center justify-between rounded-[10px] px-2.5 py-[7px] odd:bg-[#f4f4f7]" style={`--f:${j}`}>
+                      <span class="text-[12px] font-medium text-muted">{k}</span>
+                      <span class="text-[13px] font-semibold text-ink tabular-nums">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {i === 2 && (
+                <>
+                  <div class="video relative h-[160px] w-[96px] overflow-hidden rounded-[14px]">
+                    <Image src={clip} alt="" width={200} class="size-full object-cover" />
+                    <span class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/55 to-transparent"></span>
+                    <span class="absolute bottom-2.5 left-1/2 -translate-x-1/2 rounded-[6px] bg-pink px-1.5 py-[3px] text-[10px] font-extrabold whitespace-nowrap text-white">SOLD OUT</span>
+                  </div>
+                  <span class="pill absolute top-1/2 right-3.5 flex -translate-y-1/2 items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10.5px] font-semibold text-ink">
+                    <i class="size-1.5 rounded-full bg-[#0a8f8b]"></i>Made for you
+                  </span>
+                </>
+              )}
+              {i === 3 && (
+                <div class="relative flex w-full flex-col items-center gap-2.5">
+                  <div class="pill flex w-full items-center gap-2.5 rounded-[14px] bg-white px-2.5 py-2 text-ink">
+                    <Image src={serum} alt="" width={64} class="size-8 rounded-[8px] bg-[#fbefb6] object-cover" />
+                    <div class="min-w-0 leading-tight">
+                      <p class="truncate text-[11.5px] font-medium text-muted">New order · Glow Serum</p>
+                      <p class="text-[15px] font-semibold tabular-nums">+$24.00</p>
+                    </div>
+                  </div>
+                  <span class="pill rounded-full bg-white/90 px-2.5 py-1 text-[11.5px] font-medium text-muted"><b class="font-semibold text-ink tabular-nums">1,284</b> customers you own</span>
+                </div>
+              )}
+            </div>
+            <div class="px-6 pt-3 pb-6">
+              <p class="flex items-center gap-2 text-[13px] font-semibold text-muted"><span class="tag tabular-nums">{b.n}</span>{b.kicker}</p>
+              <h3 class="title-md mt-2 text-ink">{b.title}</h3>
+              <p class="mt-1.5 text-[14.5px] leading-[22px] text-muted">{b.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+      <!-- Runway: an in-flow spacer (sticky can't travel into padding) -->
+      <div class="runway hidden h-[120vh] md:block" aria-hidden="true"></div>
     </div>
   </section>
 </div>
@@ -86,74 +141,153 @@ const place = [
   .cta-wrap {
     background: #0b0b0d;
     border-radius: 36px 36px 0 0;
-    overflow: hidden;
+    overflow: clip; /* clip, not hidden: hidden would stop the story from sticking */
   }
-  .cta-glow-top {
+  .story { top: max(24px, calc(50vh - 250px)); }
+  /* One soft key light from above the headline */
+  .cta-light {
     position: absolute;
     left: 50%;
-    top: -260px;
-    width: 700px;
-    height: 380px;
-    transform: translateX(-50%);
+    top: -280px;
+    width: 900px;
+    height: 520px;
+    translate: -50% 0;
     border-radius: 50%;
-    background: #ffffff;
-    opacity: 0.06;
-    filter: blur(80px);
+    background: radial-gradient(closest-side, #ffffff17, #ffffff06 55%, transparent);
     pointer-events: none;
   }
-  .fan-glow {
+
+  /* Story cards: same surface language as How it works / Features */
+  /* On the dark CTA a soft black drop, not a coloured halo */
+  .story-card { box-shadow: 0 1px 0 #ffffff inset, 0 24px 48px -24px #000000e6, 0 2px 6px #00000066; }
+  .pill { box-shadow: inset 0 1px 0 #fff, var(--shadow-float); }
+  .video { box-shadow: var(--shadow-video); }
+
+  /* Clip: an ink binder clip that grips the card and straddles the line (Kalstore calendar clip, in our ink) */
+  .clip {
     position: absolute;
-    top: -30px;
-    width: 640px;
-    height: 420px;
-    border-radius: 50%;
-    filter: blur(70px);
-    pointer-events: none;
-  }
-  .fan-glow-l {
-    left: calc(50% - 600px);
-    background: radial-gradient(closest-side, #12534f 0%, #0d3836 55%, transparent 100%);
-  }
-  .fan-glow-r {
-    right: calc(50% - 600px);
-    background: radial-gradient(closest-side, #5a1424 0%, #3a0e19 55%, transparent 100%);
-  }
-  .fan-fade {
-    position: absolute;
+    z-index: 2;
     left: 50%;
-    bottom: -1px;
-    z-index: 20;
-    width: 100vw;
-    height: 34%;
-    transform: translateX(-50%);
-    pointer-events: none;
-    background: linear-gradient(180deg, #0b0b0d00 0%, #0b0b0dcc 50%, #0b0b0d 85%);
+    top: -32px;
+    width: 34px;
+    height: 46px;
+    translate: -50% 0;
+    border-radius: 9px 9px 7px 7px;
+    rotate: var(--clip, 0deg);
+    transform-origin: 50% 13px; /* turn around the point where the cord passes */
+    background: linear-gradient(180deg, #3b3c45, #1a1b21 38%, #0d0e12);
+    box-shadow: inset 0 1px 0 #ffffff30, inset 0 -1px 0 #00000080, 0 8px 14px -6px #000000e6, 0 2px 3px #00000066;
   }
-  .fan-row {
-    perspective: 1400px;
+  /* hinge where the line passes through, and a soft grip groove */
+  .clip::before {
+    content: "";
+    position: absolute;
+    inset: 12px 5px auto;
+    height: 3px;
+    border-radius: 9px;
+    background: #00000099;
+    box-shadow: 0 1px 0 #ffffff1a;
   }
-  .fan-card {
-    transform: rotateY(calc(var(--o) * -3deg)) rotate(var(--r));
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 90%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 58%, transparent 90%);
-    box-shadow: 0 0 0 1px #ffffff12;
-    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  .clip::after {
+    content: "";
+    position: absolute;
+    inset: auto 11px 7px;
+    height: 2px;
+    border-radius: 9px;
+    background: #ffffff1f;
   }
-  .fan-card:hover {
-    transform: translateY(-14px) rotateY(calc(var(--o) * -3deg)) rotate(var(--r));
+
+  /* Scroll reveal: each card is clipped on to the line, then settles with a small sway */
+  .story-card {
+    opacity: 0;
+    translate: 0 -18px;
+    transform-origin: 50% -20px; /* pivot at the clip */
+    transition: opacity 0.45s ease, translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  @media (max-width: 1100px) {
-    .fan-row { zoom: 0.8; }
-    .fan-glow-l { left: -10%; }
-    .fan-glow-r { right: -10%; }
+  .story-card.is-on { opacity: 1; translate: 0 0; }
+  @media (min-width: 768px) {
+    /* hang each card from the cord at its own height: clip hinge (13px into the clip, which starts 32px above the card) sits on the cord */
+    .story-card { rotate: var(--tilt); margin-top: calc(var(--y) * 1px + 19px); }
+    .story-card.is-on { animation: sway 1.4s cubic-bezier(0.3, 0.7, 0.3, 1) both; }
   }
-  @media (max-width: 760px) {
-    .fan-row { zoom: 0.56; }
-    .fan-wrap { height: 300px; margin-top: 56px; }
-    .fan-glow { width: 420px; height: 300px; }
+  @keyframes sway {
+    0% { rotate: calc(var(--tilt) * -1 + 4deg); }
+    35% { rotate: calc(var(--tilt) - 2.5deg); }
+    65% { rotate: calc(var(--tilt) + 1deg); }
+    100% { rotate: var(--tilt); }
   }
-  @media (max-width: 420px) {
-    .fan-row { zoom: 0.46; }
-    .fan-wrap { height: 250px; }
+
+  /* Track: fill + dot follow scroll progress (--p from 0 to 1) */
+  .cord-fill {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: calc(1 - var(--p, 0));
+    filter: drop-shadow(0 0 6px #9a8cff99);
+  }
+  .track-dot {
+    left: calc(var(--p, 0) * 100%);
+    top: calc(6px + 96px * var(--p, 0) * (1 - var(--p, 0))); /* same curve as the cord */
+    translate: -50% -50%;
+    box-shadow: 0 0 0 4px #ffffff1f, 0 0 16px #ffffffaa;
+  }
+
+  /* Little moments inside the cards, played once the card is in */
+  .type { border-right: 1.5px solid transparent; }
+  .story-card.is-on .type { animation: caret 0.9s steps(1) 6; }
+  @keyframes caret { 50% { border-color: var(--color-ink); } }
+  .fact { opacity: 0; translate: 0 6px; transition: opacity 0.4s ease, translate 0.4s ease; transition-delay: calc(300ms + var(--f) * 140ms); }
+  .story-card.is-on .fact { opacity: 1; translate: 0 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .runway { display: none; }
+    .story { position: static; }
+    .story-card { opacity: 1; translate: none; transition: none; }
+    .story-card.is-on { animation: none; }
+    .fact { opacity: 1; translate: none; transition: none; }
+    .story-card .type { animation: none; }
   }
 </style>
+
+<script>
+  // Scroll-driven story: as the story moves up the screen, the track fills and the cards appear one by one.
+  const story = document.querySelector<HTMLElement>("[data-story]");
+  if (story) {
+    const cards = [...story.querySelectorAll<HTMLElement>("[data-card]")];
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wide = matchMedia("(min-width: 768px)");
+    const pin = story.closest<HTMLElement>("[data-pin]")!;
+    const runwayEl = pin.querySelector<HTMLElement>(".runway")!;
+    const update = () => {
+      const vh = window.innerHeight;
+      if (wide.matches) {
+        // Progress through the pinned runway: 0 when the story sticks, 1 when it lets go.
+        // Cards land in the first ~70%, the rest is a short hold so all four are seen before moving on.
+        const stuckAt = parseFloat(getComputedStyle(story).top) || 0;
+        const runway = runwayEl.offsetHeight;
+        const p = runway ? Math.min(1, Math.max(0, (stuckAt - pin.getBoundingClientRect().top) / runway)) : 1;
+        story.style.setProperty("--p", Math.min(1, p / 0.7).toFixed(3));
+        // Cards stay once shown: scrolling back up doesn't replay anything
+        cards.forEach((c, i) => { if (p > i * 0.2 + 0.02) c.classList.add("is-on"); });
+        // Once the story has played and the pin lets go, drop the pin runway so the way back up is a normal scroll.
+        // The page gets shorter above the view, so scroll by the same amount to keep everything where it was.
+        if (p >= 1 && runwayEl.offsetHeight) {
+          // Measure the story before and after, so the correction is exact whatever the browser's scroll anchoring does
+          const before = story.getBoundingClientRect().top;
+          runwayEl.style.display = "none";
+          window.scrollBy({ top: story.getBoundingClientRect().top - before, behavior: "instant" });
+        }
+      } else {
+        // Stacked on phones: each card appears when it reaches 85% of the screen
+        cards.forEach((c) => { if (c.getBoundingClientRect().top < vh * 0.85) c.classList.add("is-on"); });
+      }
+    };
+    if (reduce) {
+      story.style.setProperty("--p", "1");
+      cards.forEach((c) => c.classList.add("is-on"));
+    } else {
+      // Direct call (a few rect reads), so it never stalls when frames are paused
+      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("resize", update);
+      update();
+    }
+  }
+</script>

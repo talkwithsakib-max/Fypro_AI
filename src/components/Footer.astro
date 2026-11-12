@@ -1,9 +1,6 @@
 ---
 import Logo from "./Logo.astro";
-import wordmark from "../assets/figma/footer/wordmark.svg";
-import glow1 from "../assets/figma/footer/glow-1.svg";
-import glow2 from "../assets/figma/footer/glow-2.svg";
-import glow3 from "../assets/figma/footer/glow-3.svg";
+import wordmarkMask from "../assets/figma/footer/wordmark-mask.svg";
 
 const cols = [
   { title: "Features", links: ["Growth Plan", "Ideation", "Script", "AI Product Video", "UGC Video", "Creator Store"] },
@@ -54,13 +51,13 @@ const cols = [
     </div>
   </div>
 
-  <!-- Figma "Giant wordmark" vector + glows (601:17973-76), cropped by the frame bottom -->
+  <!-- Giant wordmark (Cosmos / Monologue / Reducto style): the letters are a fine halftone of dots,
+       and a single cyan→pink light drifts across them (it follows the pointer on hover). No colour blobs. -->
   <div class="wm-wrap pointer-events-none relative mx-auto mt-10 w-full max-w-[1392px] select-none" data-fit aria-hidden="true">
-    <div class="relative h-[491px] w-[1392px]" data-w="1392">
-      <img src={glow1.src} alt="" class="absolute top-[49.6px] left-[-114px] h-[660px] w-[920px] max-w-none" />
-      <img src={glow2.src} alt="" class="absolute top-[49.6px] left-[586px] h-[660px] w-[920px] max-w-none" />
-      <img src={glow3.src} alt="" class="absolute top-[199.6px] left-[276px] h-[480px] w-[840px] max-w-none" />
-      <img src={wordmark.src} alt="" class="absolute top-0 left-0 h-[570.39px] w-[1392px] max-w-none" />
+    <div class="wm relative h-[491px] w-[1392px]" data-w="1392" style={`--wm:url(${wordmarkMask.src})`} data-wm>
+      <div class="wm-layer wm-fill"></div>
+      <div class="wm-layer wm-dots"></div>
+      <div class="wm-layer wm-light"></div>
     </div>
   </div>
 </footer>
@@ -76,4 +73,62 @@ const cols = [
     overflow-x: visible;
     overflow-y: clip;
   }
+  @property --mx { syntax: "<percentage>"; inherits: true; initial-value: 30%; }
+  @property --my { syntax: "<percentage>"; inherits: true; initial-value: 45%; }
+  .wm { --mx: 30%; --my: 45%; animation: wm-drift 14s ease-in-out infinite alternate; }
+  .wm.is-follow { animation: none; }
+  @keyframes wm-drift {
+    0% { --mx: 12%; --my: 38%; }
+    50% { --mx: 55%; --my: 62%; }
+    100% { --mx: 88%; --my: 40%; }
+  }
+  /* Every layer is cut to the letters (the mask is 570px tall; the frame crops the bottom like before) */
+  .wm-layer {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 570.39px;
+    -webkit-mask: var(--wm) 0 0 / 100% 100% no-repeat;
+    mask: var(--wm) 0 0 / 100% 100% no-repeat;
+  }
+  /* A faint body so the letterforms read even where the light isn't */
+  .wm-fill { background: linear-gradient(180deg, #ffffff12, #ffffff05 70%); }
+  /* Halftone: fine dots inside the letters */
+  .wm-dots {
+    background-image: radial-gradient(circle, #ffffff38 1.15px, transparent 1.7px);
+    background-size: 8px 8px;
+  }
+  /* The light: only the dots under it take colour */
+  .wm-light {
+    background: radial-gradient(34% 58% at var(--mx) var(--my), #25f4ee 0%, #8f8fff 38%, #fe2c55 62%, transparent 82%);
+    -webkit-mask:
+      var(--wm) 0 0 / 100% 100% no-repeat,
+      radial-gradient(circle, #000 1.25px, transparent 1.8px) 0 0 / 8px 8px;
+    -webkit-mask-composite: source-in;
+    mask:
+      var(--wm) 0 0 / 100% 100% no-repeat,
+      radial-gradient(circle, #000 1.25px, transparent 1.8px) 0 0 / 8px 8px;
+    mask-composite: intersect;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wm { animation: none; }
+  }
 </style>
+
+<script>
+  // Let the wordmark light follow the pointer while it is over the footer
+  const footer = document.querySelector<HTMLElement>(".footer");
+  const wm = document.querySelector<HTMLElement>("[data-wm]");
+  if (footer && wm && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover)").matches) {
+    footer.addEventListener("pointermove", (e) => {
+      const r = wm.getBoundingClientRect();
+      wm.classList.add("is-follow");
+      wm.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+      wm.style.setProperty("--my", `${((e.clientY - r.top) / 570.39 / (r.width / 1392)) * 100}%`);
+    });
+    footer.addEventListener("pointerleave", () => {
+      wm.classList.remove("is-follow");
+      wm.style.removeProperty("--mx");
+      wm.style.removeProperty("--my");
+    });
+  }
+</script>
